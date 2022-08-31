@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExampleGame", "ExampleGame", "{AC0EBDC3-8723-4A43-9112-DB863C2C3694}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleGame", "ExampleGame_\ExampleGame\ExampleGame.vcxproj", "{C4A8A8ED-1817-46FC-97E1-E77CA8057D9E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DFB3A233-13A2-4EF1-9872-9CBB331E560A} = {DFB3A233-13A2-4EF1-9872-9CBB331E560A}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Application", "Engine\Application\Application.vcxproj", "{E9A1C1DB-D622-4FB4-8CF0-C76DF6A8CB1B}"
 EndProject
@@ -70,6 +73,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Windows", "Engine\Windows\Windows.vcxproj", "{6FF846D1-2377-4601-B2F6-83E31748CB16}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScopeGuard", "Engine\ScopeGuard\ScopeGuard.vcxproj", "{B7ED3F7D-BFA1-42C9-9089-C6401FFDE3D4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphics", "Engine\Graphics\Graphics.vcxproj", "{181B6042-93D1-4FF5-96B9-A61104A53B8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -279,6 +284,14 @@ Global
 		{B7ED3F7D-BFA1-42C9-9089-C6401FFDE3D4}.Release|x64.Build.0 = Release|x64
 		{B7ED3F7D-BFA1-42C9-9089-C6401FFDE3D4}.Release|x86.ActiveCfg = Release|Win32
 		{B7ED3F7D-BFA1-42C9-9089-C6401FFDE3D4}.Release|x86.Build.0 = Release|Win32
+		{181B6042-93D1-4FF5-96B9-A61104A53B8D}.Debug|x64.ActiveCfg = Debug|x64
+		{181B6042-93D1-4FF5-96B9-A61104A53B8D}.Debug|x64.Build.0 = Debug|x64
+		{181B6042-93D1-4FF5-96B9-A61104A53B8D}.Debug|x86.ActiveCfg = Debug|Win32
+		{181B6042-93D1-4FF5-96B9-A61104A53B8D}.Debug|x86.Build.0 = Debug|Win32
+		{181B6042-93D1-4FF5-96B9-A61104A53B8D}.Release|x64.ActiveCfg = Release|x64
+		{181B6042-93D1-4FF5-96B9-A61104A53B8D}.Release|x64.Build.0 = Release|x64
+		{181B6042-93D1-4FF5-96B9-A61104A53B8D}.Release|x86.ActiveCfg = Release|Win32
+		{181B6042-93D1-4FF5-96B9-A61104A53B8D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -310,6 +323,7 @@ Global
 		{54116086-BD9D-4DAC-B791-EC675B9CADAB} = {E5C51EF7-81D3-4030-A4CE-0D2D666CEF4F}
 		{6FF846D1-2377-4601-B2F6-83E31748CB16} = {E5C51EF7-81D3-4030-A4CE-0D2D666CEF4F}
 		{B7ED3F7D-BFA1-42C9-9089-C6401FFDE3D4} = {E5C51EF7-81D3-4030-A4CE-0D2D666CEF4F}
+		{181B6042-93D1-4FF5-96B9-A61104A53B8D} = {E5C51EF7-81D3-4030-A4CE-0D2D666CEF4F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A89F366F-0B7F-464F-90A8-A4828B273298}
