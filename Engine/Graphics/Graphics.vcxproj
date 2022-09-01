@@ -127,9 +127,6 @@
     <ProjectReference Include="..\UserOutput\UserOutput.vcxproj">
       <Project>{2bc54f48-d7bf-416b-9c09-e0f292ca4eb1}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Windows\Windows.vcxproj">
-      <Project>{6ff846d1-2377-4601-b2f6-83e31748cb16}</Project>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
