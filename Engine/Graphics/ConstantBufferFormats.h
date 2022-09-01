@@ -33,7 +33,7 @@ namespace eae6320
 				float g_elapsedSecondCount_systemTime = 0.0f;
 				float g_elapsedSecondCount_simulationTime = 0.0f;
 				// For float4 alignment
-				float padding[2];
+				float padding[2] = { 0, 0 };
 			};
 
 			// Data that is constant for a single draw call
