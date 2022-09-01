@@ -57,7 +57,7 @@ void main(
 		
 		float new_color_r = ((sin_value + 1.0) / 2.0);
 		float new_color_g = ((cos_value + 1.0) / 2.0);
-		float new_color_b = ((sin_value + 1.0) / 2.0);
+		float new_color_b = (((sin_value * cos_value) + 1.0) / 2.0);
 		
 		o_color = float4(new_color_r, new_color_g, new_color_b, 1.0);
 }
@@ -106,7 +106,7 @@ void main()
 	
 	float new_color_r = ((sin_value + 1.0) / 2.0);
 	float new_color_g = ((cos_value + 1.0) / 2.0);
-	float new_color_b = ((sin_value + 1.0) / 2.0);
+	float new_color_b = (((sin_value * cos_value) + 1.0) / 2.0);
 	
 	o_color = vec4(new_color_r, new_color_g, new_color_b, 1.0);
 }
