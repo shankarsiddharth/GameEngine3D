@@ -21,6 +21,8 @@
 #include <new>
 #include <utility>
 
+#include "../cMesh.h"
+
 // Static Data
 //============
 
