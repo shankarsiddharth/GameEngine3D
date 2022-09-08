@@ -64,10 +64,10 @@ namespace
 	// (the application loop thread waits for the signal)
 	eae6320::Concurrency::cEvent s_whenDataForANewFrameCanBeSubmittedFromApplicationThread;
 
-	// Geometry Data
+	// Mesh Data
 	//--------------
 
-	eae6320::Graphics::cMesh s_d3d_Mesh;
+	eae6320::Graphics::cMesh* s_newMesh = new eae6320::Graphics::cMesh();
 
 	// Shading Data
 	//-------------
@@ -200,7 +200,7 @@ void eae6320::Graphics::RenderFrame()
 		}
 	}
 	
-	s_d3d_Mesh.Draw();
+	s_newMesh->Draw();
 
 	// Everything has been drawn to the "back buffer", which is just an image in memory.
 	// In order to display it the contents of the back buffer must be "presented"
@@ -309,7 +309,7 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 		s_depthStencilView = nullptr;
 	}
 
-	s_d3d_Mesh.CleanUp();
+	result = s_newMesh->CleanUp();
 	
 	if ( s_vertexShader )
 	{
@@ -356,7 +356,7 @@ namespace
 {
 	eae6320::cResult InitializeGeometry()
 	{
-		return s_d3d_Mesh.Initialize();
+		return s_newMesh->Initialize();
 	}
 
 	eae6320::cResult InitializeShadingData()
