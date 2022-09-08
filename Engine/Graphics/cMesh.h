@@ -1,4 +1,5 @@
 #pragma once
+
 #include <Engine/Results/Results.h>
 #include "cVertexFormat.h"
 
