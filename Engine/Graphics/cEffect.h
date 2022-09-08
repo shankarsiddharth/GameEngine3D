@@ -34,6 +34,17 @@ namespace eae6320
 
 
 		private:
+#if defined( EAE6320_PLATFORM_WINDOWS )			
+#if defined( EAE6320_PLATFORM_D3D )			
+#elif defined( EAE6320_PLATFORM_GL )
+			// Create & Link Program
+			//----------------------
+
+			cResult InitializeProgram();
+			cResult CleanUpProgram();
+#endif
+#endif
+
 			// Shading Data
 			//-------------
 
@@ -41,6 +52,17 @@ namespace eae6320
 			eae6320::Graphics::cShader* s_fragmentShader = nullptr;
 
 			eae6320::Graphics::cRenderState s_renderState;
+
+			
+#if defined( EAE6320_PLATFORM_WINDOWS )			
+#if defined( EAE6320_PLATFORM_D3D )			
+#elif defined( EAE6320_PLATFORM_GL )
+			// Program Data
+			//-------------
+
+			GLuint s_programId = 0;
+#endif
+#endif
 
 		};
 	}
