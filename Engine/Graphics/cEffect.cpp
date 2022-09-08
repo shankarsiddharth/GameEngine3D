@@ -44,13 +44,27 @@ eae6320::cResult eae6320::Graphics::cEffect::Initialize()
 		}
 	}
 
+#if defined( EAE6320_PLATFORM_WINDOWS )			
+#if defined( EAE6320_PLATFORM_D3D )			
+#elif defined( EAE6320_PLATFORM_GL )
+	result = InitializeProgram();
+#endif
+#endif
+
 	return result;
 }
 
 eae6320::cResult eae6320::Graphics::cEffect::CleanUp()
 {
 	auto result = Results::Success;
-		
+	
+#if defined( EAE6320_PLATFORM_WINDOWS )			
+#if defined( EAE6320_PLATFORM_D3D )			
+#elif defined( EAE6320_PLATFORM_GL )
+	result = CleanUpProgram();
+#endif
+#endif
+
 	if (s_vertexShader)
 	{
 		s_vertexShader->DecrementReferenceCount();
