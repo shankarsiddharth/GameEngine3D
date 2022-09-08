@@ -2,13 +2,7 @@
 #include <Engine/Results/Results.h>
 #include "cVertexFormat.h"
 
-#if defined( EAE6320_PLATFORM_WINDOWS )			
-#if defined( EAE6320_PLATFORM_D3D )
-#include <d3d11.h>
-#elif defined( EAE6320_PLATFORM_GL )
-
-#endif
-#endif
+#include "Includes.h"
 
 
 // Class Declaration
@@ -32,7 +26,7 @@ namespace eae6320
 			//----------------------
 
 			cResult Initialize();
-			void CleanUp();
+			cResult CleanUp();
 
 			// Draw
 			//-------
@@ -40,7 +34,7 @@ namespace eae6320
 			void Draw();
 
 
-		public:
+		private:
 
 #if defined( EAE6320_PLATFORM_WINDOWS )			
 #if defined( EAE6320_PLATFORM_D3D )
@@ -52,7 +46,13 @@ namespace eae6320
 			// A vertex buffer holds the data for each vertex
 			ID3D11Buffer* s_vertexBuffer = nullptr;
 #elif defined( EAE6320_PLATFORM_GL )
-			
+			// Geometry Data
+			//--------------
+
+			// A vertex buffer holds the data for each vertex
+			GLuint s_vertexBufferId = 0;
+			// A vertex array encapsulates the vertex data as well as the vertex input layout
+			GLuint s_vertexArrayId = 0;
 #endif
 #endif
 
