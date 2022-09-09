@@ -1,9 +1,8 @@
 #pragma once
 
 #include <Engine/Results/Results.h>
-#include "cVertexFormat.h"
-
 #include "Includes.h"
+#include "cVertexFormat.h"
 
 
 // Class Declaration
