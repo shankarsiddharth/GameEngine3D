@@ -90,9 +90,9 @@ eae6320::cResult eae6320::Graphics::cMesh::Initialize()
 	{
 		
 		constexpr unsigned int triangleCount = 2;
-		constexpr unsigned int vertexCountPerTriangle = 3;
-		constexpr auto vertexCount = triangleCount * vertexCountPerTriangle;
-		uint16_t indexData[vertexCount];
+		constexpr unsigned int indexCountPerTriangle = 3;
+		constexpr auto indexCount = triangleCount * indexCountPerTriangle;
+		uint16_t indexData[indexCount];
 		{
 			indexData[0] = 0;
 			indexData[1] = 1;
@@ -102,7 +102,7 @@ eae6320::cResult eae6320::Graphics::cMesh::Initialize()
 			indexData[4] = 3;
 			indexData[5] = 1;
 		}
-		constexpr auto bufferSize = sizeof(indexData[0]) * vertexCount;
+		constexpr auto bufferSize = sizeof(indexData[0]) * indexCount;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<decltype(D3D11_BUFFER_DESC::ByteWidth)>::max());
 		constexpr auto bufferDescription = [bufferSize]
 		{
