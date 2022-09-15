@@ -1,8 +1,12 @@
 #pragma once
 
-#include <Engine/Results/Results.h>
 #include "Includes.h"
 #include "cVertexFormat.h"
+#include "VertexFormats.h"
+
+#include <Engine/Results/Results.h>
+
+#include <vector>
 
 
 // Class Declaration
@@ -45,6 +49,9 @@ namespace eae6320
 
 			// A vertex buffer holds the data for each vertex
 			ID3D11Buffer* m_vertexBuffer = nullptr;
+
+			// A index buffer holds the index data of the vertices
+			ID3D11Buffer* m_indexBuffer = nullptr;
 #elif defined( EAE6320_PLATFORM_GL )
 			// Geometry Data
 			//--------------
@@ -55,6 +62,7 @@ namespace eae6320
 			GLuint m_vertexArrayId = 0;
 #endif
 #endif
+			std::vector<eae6320::Graphics::VertexFormats::sVertex_mesh> m_VertexArray;
 
 		};
 	}
