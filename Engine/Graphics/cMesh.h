@@ -29,7 +29,7 @@ namespace eae6320
 			// Initialize / Clean Up
 			//----------------------
 
-			cResult Initialize();
+			cResult Initialize(eae6320::Graphics::VertexFormats::sVertex_mesh* i_vertexArray, size_t i_vertexArraySize,uint16_t* i_indexArray, size_t i_indexArraySize);
 			cResult CleanUp();
 
 			// Draw
@@ -64,7 +64,7 @@ namespace eae6320
 			GLuint m_indexBufferId = 0;
 #endif
 #endif
-			std::vector<eae6320::Graphics::VertexFormats::sVertex_mesh> m_VertexArray;
+			size_t m_indexBufferSize;
 
 		};
 	}

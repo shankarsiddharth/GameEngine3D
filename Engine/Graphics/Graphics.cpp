@@ -274,7 +274,22 @@ namespace
 	{
 		auto result = eae6320::Results::Success;
 
-		result = s_newMesh->Initialize();
+		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData[] =
+		{
+			// Direct3D is left-handed
+			{0.0f, 0.0f, 0.0f},
+			{1.0f, 1.0f, 0.0f},
+			{1.0f, 0.0f, 0.0f},
+			{0.0f, 1.0f, 0.0f}
+		};
+
+		uint16_t indexData[] =
+		{
+			// Direct3D is left-handed
+			0, 1, 2, 0, 3, 1
+		};
+
+		result = s_newMesh->Initialize(vertexData, 4, indexData, 6);
 
 		return result;
 	}

@@ -8,7 +8,7 @@
 #include <Engine/Asserts/Asserts.h>
 #include <Engine/Logging/Logging.h>
 
-eae6320::cResult eae6320::Graphics::cMesh::Initialize()
+eae6320::cResult eae6320::Graphics::cMesh::Initialize(eae6320::Graphics::VertexFormats::sVertex_mesh* i_vertexArray, size_t i_vertexArraySize, uint16_t* i_indexArray, size_t i_indexArraySize)
 {
 	auto result = eae6320::Results::Success;
 
@@ -26,33 +26,12 @@ eae6320::cResult eae6320::Graphics::cMesh::Initialize()
 	}
 	// Vertex Buffer
 	{
-		//constexpr unsigned int triangleCount = 2;
-		//constexpr unsigned int vertexCountPerTriangle = 3;
-		//constexpr auto vertexCount = triangleCount * vertexCountPerTriangle;
-		constexpr auto vertexCount = 4;
-		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData[vertexCount];
-		{
-			// Direct3D is left-handed
-
-			vertexData[0].x = 0.0f;
-			vertexData[0].y = 0.0f;
-			vertexData[0].z = 0.0f;
-
-			vertexData[1].x = 1.0f;
-			vertexData[1].y = 1.0f;
-			vertexData[1].z = 0.0f;
-
-			vertexData[2].x = 1.0f;
-			vertexData[2].y = 0.0f;
-			vertexData[2].z = 0.0f;
-
-			vertexData[3].x = 0.0f;
-			vertexData[3].y = 1.0f;
-			vertexData[3].z = 0.0f;
-		}
-		constexpr auto bufferSize = sizeof(vertexData[0]) * vertexCount;
+		const auto vertexArraySize = i_vertexArraySize;
+		EAE6320_ASSERT(vertexArraySize != 0)
+		const auto vertexCount = vertexArraySize;		
+		const auto bufferSize = sizeof(i_vertexArray[0]) * vertexCount;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<decltype(D3D11_BUFFER_DESC::ByteWidth)>::max());
-		constexpr auto bufferDescription = [bufferSize]
+		const auto bufferDescription = [bufferSize]
 		{
 			D3D11_BUFFER_DESC bufferDescription{};
 
@@ -66,11 +45,11 @@ eae6320::cResult eae6320::Graphics::cMesh::Initialize()
 			return bufferDescription;
 		}();
 
-		const auto initialData = [vertexData]
+		const auto initialData = [i_vertexArray]
 		{
 			D3D11_SUBRESOURCE_DATA initialData{};
 
-			initialData.pSysMem = vertexData;
+			initialData.pSysMem = i_vertexArray;
 			// (The other data members are ignored for non-texture buffers)
 
 			return initialData;
@@ -88,25 +67,15 @@ eae6320::cResult eae6320::Graphics::cMesh::Initialize()
 
 	// Index Buffer
 	{
-		
-		constexpr unsigned int triangleCount = 2;
-		constexpr unsigned int indexCountPerTriangle = 3;
-		constexpr auto indexCount = triangleCount * indexCountPerTriangle;
-		uint16_t indexData[indexCount];
-		{
-			// Direct3D is left-handed
-
-			indexData[0] = 0;
-			indexData[1] = 1;
-			indexData[2] = 2;
-
-			indexData[3] = 0;
-			indexData[4] = 3;
-			indexData[5] = 1;
-		}
-		constexpr auto bufferSize = sizeof(indexData[0]) * indexCount;
+		const size_t indexCountPerTriangle = 3;
+		m_indexBufferSize = i_indexArraySize;
+		EAE6320_ASSERT(m_indexBufferSize != 0)
+		EAE6320_ASSERT(m_indexBufferSize % indexCountPerTriangle == 0)		
+		const size_t triangleCount = m_indexBufferSize / indexCountPerTriangle;
+		const auto indexCount = triangleCount * indexCountPerTriangle;		
+		const auto bufferSize = sizeof(i_indexArray[0]) * indexCount;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<decltype(D3D11_BUFFER_DESC::ByteWidth)>::max());
-		constexpr auto bufferDescription = [bufferSize]
+		const auto bufferDescription = [bufferSize]
 		{
 			D3D11_BUFFER_DESC bufferDescription{};
 
@@ -120,11 +89,11 @@ eae6320::cResult eae6320::Graphics::cMesh::Initialize()
 			return bufferDescription;
 		}();
 
-		const auto initialData = [indexData]
+		const auto initialData = [i_indexArray]
 		{
 			D3D11_SUBRESOURCE_DATA initialData{};
 
-			initialData.pSysMem = indexData;
+			initialData.pSysMem = i_indexArray;
 			// (The other data members are ignored for non-texture buffers)
 
 			return initialData;
@@ -217,15 +186,10 @@ void eae6320::Graphics::cMesh::Draw()
 		}
 		// Render triangles from the currently-bound index buffer
 		{
-			// As of this comment only a single triangle is drawn
-			// (you will have to update this code in future assignments!)
-			constexpr unsigned int triangleCount = 2;
-			constexpr unsigned int indexCountPerTriangle = 3;
-			constexpr auto indexCountToRender = triangleCount * indexCountPerTriangle;
 			// It's possible to start rendering primitives in the middle of the stream
 			constexpr unsigned int indexOfFirstIndexToUse = 0;
 			constexpr unsigned int offsetToAddToEachIndex = 0;
-			direct3dImmediateContext->DrawIndexed(static_cast<unsigned int>(indexCountToRender), indexOfFirstIndexToUse, offsetToAddToEachIndex);
+			direct3dImmediateContext->DrawIndexed(static_cast<unsigned int>(m_indexBufferSize), indexOfFirstIndexToUse, offsetToAddToEachIndex);
 		}
 	}
 }
