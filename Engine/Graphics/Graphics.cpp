@@ -59,11 +59,14 @@ namespace
 	//--------------
 
 	eae6320::Graphics::cMesh* s_newMesh = new eae6320::Graphics::cMesh();
+	eae6320::Graphics::cMesh* s_secondMesh = new eae6320::Graphics::cMesh();
 
 	// Effect Data
 	//-------------
 
 	eae6320::Graphics::cEffect* s_newEffect = new eae6320::Graphics::cEffect();
+	eae6320::Graphics::cEffect* s_secondEffect = new eae6320::Graphics::cEffect();
+
 }
 
 // Helper Declarations
@@ -144,6 +147,10 @@ void eae6320::Graphics::RenderFrame()
 	s_newEffect->Bind();
 
 	s_newMesh->Draw();
+
+	s_secondEffect->Bind();
+
+	s_secondMesh->Draw();
 
 	s_View->Swap();
 
@@ -237,6 +244,10 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 
 	result = s_newEffect->CleanUp();
 
+	result = s_secondMesh->CleanUp();
+
+	result = s_secondEffect->CleanUp();
+
 	{
 		const auto result_constantBuffer_frame = s_constantBuffer_frame.CleanUp();
 		if (!result_constantBuffer_frame)
@@ -291,6 +302,22 @@ namespace
 
 		result = s_newMesh->Initialize(vertexData, 4, indexData, 6);
 
+		eae6320::Graphics::VertexFormats::sVertex_mesh newVertexData[] =
+		{
+			// Direct3D is left-handed
+			{0.0f, 0.0f, 0.0f},
+			{-1.0f, -1.0f, 0.0f},
+			{-1.0f, 0.0f, 0.0f}
+		};
+
+		uint16_t newIndexData[] =
+		{
+			// Direct3D is left-handed
+			0, 1, 2
+		};
+
+		result = s_secondMesh->Initialize(newVertexData, 3, newIndexData, 3);
+
 		return result;
 	}
 
@@ -298,7 +325,9 @@ namespace
 	{
 		auto result = eae6320::Results::Success;
 
-		result = s_newEffect->Initialize();
+		result = s_newEffect->Initialize("data/Shaders/Fragment/testsample.shader");
+
+		result = s_secondEffect->Initialize();
 
 		return result;
 	}

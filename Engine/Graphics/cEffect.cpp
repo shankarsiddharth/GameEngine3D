@@ -22,7 +22,7 @@ eae6320::cResult eae6320::Graphics::cEffect::Initialize(const std::string& i_fra
 	}
 	if (i_fragmentShaderPath.empty())
 	{
-		fragmentShaderPath = "data/Shaders/Fragment/testsample.shader";
+		fragmentShaderPath = "data/Shaders/Fragment/standard.shader";
 	}
 
 	if (!(result = eae6320::Graphics::cShader::Load(vertexShaderPath,
