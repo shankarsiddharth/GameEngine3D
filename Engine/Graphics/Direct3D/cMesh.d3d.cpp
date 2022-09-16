@@ -69,9 +69,7 @@ eae6320::cResult eae6320::Graphics::cMesh::Initialize(eae6320::Graphics::VertexF
 		m_indexBufferSize = i_indexArraySize;
 		EAE6320_ASSERT(m_indexBufferSize != 0)
 		EAE6320_ASSERT(m_indexBufferSize % indexCountPerTriangle == 0)		
-		const size_t triangleCount = m_indexBufferSize / indexCountPerTriangle;
-		const auto indexCount = triangleCount * indexCountPerTriangle;		
-		const auto bufferSize = sizeof(i_indexArray[0]) * indexCount;
+		const auto bufferSize = sizeof(i_indexArray[0]) * m_indexBufferSize;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<decltype(D3D11_BUFFER_DESC::ByteWidth)>::max());
 		const auto bufferDescription = [bufferSize]
 		{
