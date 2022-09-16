@@ -8,7 +8,7 @@
 #include <Engine/Asserts/Asserts.h>
 #include <Engine/Logging/Logging.h>
 
-eae6320::cResult eae6320::Graphics::cMesh::Initialize()
+eae6320::cResult eae6320::Graphics::cMesh::Initialize(eae6320::Graphics::VertexFormats::sVertex_mesh* i_vertexArray, size_t i_vertexArraySize, uint16_t* i_indexArray, size_t i_indexArraySize)
 {
 	auto result = eae6320::Results::Success;
 
@@ -68,33 +68,13 @@ eae6320::cResult eae6320::Graphics::cMesh::Initialize()
 	}
 	// Assign the data to the vertex buffer
 	{
+		EAE6320_ASSERT(i_vertexArraySize != 0)
 		//constexpr unsigned int triangleCount = 2;
 		//constexpr unsigned int vertexCountPerTriangle = 3;
-		//const auto vertexCount = triangleCount * vertexCountPerTriangle;
-		const auto vertexCount = 4;
-		eae6320::Graphics::VertexFormats::sVertex_mesh vertexData[vertexCount];
-		{
-			// OpenGL is right-handed
-
-			vertexData[0].x = 0.0f;
-			vertexData[0].y = 0.0f;
-			vertexData[0].z = 0.0f;
-
-			vertexData[1].x = 1.0f;
-			vertexData[1].y = 1.0f;
-			vertexData[1].z = 0.0f;
-
-			vertexData[2].x = 1.0f;
-			vertexData[2].y = 0.0f;
-			vertexData[2].z = 0.0f;
-
-			vertexData[3].x = 0.0f;
-			vertexData[3].y = 1.0f;
-			vertexData[3].z = 0.0f;
-		}
-		constexpr auto bufferSize = sizeof(vertexData[0]) * vertexCount;
-		EAE6320_ASSERT(bufferSize <= std::numeric_limits<GLsizeiptr>::max());
-		glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(bufferSize), reinterpret_cast<GLvoid*>(vertexData),
+		const auto vertexCount = i_vertexArraySize;
+		const auto bufferSize = sizeof(i_vertexArray[0]) * vertexCount;
+		EAE6320_ASSERT(static_cast<GLsizeiptr>(bufferSize) <= std::numeric_limits<GLsizeiptr>::max());
+		glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(bufferSize), reinterpret_cast<GLvoid*>(i_vertexArray),
 			// In our class we won't ever read from the buffer
 			GL_STATIC_DRAW);
 		const auto errorCode = glGetError();
@@ -136,24 +116,19 @@ eae6320::cResult eae6320::Graphics::cMesh::Initialize()
 	}
 	// Assign the data to the index buffer
 	{
-		constexpr unsigned int triangleCount = 2;
-		constexpr unsigned int indexCountPerTriangle = 3;
-		const auto indexCount = triangleCount * indexCountPerTriangle;
-		uint16_t indexData[indexCount];
+		constexpr unsigned int indexCountPerTriangle = 3;		
+		EAE6320_ASSERT(i_indexArraySize != 0)
+		EAE6320_ASSERT(i_indexArraySize % indexCountPerTriangle == 0)
+		m_indexBufferSize = i_indexArraySize;
+		for (size_t index = 0; index < m_indexBufferSize; index += 3)
 		{
-			// OpenGL is right-handed
-
-			indexData[0] = 0;
-			indexData[1] = 2;
-			indexData[2] = 1;
-
-			indexData[3] = 0;
-			indexData[4] = 1;
-			indexData[5] = 3;
+			uint16_t cacheValue = i_indexArray[index + 2];
+			i_indexArray[index + 2] = i_indexArray[index + 1];
+			i_indexArray[index + 1] = cacheValue;
 		}
-		constexpr auto bufferSize = sizeof(indexData[0]) * indexCount;
-		EAE6320_ASSERT(bufferSize <= std::numeric_limits<GLsizeiptr>::max());
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizeiptr>(bufferSize), reinterpret_cast<GLvoid*>(indexData),
+		const auto bufferSize = sizeof(i_indexArray[0]) * m_indexBufferSize;
+		EAE6320_ASSERT(static_cast<GLsizeiptr>(bufferSize) <= std::numeric_limits<GLsizeiptr>::max());
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizeiptr>(bufferSize), reinterpret_cast<GLvoid*>(i_indexArray),
 			// In our class we won't ever read from the buffer
 			GL_STATIC_DRAW);
 		const auto errorCode = glGetError();
@@ -317,15 +292,10 @@ void eae6320::Graphics::cMesh::Draw()
 			// The mode defines how to interpret multiple vertices as a single "primitive";
 			// a triangle list is defined
 			// (meaning that every primitive is a triangle and will be defined by three vertices)
-			constexpr GLenum mode = GL_TRIANGLES;
-			// As of this comment only a single triangle is drawn
-			// (you will have to update this code in future assignments!)
-			constexpr unsigned int triangleCount = 2;
-			constexpr unsigned int indexCountPerTriangle = 3;
-			constexpr auto indexCountToRender = triangleCount * indexCountPerTriangle;
+			constexpr GLenum mode = GL_TRIANGLES;			
 			// It's possible to start rendering primitives in the middle of the stream
 			const GLvoid* const offset = 0;
-			glDrawElements(mode, static_cast<GLsizei>(indexCountToRender), GL_UNSIGNED_SHORT, offset);
+			glDrawElements(mode, static_cast<GLsizei>(m_indexBufferSize), GL_UNSIGNED_SHORT, offset);
 			EAE6320_ASSERT(glGetError() == GL_NO_ERROR);
 		}
 	}
