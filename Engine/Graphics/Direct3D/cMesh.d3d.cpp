@@ -94,6 +94,8 @@ eae6320::cResult eae6320::Graphics::cMesh::Initialize()
 		constexpr auto indexCount = triangleCount * indexCountPerTriangle;
 		uint16_t indexData[indexCount];
 		{
+			// Direct3D is left-handed
+
 			indexData[0] = 0;
 			indexData[1] = 1;
 			indexData[2] = 2;
