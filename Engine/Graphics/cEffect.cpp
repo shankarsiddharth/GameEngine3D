@@ -9,17 +9,29 @@ eae6320::Graphics::cEffect::~cEffect()
 
 }
 
-eae6320::cResult eae6320::Graphics::cEffect::Initialize()
+eae6320::cResult eae6320::Graphics::cEffect::Initialize(const std::string& i_fragmentShaderPath/* = ""*/, const std::string& i_vertexShaderPath/* = ""*/)
 {
 	auto result = eae6320::Results::Success;
 
-	if (!(result = eae6320::Graphics::cShader::Load("data/Shaders/Vertex/standard.shader",
+	std::string fragmentShaderPath = i_fragmentShaderPath;
+	std::string vertexShaderPath = i_vertexShaderPath;
+
+	if (i_vertexShaderPath.empty())
+	{
+		vertexShaderPath = "data/Shaders/Vertex/standard.shader";
+	}
+	if (i_fragmentShaderPath.empty())
+	{
+		fragmentShaderPath = "data/Shaders/Fragment/testsample.shader";
+	}
+
+	if (!(result = eae6320::Graphics::cShader::Load(vertexShaderPath,
 		m_vertexShader, eae6320::Graphics::eShaderType::Vertex)))
 	{
 		EAE6320_ASSERTF(false, "Can't initialize shading data without vertex shader");
 		return result;
 	}
-	if (!(result = eae6320::Graphics::cShader::Load("data/Shaders/Fragment/testsample.shader",
+	if (!(result = eae6320::Graphics::cShader::Load(fragmentShaderPath,
 		m_fragmentShader, eae6320::Graphics::eShaderType::Fragment)))
 	{
 		EAE6320_ASSERTF(false, "Can't initialize shading data without fragment shader");
