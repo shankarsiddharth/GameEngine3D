@@ -26,10 +26,8 @@ eae6320::cResult eae6320::Graphics::cMesh::Initialize(eae6320::Graphics::VertexF
 	}
 	// Vertex Buffer
 	{
-		const auto vertexArraySize = i_vertexArraySize;
-		EAE6320_ASSERT(vertexArraySize != 0)
-		const auto vertexCount = vertexArraySize;		
-		const auto bufferSize = sizeof(i_vertexArray[0]) * vertexCount;
+		EAE6320_ASSERT(i_vertexArraySize != 0)
+		const auto bufferSize = sizeof(i_vertexArray[0]) * i_vertexArraySize;
 		EAE6320_ASSERT(bufferSize <= std::numeric_limits<decltype(D3D11_BUFFER_DESC::ByteWidth)>::max());
 		const auto bufferDescription = [bufferSize]
 		{
