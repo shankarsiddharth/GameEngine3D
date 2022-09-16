@@ -5,6 +5,8 @@
 #include "cShader.h"
 #include "cRenderState.h"
 
+#include <string>
+
 // Class Declaration
 //==================
 
@@ -25,7 +27,7 @@ namespace eae6320
 			// Initialize / Clean Up
 			//----------------------
 
-			cResult Initialize();
+			cResult Initialize(const std::string& i_fragmentShaderPath = "", const std::string& i_vertexShaderPath = "");
 			cResult CleanUp();
 
 			// Bind
