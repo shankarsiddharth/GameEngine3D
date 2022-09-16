@@ -35,7 +35,7 @@ void eae6320::Graphics::cView::Clear(float i_red /*= 0.0f*/, float i_green /*= 0
 	{
 		// Black is usually used
 		{
-			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			glClearColor(i_red, i_green, i_blue, i_alpha);
 			EAE6320_ASSERT(glGetError() == GL_NO_ERROR);
 		}
 		{
