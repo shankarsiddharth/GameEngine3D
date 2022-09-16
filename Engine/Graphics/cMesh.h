@@ -60,6 +60,8 @@ namespace eae6320
 			GLuint m_vertexBufferId = 0;
 			// A vertex array encapsulates the vertex data as well as the vertex input layout
 			GLuint m_vertexArrayId = 0;
+			// A index buffer holds the index data of the vertices
+			GLuint m_indexBufferId = 0;
 #endif
 #endif
 			std::vector<eae6320::Graphics::VertexFormats::sVertex_mesh> m_VertexArray;
