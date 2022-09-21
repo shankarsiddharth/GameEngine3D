@@ -62,8 +62,8 @@ namespace
 	// Mesh Data
 	//--------------
 
-	eae6320::Graphics::cMesh* s_newMesh = new eae6320::Graphics::cMesh();
-	eae6320::Graphics::cMesh* s_secondMesh = new eae6320::Graphics::cMesh();
+	eae6320::Graphics::cMesh* s_newMesh = nullptr;
+	eae6320::Graphics::cMesh* s_secondMesh = nullptr;
 
 	// Effect Data
 	//-------------
@@ -253,11 +253,11 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 
 	result = s_View->CleanUp();
 
-	result = s_newMesh->CleanUp();
+	s_newMesh->DecrementReferenceCount();
 
 	result = s_newEffect->CleanUp();
 
-	result = s_secondMesh->CleanUp();
+	s_secondMesh->DecrementReferenceCount();
 
 	result = s_secondEffect->CleanUp();
 
@@ -313,7 +313,7 @@ namespace
 			0, 1, 2, 0, 3, 1
 		};
 
-		result = s_newMesh->Initialize(vertexData, 4, indexData, 6);
+		result = eae6320::Graphics::cMesh::CreateMesh(vertexData, 4, indexData, 6, s_newMesh);
 
 		eae6320::Graphics::VertexFormats::sVertex_mesh newVertexData[] =
 		{
@@ -329,7 +329,7 @@ namespace
 			0, 1, 2
 		};
 
-		result = s_secondMesh->Initialize(newVertexData, 3, newIndexData, 3);
+		result = eae6320::Graphics::cMesh::CreateMesh(newVertexData, 3, newIndexData, 3, s_secondMesh);
 
 		return result;
 	}

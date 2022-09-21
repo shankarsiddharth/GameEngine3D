@@ -19,12 +19,7 @@ namespace eae6320
 	{
 		class cMesh
 		{
-			
-		public:
 
-			cMesh() = default;
-			~cMesh();
-		
 		public:
 
 			EAE6320_ASSETS_DECLAREDELETEDREFERENCECOUNTEDFUNCTIONS(cMesh);
@@ -35,25 +30,32 @@ namespace eae6320
 			EAE6320_ASSETS_DECLAREREFERENCECOUNTINGFUNCTIONS();
 
 
-			// Initialize / Clean Up
-			//----------------------
-
-			cResult Initialize(eae6320::Graphics::VertexFormats::sVertex_mesh* i_vertexArray, size_t i_vertexArraySize,uint16_t* i_indexArray, size_t i_indexArraySize);
-			cResult CleanUp();
-
 			// Draw
 			//-------
 
 			void Draw();
 
+			// Factory Method
+			//-------
+
+			static cResult CreateMesh(eae6320::Graphics::VertexFormats::sVertex_mesh* i_vertexArray, size_t i_vertexArraySize, uint16_t* i_indexArray, size_t i_indexArraySize, cMesh*& o_mesh);
 
 		private:
 
-#if defined( EAE6320_PLATFORM_WINDOWS )			
-#if defined( EAE6320_PLATFORM_D3D )
+			cMesh() = default;
+			~cMesh();
+
+			// Initialize / Clean Up
+			//----------------------
+
+			cResult Initialize(eae6320::Graphics::VertexFormats::sVertex_mesh* i_vertexArray, size_t i_vertexArraySize, uint16_t* i_indexArray, size_t i_indexArraySize);
+			cResult CleanUp();
+
 			// Geometry Data
 			//--------------
 
+#if defined( EAE6320_PLATFORM_WINDOWS )			
+#if defined( EAE6320_PLATFORM_D3D )
 			eae6320::Graphics::cVertexFormat* m_vertexFormat = nullptr;
 
 			// A vertex buffer holds the data for each vertex
@@ -62,9 +64,6 @@ namespace eae6320
 			// A index buffer holds the index data of the vertices
 			ID3D11Buffer* m_indexBuffer = nullptr;
 #elif defined( EAE6320_PLATFORM_GL )
-			// Geometry Data
-			//--------------
-
 			// A vertex buffer holds the data for each vertex
 			GLuint m_vertexBufferId = 0;
 			// A vertex array encapsulates the vertex data as well as the vertex input layout
@@ -75,6 +74,8 @@ namespace eae6320
 #endif
 			size_t m_indexBufferSize = 0;
 
+			// Reference Count Variable
+			//--------------
 			EAE6320_ASSETS_DECLAREREFERENCECOUNT();
 
 		};
