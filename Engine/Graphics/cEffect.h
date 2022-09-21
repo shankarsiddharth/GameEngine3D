@@ -1,9 +1,11 @@
 #pragma once
 
-#include <Engine/Results/Results.h>
 #include "Includes.h"
 #include "cShader.h"
 #include "cRenderState.h"
+
+#include <Engine/Assets/ReferenceCountedAssets.h>
+#include <Engine/Results/Results.h>
 
 #include <string>
 
@@ -23,6 +25,13 @@ namespace eae6320
 			~cEffect();
 
 		public:
+
+			EAE6320_ASSETS_DECLAREDELETEDREFERENCECOUNTEDFUNCTIONS(cEffect);
+
+			// Reference Counting
+			//-------------------
+
+			EAE6320_ASSETS_DECLAREREFERENCECOUNTINGFUNCTIONS();
 
 			// Initialize / Clean Up
 			//----------------------
@@ -66,6 +75,7 @@ namespace eae6320
 			GLuint m_programId = 0;
 #endif
 #endif
+			EAE6320_ASSETS_DECLAREREFERENCECOUNT();
 
 		};
 	}
