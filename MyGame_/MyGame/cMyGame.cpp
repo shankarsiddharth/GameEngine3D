@@ -14,7 +14,7 @@
 void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime,
 	const float i_elapsedSecondCount_sinceLastSimulationUpdate)
 {
-	
+	eae6320::Graphics::SetBackgroundClearColor(1, 0, 0);
 }
 
 // Run

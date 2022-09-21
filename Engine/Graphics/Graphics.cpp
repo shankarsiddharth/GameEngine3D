@@ -36,6 +36,10 @@ namespace
 	struct sDataRequiredToRenderAFrame
 	{
 		eae6320::Graphics::ConstantBufferFormats::sFrame constantData_frame;
+		float clearColorRed = 0.0f;
+		float clearColorGreen = 0.0f;
+		float clearColorBlue = 0.0f;
+		float clearColorAlpha = 1.0f;
 	};
 	// In our class there will be two copies of the data required to render a frame:
 	//	* One of them will be in the process of being populated by the data currently being submitted by the application loop thread
@@ -84,7 +88,7 @@ namespace
 
 void eae6320::Graphics::SubmitElapsedTime(const float i_elapsedSecondCount_systemTime, const float i_elapsedSecondCount_simulationTime)
 {
-	EAE6320_ASSERT(s_dataBeingSubmittedByApplicationThread);
+	EAE6320_ASSERT(s_dataBeingSubmittedByApplicationThread)
 	auto& constantData_frame = s_dataBeingSubmittedByApplicationThread->constantData_frame;
 	constantData_frame.g_elapsedSecondCount_systemTime = i_elapsedSecondCount_systemTime;
 	constantData_frame.g_elapsedSecondCount_simulationTime = i_elapsedSecondCount_simulationTime;
@@ -98,6 +102,14 @@ eae6320::cResult eae6320::Graphics::WaitUntilDataForANewFrameCanBeSubmitted(cons
 eae6320::cResult eae6320::Graphics::SignalThatAllDataForAFrameHasBeenSubmitted()
 {
 	return s_whenAllDataHasBeenSubmittedFromApplicationThread.Signal();
+}
+
+void eae6320::Graphics::SetBackgroundClearColor(float i_red, float i_green, float i_blue, float i_alpha)
+{
+	s_dataBeingSubmittedByApplicationThread->clearColorRed = i_red;
+	s_dataBeingSubmittedByApplicationThread->clearColorGreen = i_green;
+	s_dataBeingSubmittedByApplicationThread->clearColorBlue = i_blue;
+	s_dataBeingSubmittedByApplicationThread->clearColorAlpha = i_alpha;
 }
 
 // Render
@@ -115,7 +127,7 @@ void eae6320::Graphics::RenderFrame()
 			// Once the pointers have been swapped the application loop can submit new data
 			if (!s_whenDataForANewFrameCanBeSubmittedFromApplicationThread.Signal())
 			{
-				EAE6320_ASSERTF(false, "Couldn't signal that new graphics data can be submitted");
+				EAE6320_ASSERTF(false, "Couldn't signal that new graphics data can be submitted")
 				Logging::OutputError("Failed to signal that new render data can be submitted");
 				UserOutput::Print("The renderer failed to signal to the application that new graphics data can be submitted."
 					" The application is probably in a bad state and should be exited");
@@ -124,18 +136,19 @@ void eae6320::Graphics::RenderFrame()
 		}
 		else
 		{
-			EAE6320_ASSERTF(false, "Waiting for the graphics data to be submitted failed");
+			EAE6320_ASSERTF(false, "Waiting for the graphics data to be submitted failed")
 			Logging::OutputError("Waiting for the application loop to submit data to be rendered failed");
 			UserOutput::Print("The renderer failed to wait for the application to submit data to be rendered."
 				" The application is probably in a bad state and should be exited");
 			return;
 		}
-	}
-
-	s_View->Clear();
+	}	
 
 	EAE6320_ASSERT(s_dataBeingRenderedByRenderThread);
 	auto* const dataRequiredToRenderFrame = s_dataBeingRenderedByRenderThread;
+
+	// Clear the Background Color
+	s_View->Clear(dataRequiredToRenderFrame->clearColorRed, dataRequiredToRenderFrame->clearColorGreen, dataRequiredToRenderFrame->clearColorBlue, dataRequiredToRenderFrame->clearColorAlpha);
 
 	// Update the frame constant buffer
 	{

@@ -44,6 +44,8 @@ namespace eae6320
 		// it must call this function
 		cResult SignalThatAllDataForAFrameHasBeenSubmitted();
 
+		void SetBackgroundClearColor(float i_red = 0.0f, float i_green = 0.0f, float i_blue = 0.0f, float i_alpha = 1.0f);
+
 		// Render
 		//-------
 
