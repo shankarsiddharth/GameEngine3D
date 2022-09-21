@@ -3,10 +3,62 @@
 
 #include "cEffect.h"
 
+#include <Engine/Asserts/Asserts.h>
+#include <Engine/Logging/Logging.h>
+#include <Engine/ScopeGuard/cScopeGuard.h>
+
+
+eae6320::cResult eae6320::Graphics::cEffect::CreateEffect(cEffect*& o_effect, const std::string& i_fragmentShaderPath, const std::string& i_vertexShaderPath)
+{
+	auto result = Results::Success;
+
+	EAE6320_ASSERT(o_effect == nullptr);
+
+	cEffect* newEffect = nullptr;
+	cScopeGuard scopeGuard([&o_effect, &result, &newEffect]
+	{
+		if (result)
+		{
+			EAE6320_ASSERT(newEffect != nullptr);
+			o_effect = newEffect;
+		}
+		else
+		{
+			if (newEffect)
+			{
+				newEffect->DecrementReferenceCount();
+				newEffect = nullptr;
+			}
+			o_effect = nullptr;
+		}
+	});
+
+	// Allocate a new Effect
+	{
+		newEffect = new (std::nothrow) cEffect();
+		if (!newEffect)
+		{
+			result = Results::OutOfMemory;
+			EAE6320_ASSERTF(false, "Couldn't allocate memory for a effect");
+			Logging::OutputError("Failed to allocate memory for a effect");
+			return result;
+		}
+	}
+	// Initialize the platform-specific effect
+	if (!(result = newEffect->Initialize(i_fragmentShaderPath, i_vertexShaderPath)))
+	{
+		EAE6320_ASSERTF(false, "Initialization of new effect failed");
+		return result;
+	}
+
+	return result;
+}
 
 eae6320::Graphics::cEffect::~cEffect()
 {
-
+	EAE6320_ASSERT(m_referenceCount == 0);
+	const auto result = CleanUp();
+	EAE6320_ASSERT(result);
 }
 
 eae6320::cResult eae6320::Graphics::cEffect::Initialize(const std::string& i_fragmentShaderPath/* = ""*/, const std::string& i_vertexShaderPath/* = ""*/)

@@ -21,17 +21,27 @@ namespace eae6320
 
 		public:
 
-			cEffect() = default;
-			~cEffect();
-
-		public:
-
 			EAE6320_ASSETS_DECLAREDELETEDREFERENCECOUNTEDFUNCTIONS(cEffect);
 
 			// Reference Counting
 			//-------------------
 
 			EAE6320_ASSETS_DECLAREREFERENCECOUNTINGFUNCTIONS();
+						
+			// Bind
+			//-------
+
+			void Bind();
+
+			// Factory Method
+			//-------
+
+			static cResult CreateEffect(cEffect*& o_effect, const std::string& i_fragmentShaderPath = "", const std::string& i_vertexShaderPath = "");
+
+		private:
+
+			cEffect() = default;
+			~cEffect();
 
 			// Initialize / Clean Up
 			//----------------------
@@ -39,13 +49,6 @@ namespace eae6320
 			cResult Initialize(const std::string& i_fragmentShaderPath = "", const std::string& i_vertexShaderPath = "");
 			cResult CleanUp();
 
-			// Bind
-			//-------
-
-			void Bind();
-
-
-		private:
 #if defined( EAE6320_PLATFORM_WINDOWS )			
 #if defined( EAE6320_PLATFORM_D3D )			
 #elif defined( EAE6320_PLATFORM_GL )
@@ -75,6 +78,8 @@ namespace eae6320
 			GLuint m_programId = 0;
 #endif
 #endif
+			// Reference Count Variable
+			//--------------
 			EAE6320_ASSETS_DECLAREREFERENCECOUNT();
 
 		};
