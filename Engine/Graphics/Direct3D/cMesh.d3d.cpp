@@ -189,9 +189,3 @@ void eae6320::Graphics::cMesh::Draw()
 		}
 	}
 }
-
-eae6320::Graphics::cMesh::~cMesh()
-{
-	
-}
-
