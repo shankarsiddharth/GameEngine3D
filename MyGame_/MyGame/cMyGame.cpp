@@ -6,9 +6,16 @@
 #include <Engine/Asserts/Asserts.h>
 #include <Engine/UserInput/UserInput.h>
 #include <Engine/Logging/Logging.h>
+#include <Engine/Graphics/Graphics.h>
 
 // Inherited Implementation
 //=========================
+
+void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime,
+	const float i_elapsedSecondCount_sinceLastSimulationUpdate)
+{
+	
+}
 
 // Run
 //----
@@ -16,11 +23,11 @@
 void eae6320::cMyGame::UpdateBasedOnInput()
 {
 	// Is the user pressing the ESC key?
-	if ( UserInput::IsKeyPressed( UserInput::KeyCodes::Escape ) )
+	if (UserInput::IsKeyPressed(UserInput::KeyCodes::Escape))
 	{
 		// Exit the application
-		const auto result = Exit( EXIT_SUCCESS );
-		EAE6320_ASSERT( result );
+		const auto result = Exit(EXIT_SUCCESS);
+		EAE6320_ASSERT(result);
 	}
 }
 
