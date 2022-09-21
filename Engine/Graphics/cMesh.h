@@ -4,6 +4,7 @@
 #include "cVertexFormat.h"
 #include "VertexFormats.h"
 
+#include <Engine/Assets/ReferenceCountedAssets.h>
 #include <Engine/Results/Results.h>
 
 #include <vector>
@@ -25,6 +26,14 @@ namespace eae6320
 			~cMesh();
 		
 		public:
+
+			EAE6320_ASSETS_DECLAREDELETEDREFERENCECOUNTEDFUNCTIONS(cMesh);
+
+			// Reference Counting
+			//-------------------
+
+			EAE6320_ASSETS_DECLAREREFERENCECOUNTINGFUNCTIONS();
+
 
 			// Initialize / Clean Up
 			//----------------------
@@ -64,7 +73,9 @@ namespace eae6320
 			GLuint m_indexBufferId = 0;
 #endif
 #endif
-			size_t m_indexBufferSize;
+			size_t m_indexBufferSize = 0;
+
+			EAE6320_ASSETS_DECLAREREFERENCECOUNT();
 
 		};
 	}
