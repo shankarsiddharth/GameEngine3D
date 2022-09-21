@@ -68,8 +68,8 @@ namespace
 	// Effect Data
 	//-------------
 
-	eae6320::Graphics::cEffect* s_newEffect = new eae6320::Graphics::cEffect();
-	eae6320::Graphics::cEffect* s_secondEffect = new eae6320::Graphics::cEffect();
+	eae6320::Graphics::cEffect* s_newEffect = nullptr;
+	eae6320::Graphics::cEffect* s_secondEffect = nullptr;
 
 }
 
@@ -255,11 +255,11 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 
 	s_newMesh->DecrementReferenceCount();
 
-	result = s_newEffect->CleanUp();
+	s_newEffect->DecrementReferenceCount();
 
 	s_secondMesh->DecrementReferenceCount();
 
-	result = s_secondEffect->CleanUp();
+	s_secondEffect->DecrementReferenceCount();
 
 	{
 		const auto result_constantBuffer_frame = s_constantBuffer_frame.CleanUp();
@@ -338,9 +338,9 @@ namespace
 	{
 		auto result = eae6320::Results::Success;
 
-		result = s_newEffect->Initialize("data/Shaders/Fragment/testsample.shader");
+		result = eae6320::Graphics::cEffect::CreateEffect(s_newEffect, "data/Shaders/Fragment/testsample.shader");
 
-		result = s_secondEffect->Initialize();
+		result = eae6320::Graphics::cEffect::CreateEffect(s_secondEffect);
 
 		return result;
 	}
