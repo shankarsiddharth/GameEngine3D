@@ -16,8 +16,17 @@
 #if defined( EAE6320_PLATFORM_WINDOWS )
 	#include <Engine/Windows/Includes.h>
 #endif
-#include "cMesh.h"
-#include "cEffect.h"
+
+// Forward Declaration
+//==================
+
+namespace eae6320
+{
+	namespace Graphics
+	{
+		struct MeshEffectPair;
+	}
+}
 
 // Interface
 //==========
@@ -26,8 +35,6 @@ namespace eae6320
 {
 	namespace Graphics
 	{
-		//class cMesh;
-		//class cEffect;
 
 		// Submission
 		//-----------
@@ -51,7 +58,7 @@ namespace eae6320
 
 		void SetBackgroundClearColor(float i_red = 0.0f, float i_green = 0.0f, float i_blue = 0.0f, float i_alpha = 1.0f);
 
-		void SubmitMeshEffect(eae6320::Graphics::cMesh* i_mesh, eae6320::Graphics::cEffect* i_effect);
+		void SubmitMeshEffectPairs(eae6320::Graphics::MeshEffectPair*& i_meshEffectPair, size_t i_numberOfPairsToRender);
 
 		// Render
 		//-------
