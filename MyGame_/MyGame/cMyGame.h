@@ -15,6 +15,19 @@
 #include "Resource Files/Resource.h"
 #endif
 
+// Forward Declaration
+//==================
+
+namespace eae6320 
+{
+	namespace Graphics
+	{
+		class cMesh;
+		class cEffect;
+	}
+}
+
+
 // Class Declaration
 //==================
 
@@ -29,6 +42,11 @@ namespace eae6320
 			const float i_elapsedSecondCount_sinceLastSimulationUpdate) override;
 
 	private:
+
+		eae6320::Graphics::cMesh* m_newMesh = nullptr;
+		eae6320::Graphics::cMesh* m_secondMesh = nullptr;
+		eae6320::Graphics::cEffect* m_newEffect = nullptr;
+		eae6320::Graphics::cEffect* m_secondEffect = nullptr;
 
 		// Configuration
 		//--------------
@@ -82,6 +100,10 @@ namespace eae6320
 
 		cResult Initialize() final;
 		cResult CleanUp() final;
+
+
+		eae6320::cResult InitializeGeometry();
+		eae6320::cResult InitializeShadingData();
 	};
 }
 

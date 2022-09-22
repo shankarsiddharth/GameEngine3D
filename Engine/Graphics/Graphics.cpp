@@ -40,6 +40,8 @@ namespace
 		float clearColorGreen = 0.0f;
 		float clearColorBlue = 0.0f;
 		float clearColorAlpha = 1.0f;
+		eae6320::Graphics::cMesh* meshToRender = nullptr;
+		eae6320::Graphics::cEffect* effectToRender = nullptr;
 	};
 	// In our class there will be two copies of the data required to render a frame:
 	//	* One of them will be in the process of being populated by the data currently being submitted by the application loop thread
@@ -62,14 +64,14 @@ namespace
 	// Mesh Data
 	//--------------
 
-	eae6320::Graphics::cMesh* s_newMesh = nullptr;
-	eae6320::Graphics::cMesh* s_secondMesh = nullptr;
+	//eae6320::Graphics::cMesh* s_newMesh = nullptr;
+	//eae6320::Graphics::cMesh* s_secondMesh = nullptr;
 
 	// Effect Data
 	//-------------
 
-	eae6320::Graphics::cEffect* s_newEffect = nullptr;
-	eae6320::Graphics::cEffect* s_secondEffect = nullptr;
+	//eae6320::Graphics::cEffect* s_newEffect = nullptr;
+	//eae6320::Graphics::cEffect* s_secondEffect = nullptr;
 
 }
 
@@ -110,6 +112,14 @@ void eae6320::Graphics::SetBackgroundClearColor(float i_red, float i_green, floa
 	s_dataBeingSubmittedByApplicationThread->clearColorGreen = i_green;
 	s_dataBeingSubmittedByApplicationThread->clearColorBlue = i_blue;
 	s_dataBeingSubmittedByApplicationThread->clearColorAlpha = i_alpha;
+}
+
+void eae6320::Graphics::SubmitMeshEffect(eae6320::Graphics::cMesh* i_mesh, eae6320::Graphics::cEffect* i_effect)
+{	
+	s_dataBeingSubmittedByApplicationThread->meshToRender = i_mesh;	
+	s_dataBeingSubmittedByApplicationThread->meshToRender->IncrementReferenceCount();
+	s_dataBeingSubmittedByApplicationThread->effectToRender = i_effect;	
+	s_dataBeingSubmittedByApplicationThread->effectToRender->IncrementReferenceCount();
 }
 
 // Render
@@ -157,13 +167,18 @@ void eae6320::Graphics::RenderFrame()
 		s_constantBuffer_frame.Update(&constantData_frame);
 	}
 
-	s_newEffect->Bind();
+	//s_newEffect->Bind();
 
-	s_newMesh->Draw();
+	//s_newMesh->Draw();
 
-	s_secondEffect->Bind();
+	//s_secondEffect->Bind();
+	if (dataRequiredToRenderFrame->meshToRender != nullptr && dataRequiredToRenderFrame->effectToRender != nullptr)
+	{
+		dataRequiredToRenderFrame->effectToRender->Bind();
+		dataRequiredToRenderFrame->meshToRender->Draw();
+	}
 
-	s_secondMesh->Draw();
+	//s_secondMesh->Draw();
 
 	s_View->Swap();
 
@@ -173,6 +188,13 @@ void eae6320::Graphics::RenderFrame()
 	{
 		// (At this point in the class there isn't anything that needs to be cleaned up)
 		//dataRequiredToRenderFrame	// TODO
+		if (dataRequiredToRenderFrame->meshToRender != nullptr && dataRequiredToRenderFrame->effectToRender != nullptr)
+		{
+			dataRequiredToRenderFrame->meshToRender->DecrementReferenceCount();
+			dataRequiredToRenderFrame->meshToRender = nullptr;
+			dataRequiredToRenderFrame->effectToRender->DecrementReferenceCount();
+			dataRequiredToRenderFrame->effectToRender = nullptr;
+		}		
 	}
 }
 
@@ -253,13 +275,31 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 
 	result = s_View->CleanUp();
 
-	s_newMesh->DecrementReferenceCount();
+	//s_newMesh->DecrementReferenceCount();
+	//s_newMesh = nullptr;
 
-	s_newEffect->DecrementReferenceCount();
+	//s_newEffect->DecrementReferenceCount();
+	//s_newEffect = nullptr;
 
-	s_secondMesh->DecrementReferenceCount();
+	//s_secondMesh->DecrementReferenceCount();
 
-	s_secondEffect->DecrementReferenceCount();
+	//s_secondEffect->DecrementReferenceCount();
+
+	if (s_dataRequiredToRenderAFrame[0].meshToRender != nullptr && s_dataRequiredToRenderAFrame[0].effectToRender != nullptr)
+	{
+		s_dataRequiredToRenderAFrame[0].meshToRender->DecrementReferenceCount();
+		s_dataRequiredToRenderAFrame[0].meshToRender = nullptr;
+		s_dataRequiredToRenderAFrame[0].effectToRender->DecrementReferenceCount();
+		s_dataRequiredToRenderAFrame[0].effectToRender = nullptr;
+	}
+
+	if (s_dataRequiredToRenderAFrame[1].meshToRender != nullptr && s_dataRequiredToRenderAFrame[1].effectToRender != nullptr)
+	{
+		s_dataRequiredToRenderAFrame[1].meshToRender->DecrementReferenceCount();
+		s_dataRequiredToRenderAFrame[1].meshToRender = nullptr;
+		s_dataRequiredToRenderAFrame[1].effectToRender->DecrementReferenceCount();
+		s_dataRequiredToRenderAFrame[1].effectToRender = nullptr;
+	}
 
 	{
 		const auto result_constantBuffer_frame = s_constantBuffer_frame.CleanUp();
@@ -313,7 +353,7 @@ namespace
 			0, 1, 2, 0, 3, 1
 		};
 
-		result = eae6320::Graphics::cMesh::CreateMesh(vertexData, 4, indexData, 6, s_newMesh);
+		//result = eae6320::Graphics::cMesh::CreateMesh(vertexData, 4, indexData, 6, s_newMesh);
 
 		eae6320::Graphics::VertexFormats::sVertex_mesh newVertexData[] =
 		{
@@ -329,7 +369,7 @@ namespace
 			0, 1, 2
 		};
 
-		result = eae6320::Graphics::cMesh::CreateMesh(newVertexData, 3, newIndexData, 3, s_secondMesh);
+		//result = eae6320::Graphics::cMesh::CreateMesh(newVertexData, 3, newIndexData, 3, s_secondMesh);
 
 		return result;
 	}
@@ -338,9 +378,9 @@ namespace
 	{
 		auto result = eae6320::Results::Success;
 
-		result = eae6320::Graphics::cEffect::CreateEffect(s_newEffect, "data/Shaders/Fragment/testsample.shader");
+		//result = eae6320::Graphics::cEffect::CreateEffect(s_newEffect, "data/Shaders/Fragment/testsample.shader");
 
-		result = eae6320::Graphics::cEffect::CreateEffect(s_secondEffect);
+		//result = eae6320::Graphics::cEffect::CreateEffect(s_secondEffect);
 
 		return result;
 	}
