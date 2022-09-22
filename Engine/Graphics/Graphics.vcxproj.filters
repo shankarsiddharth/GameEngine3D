@@ -81,6 +81,7 @@
     <ClInclude Include="cEffect.h" />
     <ClInclude Include="Includes.h" />
     <ClInclude Include="cView.h" />
+    <ClInclude Include="MeshEffectPair.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cRenderState.inl" />

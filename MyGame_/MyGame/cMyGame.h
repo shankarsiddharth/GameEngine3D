@@ -14,7 +14,6 @@
 #if defined( EAE6320_PLATFORM_WINDOWS )
 #include "Resource Files/Resource.h"
 #endif
-#include "Engine/Graphics/MeshEffectPair.h"
 
 // Forward Declaration
 //==================
@@ -25,6 +24,7 @@ namespace eae6320
 	{
 		class cMesh;
 		class cEffect;
+		struct MeshEffectPair;
 	}
 }
 
@@ -50,6 +50,10 @@ namespace eae6320
 		eae6320::Graphics::cMesh* m_secondMesh = nullptr;
 		eae6320::Graphics::cEffect* m_newEffect = nullptr;
 		eae6320::Graphics::cEffect* m_secondEffect = nullptr;
+
+		static const size_t MAXIMUM_NUMBER_OF_PAIRS = 500;
+		static size_t s_numberOfPairsToRender;
+		eae6320::Graphics::MeshEffectPair* m_meshEffectPair = nullptr;
 
 		// Configuration
 		//--------------
@@ -107,6 +111,7 @@ namespace eae6320
 
 		eae6320::cResult InitializeGeometry();
 		eae6320::cResult InitializeShadingData();
+		eae6320::cResult InitializePairs();
 	};
 }
 

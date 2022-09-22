@@ -10,6 +10,9 @@
 #include <Engine/Graphics/VertexFormats.h>
 #include <Engine/Graphics/cMesh.h>
 #include <Engine/Graphics/cEffect.h>
+#include <Engine/Graphics/MeshEffectPair.h>
+
+size_t eae6320::cMyGame::s_numberOfPairsToRender = 0;
 
 // Inherited Implementation
 //=========================
@@ -18,7 +21,7 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 	const float i_elapsedSecondCount_sinceLastSimulationUpdate)
 {
 	eae6320::Graphics::SetBackgroundClearColor(1, 0, 0);
-	eae6320::Graphics::SubmitMeshEffect(m_newMesh, m_newEffect);	
+	eae6320::Graphics::SubmitMeshEffectPairs(m_meshEffectPair, s_numberOfPairsToRender);	
 }
 
 // Run
@@ -58,6 +61,10 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 			return result;
 		}
 	}
+	// Initialize the Mesh Effect Pairs
+	m_meshEffectPair = new eae6320::Graphics::MeshEffectPair[MAXIMUM_NUMBER_OF_PAIRS];
+
+	InitializePairs();
 
 	eae6320::Logging::OutputMessage("My Game Initialized");
 	return result;
@@ -65,6 +72,9 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 
 eae6320::cResult eae6320::cMyGame::CleanUp()
 {
+
+	auto result = eae6320::Results::Success;
+	
 	if (m_newMesh)
 	{
 		m_newMesh->DecrementReferenceCount();
@@ -85,6 +95,20 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 	{
 		m_secondEffect->DecrementReferenceCount();
 		m_secondEffect = nullptr;
+	}
+
+	size_t numberOfPairsToRender = s_numberOfPairsToRender;
+
+	for (size_t index = 0; index < numberOfPairsToRender; index++)
+	{
+		if (m_meshEffectPair[index].mesh != nullptr
+			&& m_meshEffectPair[index].effect != nullptr)
+		{
+			m_meshEffectPair[index].mesh->DecrementReferenceCount();
+			m_meshEffectPair[index].mesh = nullptr;
+			m_meshEffectPair[index].effect->DecrementReferenceCount();
+			m_meshEffectPair[index].effect = nullptr;
+		}
 	}
 
 	eae6320::Logging::OutputMessage("My Game CleanUp");
@@ -141,6 +165,20 @@ eae6320::cResult eae6320::cMyGame::InitializeShadingData()
 	result = eae6320::Graphics::cEffect::CreateEffect(m_newEffect, "data/Shaders/Fragment/testsample.shader");
 
 	result = eae6320::Graphics::cEffect::CreateEffect(m_secondEffect);
+
+	return result;
+}
+
+eae6320::cResult eae6320::cMyGame::InitializePairs()
+{
+	auto result = eae6320::Results::Success;
+
+	m_meshEffectPair[0].mesh = m_newMesh;
+	m_meshEffectPair[0].effect = m_newEffect;
+	s_numberOfPairsToRender++;
+	m_meshEffectPair[1].mesh = m_secondMesh;
+	m_meshEffectPair[1].effect = m_secondEffect;
+	s_numberOfPairsToRender++;
 
 	return result;
 }
