@@ -14,6 +14,7 @@
 #if defined( EAE6320_PLATFORM_WINDOWS )
 #include "Resource Files/Resource.h"
 #endif
+#include "Engine/Graphics/MeshEffectPair.h"
 
 // Forward Declaration
 //==================
@@ -40,6 +41,8 @@ namespace eae6320
 
 		void SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime,
 			const float i_elapsedSecondCount_sinceLastSimulationUpdate) override;
+
+		void UpdateSimulationBasedOnInput() override;
 
 	private:
 
