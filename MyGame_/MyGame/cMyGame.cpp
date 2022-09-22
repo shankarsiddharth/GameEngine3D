@@ -144,3 +144,12 @@ eae6320::cResult eae6320::cMyGame::InitializeShadingData()
 
 	return result;
 }
+
+void eae6320::cMyGame::UpdateSimulationBasedOnInput()
+{
+	// Is the user pressing the Q key?
+	if (UserInput::IsKeyPressed('Q'))
+	{
+		eae6320::Logging::OutputMessage("Q Input Key Pressed");		
+	}	
+}
