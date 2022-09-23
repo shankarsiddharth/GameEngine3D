@@ -62,18 +62,6 @@ namespace
 	// (the application loop thread waits for the signal)
 	eae6320::Concurrency::cEvent s_whenDataForANewFrameCanBeSubmittedFromApplicationThread;
 
-	// Mesh Data
-	//--------------
-
-	//eae6320::Graphics::cMesh* s_newMesh = nullptr;
-	//eae6320::Graphics::cMesh* s_secondMesh = nullptr;
-
-	// Effect Data
-	//-------------
-
-	//eae6320::Graphics::cEffect* s_newEffect = nullptr;
-	//eae6320::Graphics::cEffect* s_secondEffect = nullptr;
-
 }
 
 // Helper Declarations
@@ -123,11 +111,9 @@ void eae6320::Graphics::SubmitMeshEffectPairs(eae6320::Graphics::MeshEffectPair*
 	for (size_t index = 0; index < i_numberOfPairsToRender; index++)
 	{
 		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].mesh = i_meshEffectPair[index].mesh;
-		i_meshEffectPair[index].mesh->IncrementReferenceCount();
-		//s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].mesh->IncrementReferenceCount();
+		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].mesh->IncrementReferenceCount();
 		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].effect = i_meshEffectPair[index].effect;
-		i_meshEffectPair[index].effect->IncrementReferenceCount();
-		//s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].effect->IncrementReferenceCount();
+		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].effect->IncrementReferenceCount();
 	}
 }
 
@@ -176,11 +162,7 @@ void eae6320::Graphics::RenderFrame()
 		s_constantBuffer_frame.Update(&constantData_frame);
 	}
 
-	//s_newEffect->Bind();
-
-	//s_newMesh->Draw();
-
-	//s_secondEffect->Bind();
+	//Bind Effect & Draw Mesh 
 	size_t numberOfPairsToRender = dataRequiredToRenderFrame->numberOfPairsToRender;
 	for (size_t index = 0; index < numberOfPairsToRender; index++)
 	{
@@ -192,8 +174,6 @@ void eae6320::Graphics::RenderFrame()
 		}
 	}	
 
-	//s_secondMesh->Draw();
-
 	s_View->Swap();
 
 	// After all of the data that was submitted for this frame has been used
@@ -202,22 +182,8 @@ void eae6320::Graphics::RenderFrame()
 	{
 		// (At this point in the class there isn't anything that needs to be cleaned up)
 		//dataRequiredToRenderFrame	// TODO
-		/*auto result = eae6320::Results::Success;
-		result = CleanUpRenderData(dataRequiredToRenderFrame);*/
-		for (size_t index = 0; index < numberOfPairsToRender; index++)
-		{
-			if (dataRequiredToRenderFrame->meshEffectPair[index].mesh != nullptr) 
-			{
-				dataRequiredToRenderFrame->meshEffectPair[index].mesh->DecrementReferenceCount();
-				dataRequiredToRenderFrame->meshEffectPair[index].mesh = nullptr;
-			}
-			if(dataRequiredToRenderFrame->meshEffectPair[index].effect != nullptr)
-			{				
-				dataRequiredToRenderFrame->meshEffectPair[index].effect->DecrementReferenceCount();
-				dataRequiredToRenderFrame->meshEffectPair[index].effect = nullptr;
-			}
-		}
-		dataRequiredToRenderFrame->numberOfPairsToRender = 0;
+		auto result = eae6320::Results::Success;
+		result = CleanUpRenderData(dataRequiredToRenderFrame);
 	}
 }
 
@@ -298,48 +264,9 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 
 	result = s_View->CleanUp();
 
-	//s_newMesh->DecrementReferenceCount();
-	//s_newMesh = nullptr;
-
-	//s_newEffect->DecrementReferenceCount();
-	//s_newEffect = nullptr;
-
-	//s_secondMesh->DecrementReferenceCount();
-
-	//s_secondEffect->DecrementReferenceCount();
-
-	/*result = CleanUpRenderData(s_dataBeingRenderedByRenderThread);
-	result = CleanUpRenderData(s_dataBeingSubmittedByApplicationThread);*/
-
-	size_t numberOfPairsToRender = s_dataRequiredToRenderAFrame[0].numberOfPairsToRender;
-	for (size_t index = 0; index < numberOfPairsToRender; index++)
-	{
-		if (s_dataRequiredToRenderAFrame[0].meshEffectPair[index].mesh != nullptr)
-		{
-			s_dataRequiredToRenderAFrame[0].meshEffectPair[index].mesh->DecrementReferenceCount();
-			s_dataRequiredToRenderAFrame[0].meshEffectPair[index].mesh = nullptr;
-		}
-		if(s_dataRequiredToRenderAFrame[0].meshEffectPair[index].effect != nullptr)
-		{	
-			s_dataRequiredToRenderAFrame[0].meshEffectPair[index].effect->DecrementReferenceCount();
-			s_dataRequiredToRenderAFrame[0].meshEffectPair[index].effect = nullptr;
-		}
-	}
-
-	numberOfPairsToRender = s_dataRequiredToRenderAFrame[1].numberOfPairsToRender;
-	for (size_t index = 0; index < numberOfPairsToRender; index++)
-	{
-		if (s_dataRequiredToRenderAFrame[1].meshEffectPair[index].mesh != nullptr)
-		{
-			s_dataRequiredToRenderAFrame[1].meshEffectPair[index].mesh->DecrementReferenceCount();
-			s_dataRequiredToRenderAFrame[1].meshEffectPair[index].mesh = nullptr;
-		}
-		if(s_dataRequiredToRenderAFrame[1].meshEffectPair[index].effect != nullptr)
-		{
-			s_dataRequiredToRenderAFrame[1].meshEffectPair[index].effect->DecrementReferenceCount();
-			s_dataRequiredToRenderAFrame[1].meshEffectPair[index].effect = nullptr;
-		}
-	}
+	//Cleanup Render Data
+	result = CleanUpRenderData(s_dataBeingRenderedByRenderThread);
+	result = CleanUpRenderData(s_dataBeingSubmittedByApplicationThread);
 
 	{
 		const auto result_constantBuffer_frame = s_constantBuffer_frame.CleanUp();
