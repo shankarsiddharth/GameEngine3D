@@ -12,6 +12,18 @@
 #include <Engine/Graphics/cEffect.h>
 #include <Engine/Graphics/MeshEffectPair.h>
 
+
+namespace
+{
+	struct GameState
+	{
+		size_t numberOfPairsToDraw = 0;
+		bool bShouldSwapEffects = false;
+	};
+
+	GameState s_GameState;
+}
+
 size_t eae6320::cMyGame::s_numberOfPairsToRender = 0;
 
 // Inherited Implementation
@@ -20,8 +32,41 @@ size_t eae6320::cMyGame::s_numberOfPairsToRender = 0;
 void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime,
 	const float i_elapsedSecondCount_sinceLastSimulationUpdate)
 {
-	eae6320::Graphics::SetBackgroundClearColor(1, 0, 0);
-	eae6320::Graphics::SubmitMeshEffectPairs(m_meshEffectPair, s_numberOfPairsToRender);	
+	eae6320::Graphics::SetBackgroundClearColor(0.0f, 0.95f, 1.0f);
+	if (s_GameState.bShouldSwapEffects)
+	{
+		m_meshEffectPair[0].effect = m_secondEffect;
+		m_meshEffectPair[1].effect = m_newEffect;
+	}
+	else
+	{
+		m_meshEffectPair[0].effect = m_newEffect;
+		m_meshEffectPair[1].effect = m_secondEffect;
+	}
+	eae6320::Graphics::SubmitMeshEffectPairs(m_meshEffectPair, s_GameState.numberOfPairsToDraw);
+}
+
+void eae6320::cMyGame::UpdateSimulationBasedOnInput()
+{
+	// Is the user pressing the Q key?
+	if (UserInput::IsKeyPressed('Q'))
+	{
+		eae6320::Logging::OutputMessage("Q Input Key Pressed");
+		s_GameState.numberOfPairsToDraw = s_numberOfPairsToRender - 1;
+	}
+	else
+	{
+		s_GameState.numberOfPairsToDraw = s_numberOfPairsToRender;
+	}
+
+	if (UserInput::IsKeyPressed('E'))
+	{
+		s_GameState.bShouldSwapEffects = true;
+	}
+	else
+	{
+		s_GameState.bShouldSwapEffects = false;
+	}
 }
 
 // Run
@@ -65,6 +110,8 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 	m_meshEffectPair = new eae6320::Graphics::MeshEffectPair[MAXIMUM_NUMBER_OF_PAIRS];
 
 	InitializePairs();
+
+	s_GameState.numberOfPairsToDraw = s_numberOfPairsToRender;
 
 	eae6320::Logging::OutputMessage("My Game Initialized");
 	return result;
@@ -181,13 +228,4 @@ eae6320::cResult eae6320::cMyGame::InitializePairs()
 	s_numberOfPairsToRender++;
 
 	return result;
-}
-
-void eae6320::cMyGame::UpdateSimulationBasedOnInput()
-{
-	// Is the user pressing the Q key?
-	if (UserInput::IsKeyPressed('Q'))
-	{
-		eae6320::Logging::OutputMessage("Q Input Key Pressed");		
-	}	
 }
