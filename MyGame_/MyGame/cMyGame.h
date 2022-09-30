@@ -78,6 +78,9 @@ namespace eae6320
 #endif
 				;
 		}
+
+		const char* GetPlatformName() const;
+
 		// Window classes are almost always identified by name;
 		// there is a unique "ATOM" associated with them,
 		// but in practice Windows expects to use the class name as an identifier.
