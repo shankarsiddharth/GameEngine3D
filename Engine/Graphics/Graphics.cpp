@@ -255,6 +255,19 @@ eae6320::cResult eae6320::Graphics::Initialize(const sInitializationParameters& 
 		}
 	}
 
+	//Size Information:
+	size_t sizeOfRenderData = sizeof(sDataRequiredToRenderAFrame);
+	std::string gPlatformName = "";
+#if defined( EAE6320_PLATFORM_WINDOWS )	
+#if defined( EAE6320_PLATFORM_D3D )
+	gPlatformName = "Direct3D";
+#elif defined( EAE6320_PLATFORM_GL )
+	gPlatformName = "OpenGL";
+#endif
+#endif
+	eae6320::Logging::OutputMessage("Size of Render Data in  %s  using sizeof operator : %zu bytes", gPlatformName.c_str(), (sizeOfRenderData * 2));
+
+
 	return result;
 }
 

@@ -26,6 +26,22 @@ namespace
 
 size_t eae6320::cMyGame::s_numberOfPairsToRender = 0;
 
+const char* eae6320::cMyGame::GetPlatformName() const
+{
+	return
+#if defined( EAE6320_PLATFORM_D3D )
+		"Direct3D"
+#elif defined( EAE6320_PLATFORM_GL )
+		"OpenGL"
+#endif
+//#ifdef _DEBUG
+//		" -- Debug"
+//#else
+//		" -- Release"
+//#endif
+		;
+}
+
 // Inherited Implementation
 //=========================
 
@@ -51,7 +67,7 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 	// Is the user pressing the Q key?
 	if (UserInput::IsKeyPressed('Q'))
 	{
-		eae6320::Logging::OutputMessage("Q Input Key Pressed");
+		//eae6320::Logging::OutputMessage("Q Input Key Pressed");
 		s_GameState.numberOfPairsToDraw = s_numberOfPairsToRender - 1;
 	}
 	else
@@ -114,6 +130,13 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 	s_GameState.numberOfPairsToDraw = s_numberOfPairsToRender;
 
 	eae6320::Logging::OutputMessage("My Game Initialized");
+
+	//Size Information:
+	size_t sizeOfMeshClass = sizeof(eae6320::Graphics::cMesh);
+	size_t sizeOfEffectClass = sizeof(eae6320::Graphics::cEffect);
+	eae6320::Logging::OutputMessage("Size of Mesh in  %s  using sizeof operator : %zu bytes", GetPlatformName(), sizeOfMeshClass);
+	eae6320::Logging::OutputMessage("Size of Effect in  %s  using sizeof operator : %zu bytes", GetPlatformName(), sizeOfEffectClass);
+
 	return result;
 }
 
@@ -148,11 +171,13 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 
 	for (size_t index = 0; index < numberOfPairsToRender; index++)
 	{
-		if (m_meshEffectPair[index].mesh != nullptr
-			&& m_meshEffectPair[index].effect != nullptr)
+		if (m_meshEffectPair[index].mesh != nullptr)
 		{
 			m_meshEffectPair[index].mesh->DecrementReferenceCount();
 			m_meshEffectPair[index].mesh = nullptr;
+		}
+		if(m_meshEffectPair[index].effect != nullptr)
+		{			
 			m_meshEffectPair[index].effect->DecrementReferenceCount();
 			m_meshEffectPair[index].effect = nullptr;
 		}
