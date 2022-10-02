@@ -29,6 +29,8 @@ namespace
 	// Constant buffer object
 	eae6320::Graphics::cConstantBuffer s_constantBuffer_frame(eae6320::Graphics::ConstantBufferTypes::Frame);
 
+	eae6320::Graphics::cConstantBuffer s_constantBuffer_drawCall(eae6320::Graphics::ConstantBufferTypes::DrawCall);
+
 	// Submission Data
 	//----------------
 
@@ -175,7 +177,13 @@ void eae6320::Graphics::RenderFrame()
 		if (dataRequiredToRenderFrame->meshEffectPair[index].mesh != nullptr 
 			&& dataRequiredToRenderFrame->meshEffectPair[index].effect != nullptr)
 		{
-			dataRequiredToRenderFrame->meshEffectPair[index].effect->Bind();
+			// Update the draw call constant buffer
+			{
+				// Copy the data from the system memory that the application owns to GPU memory
+				auto& constantData_drawCall = dataRequiredToRenderFrame->meshEffectPair[index].localToWorld_transform;
+				s_constantBuffer_drawCall.Update(&constantData_drawCall);
+			}
+			dataRequiredToRenderFrame->meshEffectPair[index].effect->Bind();			
 			dataRequiredToRenderFrame->meshEffectPair[index].mesh->Draw();
 		}
 	}	
@@ -219,6 +227,17 @@ eae6320::cResult eae6320::Graphics::Initialize(const sInitializationParameters& 
 		else
 		{
 			EAE6320_ASSERTF(false, "Can't initialize Graphics without frame constant buffer");
+			return result;
+		}
+
+		if (result = s_constantBuffer_drawCall.Initialize())
+		{
+			s_constantBuffer_drawCall.Bind(
+				static_cast<uint_fast8_t>(eShaderType::Vertex) | static_cast<uint_fast8_t>(eShaderType::Fragment));
+		}
+		else
+		{
+			EAE6320_ASSERTF(false, "Can't initialize Graphics without draw call constant buffer");
 			return result;
 		}
 	}
@@ -295,6 +314,18 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 			if (result)
 			{
 				result = result_constantBuffer_frame;
+			}
+		}
+	}
+
+	{
+		const auto result_constantBuffer_drawCall = s_constantBuffer_drawCall.CleanUp();
+		if (!result_constantBuffer_drawCall)
+		{
+			EAE6320_ASSERT(false);
+			if (result)
+			{
+				result = result_constantBuffer_drawCall;
 			}
 		}
 	}
