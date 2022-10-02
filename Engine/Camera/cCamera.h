@@ -23,13 +23,25 @@ namespace eae6320
 				const float i_z_farPlane = 1000.0f);
 			~cCamera();
 
+			void Update(const float i_elapsedSecondCount_sinceLastUpdate);
+
+			void Move(const Math::sVector& i_directionVector);
+
 			eae6320::Math::cMatrix_transformation GetWorldToCameraTransform() const;
 			eae6320::Math::cMatrix_transformation GetCameraToProjectedTransform_Perspective() const;
 
 		private:
-			//eae6320::Physics::sRigidBodyState m_rigidBodyState;
+			
+			void UpdateTransforms();
+
+			eae6320::Physics::sRigidBodyState m_rigidBodyState;
 			eae6320::Math::cMatrix_transformation m_worldToCameraTransform;
 			eae6320::Math::cMatrix_transformation m_cameraToProjectedTransform_perspective;
+
+			const float verticalFieldOfView_inDegrees;
+			const float aspectRatio;
+			const float z_nearPlane;
+			const float z_farPlane;
 		};
 	}
 }
