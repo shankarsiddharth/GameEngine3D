@@ -11,16 +11,16 @@
 // Constant Buffers
 //=================
 
-cbuffer g_constantBuffer_frame : register( b0 )
-{
-	float4x4 g_transform_worldToCamera;
-	float4x4 g_transform_cameraToProjected;
+// cbuffer g_constantBuffer_frame : register( b0 )
+// {
+// 	float4x4 g_transform_worldToCamera;
+// 	float4x4 g_transform_cameraToProjected;
 
-	float g_elapsedSecondCount_systemTime;
-	float g_elapsedSecondCount_simulationTime;
-	// For float4 alignment
-	float2 g_padding;
-};
+// 	float g_elapsedSecondCount_systemTime;
+// 	float g_elapsedSecondCount_simulationTime;
+// 	// For float4 alignment
+// 	float2 g_padding;
+// };
 
 // Entry Point
 //============
@@ -59,7 +59,8 @@ void main(
 		float new_color_g = ((cos_value + 1.0) / 2.0);
 		float new_color_b = (((sin_value * cos_value) + 1.0) / 2.0);
 		
-		o_color = float4(new_color_r, new_color_g, new_color_b, 1.0);
+		// o_color = float4(new_color_r, new_color_g, new_color_b, 1.0);
+		o_color = float4(1.0, 0.0, 0.0, 1.0);
 }
 
 #elif defined( EAE6320_PLATFORM_GL )
@@ -67,16 +68,16 @@ void main(
 // Constant Buffers
 //=================
 
-layout( std140, binding = 0 ) uniform g_constantBuffer_frame
-{
-	mat4 g_transform_worldToCamera;
-	mat4 g_transform_cameraToProjected;
+// layout( std140, binding = 0 ) uniform g_constantBuffer_frame
+// {
+// 	mat4 g_transform_worldToCamera;
+// 	mat4 g_transform_cameraToProjected;
 
-	float g_elapsedSecondCount_systemTime;
-	float g_elapsedSecondCount_simulationTime;
-	// For vec4 alignment
-	vec2 g_padding;
-};
+// 	float g_elapsedSecondCount_systemTime;
+// 	float g_elapsedSecondCount_simulationTime;
+// 	// For vec4 alignment
+// 	vec2 g_padding;
+// };
 
 // Output
 //=======
