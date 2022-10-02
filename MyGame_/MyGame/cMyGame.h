@@ -10,6 +10,7 @@
 
 #include <Engine/Application/iApplication.h>
 #include <Engine/Results/Results.h>
+#include <Engine/Camera/cCamera.h>
 
 #if defined( EAE6320_PLATFORM_WINDOWS )
 #include "Resource Files/Resource.h"
@@ -44,12 +45,16 @@ namespace eae6320
 
 		void UpdateSimulationBasedOnInput() override;
 
+		void UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate) override;
+
 	private:
 
 		eae6320::Graphics::cMesh* m_newMesh = nullptr;
 		eae6320::Graphics::cMesh* m_secondMesh = nullptr;
 		eae6320::Graphics::cEffect* m_newEffect = nullptr;
 		eae6320::Graphics::cEffect* m_secondEffect = nullptr;
+
+		eae6320::Camera::cCamera* m_camera = nullptr;
 
 		static const size_t MAXIMUM_NUMBER_OF_PAIRS = 500;
 		static size_t s_numberOfPairsToRender;

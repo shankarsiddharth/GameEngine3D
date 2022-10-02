@@ -48,7 +48,8 @@ const char* eae6320::cMyGame::GetPlatformName() const
 void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime,
 	const float i_elapsedSecondCount_sinceLastSimulationUpdate)
 {
-	eae6320::Graphics::SetBackgroundClearColor(0.0f, 0.95f, 1.0f);
+	//eae6320::Graphics::SetBackgroundClearColor(0.0f, 0.95f, 1.0f);
+
 	if (s_GameState.bShouldSwapEffects)
 	{
 		m_meshEffectPair[0].effect = m_secondEffect;
@@ -60,6 +61,8 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 		m_meshEffectPair[1].effect = m_secondEffect;
 	}
 	eae6320::Graphics::SubmitMeshEffectPairs(m_meshEffectPair, s_GameState.numberOfPairsToDraw);
+
+	eae6320::Graphics::SubmitCameraTransform(m_camera->GetWorldToCameraTransform(), m_camera->GetCameraToProjectedTransform_Perspective());
 }
 
 void eae6320::cMyGame::UpdateSimulationBasedOnInput()
@@ -83,6 +86,11 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 	{
 		s_GameState.bShouldSwapEffects = false;
 	}
+}
+
+void eae6320::cMyGame::UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
+{
+	//Update RigidBody
 }
 
 // Run
@@ -128,6 +136,8 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 	InitializePairs();
 
 	s_GameState.numberOfPairsToDraw = s_numberOfPairsToRender;
+
+	m_camera = new eae6320::Camera::cCamera(eae6320::Math::sVector(0.0f, 0.0f, 10.0f));
 
 	eae6320::Logging::OutputMessage("My Game Initialized");
 
@@ -181,6 +191,12 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 			m_meshEffectPair[index].effect->DecrementReferenceCount();
 			m_meshEffectPair[index].effect = nullptr;
 		}
+	}
+
+	if (m_camera)
+	{
+		delete m_camera;
+		m_camera = nullptr;
 	}
 
 	eae6320::Logging::OutputMessage("My Game CleanUp");

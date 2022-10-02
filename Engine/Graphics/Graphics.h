@@ -12,6 +12,7 @@
 
 #include <cstdint>
 #include <Engine/Results/Results.h>
+#include <Engine/Math/cMatrix_transformation.h>
 
 #if defined( EAE6320_PLATFORM_WINDOWS )
 	#include <Engine/Windows/Includes.h>
@@ -59,6 +60,8 @@ namespace eae6320
 		void SetBackgroundClearColor(float i_red = 0.0f, float i_green = 0.0f, float i_blue = 0.0f, float i_alpha = 1.0f);
 
 		void SubmitMeshEffectPairs(eae6320::Graphics::MeshEffectPair*& i_meshEffectPair, size_t i_numberOfPairsToRender);
+
+		void SubmitCameraTransform(const eae6320::Math::cMatrix_transformation& i_worldToCameraTransform, const eae6320::Math::cMatrix_transformation& i_cameraToProjectedTransform_perspective);
 
 		// Render
 		//-------

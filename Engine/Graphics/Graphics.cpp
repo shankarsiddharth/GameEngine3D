@@ -117,6 +117,12 @@ void eae6320::Graphics::SubmitMeshEffectPairs(eae6320::Graphics::MeshEffectPair*
 	}
 }
 
+void eae6320::Graphics::SubmitCameraTransform(const eae6320::Math::cMatrix_transformation& i_worldToCameraTransform, const eae6320::Math::cMatrix_transformation& i_cameraToProjectedTransform_perspective)
+{
+	s_dataBeingSubmittedByApplicationThread->constantData_frame.g_transform_worldToCamera = i_worldToCameraTransform;
+	s_dataBeingSubmittedByApplicationThread->constantData_frame.g_transform_cameraToProjected = i_cameraToProjectedTransform_perspective;
+}
+
 // Render
 //-------
 
