@@ -40,14 +40,14 @@ void main(
 	out float4 o_color : SV_TARGET
 
 )
-{
-	// Output solid white
-	o_color = float4(
-		// RGB (color)
-		1.0, 1.0, 1.0,
-		// Alpha (opacity)
-		1.0 );
-}
+// {
+// 	// Output solid white
+// 	o_color = float4(
+// 		// RGB (color)
+// 		1.0, 1.0, 1.0,
+// 		// Alpha (opacity)
+// 		1.0 );
+// }
 
 #elif defined( EAE6320_PLATFORM_GL )
 
@@ -76,13 +76,22 @@ out vec4 o_color;
 //============
 
 void main()
+// {
+// 	// Output solid white
+// 	o_color = vec4(
+// 		// RGB (color)
+// 		1.0, 1.0, 1.0,
+// 		// Alpha (opacity)
+// 		1.0 );
+// }
+
+#endif
+
 {
 	// Output solid white
-	o_color = vec4(
+	o_color = float4(
 		// RGB (color)
 		1.0, 1.0, 1.0,
 		// Alpha (opacity)
 		1.0 );
 }
-
-#endif
