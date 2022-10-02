@@ -32,7 +32,7 @@ namespace eae6320
 
 		private:
 			
-			void UpdateTransforms();
+			void UpdateTransforms(const float i_elapsedSecondCount_sinceLastUpdate);
 
 			eae6320::Physics::sRigidBodyState m_rigidBodyState;
 			eae6320::Math::cMatrix_transformation m_worldToCameraTransform;
