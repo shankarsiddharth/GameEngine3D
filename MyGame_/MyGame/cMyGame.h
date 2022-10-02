@@ -11,6 +11,7 @@
 #include <Engine/Application/iApplication.h>
 #include <Engine/Results/Results.h>
 #include <Engine/Camera/cCamera.h>
+#include <Engine/GameFramework/cGameObject.h>
 
 #if defined( EAE6320_PLATFORM_WINDOWS )
 #include "Resource Files/Resource.h"
@@ -55,6 +56,8 @@ namespace eae6320
 		eae6320::Graphics::cEffect* m_secondEffect = nullptr;
 
 		eae6320::Camera::cCamera* m_camera = nullptr;
+
+		eae6320::GameFramework::cGameObject newGameObject;
 
 		static const size_t MAXIMUM_NUMBER_OF_PAIRS = 500;
 		static size_t s_numberOfPairsToRender;
