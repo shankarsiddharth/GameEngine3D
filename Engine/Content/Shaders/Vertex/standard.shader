@@ -108,6 +108,7 @@ void main()
 		// Transform the vertex from world space into camera space
 		float4 vertexPosition_camera = MatrixMultiplication( g_transform_worldToCamera, vertexPosition_world );
 		// Project the vertex from camera space into projected space
-		o_vertexPosition_projected = MatrixMultiplication( g_transform_cameraToProjected, vertexPosition_camera );
+		float4 vertexPosition_projected = MatrixMultiplication( g_transform_cameraToProjected, vertexPosition_camera );
+		WriteVertexOutput(vertexPosition_projected, o_vertexPosition_projected)
 	}
 }

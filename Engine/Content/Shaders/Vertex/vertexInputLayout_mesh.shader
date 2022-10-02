@@ -28,11 +28,11 @@ void main(
 	out float4 o_position : SV_POSITION
 
 )
-{
-	// The shader program is only used to generate a vertex input layout object;
-	// the actual shading code is never used
-	o_position = float4( i_position, 1.0 );
-}
+// {
+// 	// The shader program is only used to generate a vertex input layout object;
+// 	// the actual shading code is never used
+// 	o_position = float4( i_position, 1.0 );
+// }
 
 #elif defined( EAE6320_PLATFORM_GL )
 
@@ -56,9 +56,16 @@ layout( location = 0 ) in vec3 i_position;
 //============
 
 void main()
-{
-	// The shader program is only used by Direct3D
-	gl_Position = vec4( i_position, 1.0 );
-}
+// {
+// 	// The shader program is only used by Direct3D
+// 	gl_Position = vec4( i_position, 1.0 );
+// }
 
 #endif
+
+{
+	// The shader program is only used to generate a vertex input layout object;
+	// the actual shading code is never used
+	float4 out_position = float4( i_position, 1.0 );
+	WriteVertexOutput(out_position, o_position)
+}
