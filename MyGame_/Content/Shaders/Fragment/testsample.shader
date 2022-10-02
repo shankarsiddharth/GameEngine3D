@@ -26,28 +26,6 @@ void main(
 	out float4 o_color : SV_TARGET
 
 )
-// {
-// 	// Output solid white
-// 	o_color = float4(
-// 		// RGB (color)
-// 		1.0, 1.0, 1.0,
-// 		// Alpha (opacity)
-// 		1.0 );
-		
-// 		o_color.r = 0.0;
-		
-// 		float sin_value = sin( g_elapsedSecondCount_simulationTime );
-// 		float cos_value = cos( g_elapsedSecondCount_simulationTime );
-		
-// 		//float new_color = clamp(value, 0.0, 1.0);
-		
-// 		float new_color_r = ((sin_value + 1.0) / 2.0);
-// 		float new_color_g = ((cos_value + 1.0) / 2.0);
-// 		float new_color_b = (((sin_value * cos_value) + 1.0) / 2.0);
-		
-// 		// o_color = float4(new_color_r, new_color_g, new_color_b, 1.0);
-// 		o_color = float4(1.0, 0.0, 0.0, 1.0);
-// }
 
 #elif defined( EAE6320_PLATFORM_GL )
 
@@ -62,28 +40,6 @@ out vec4 o_color;
 //============
 
 void main()
-// {
-// 	// Output solid white
-// 	o_color = vec4(
-// 		// RGB (color)
-// 		1.0, 1.0, 1.0,
-// 		// Alpha (opacity)
-// 		1.0 );
-	
-// 	o_color.r = 0.0;
-		
-// 	float sin_value = sin( g_elapsedSecondCount_simulationTime );
-// 	float cos_value = cos( g_elapsedSecondCount_simulationTime );
-	
-// 	//float new_color = clamp(value, 0.0, 1.0);
-	
-// 	float new_color_r = ((sin_value + 1.0) / 2.0);
-// 	float new_color_g = ((cos_value + 1.0) / 2.0);
-// 	float new_color_b = (((sin_value * cos_value) + 1.0) / 2.0);
-	
-// 	//o_color = vec4(new_color_r, new_color_g, new_color_b, 1.0);
-// 	o_color = vec4(1.0, 0.0, 0.0, 1.0);
-// }
 
 #endif
 
