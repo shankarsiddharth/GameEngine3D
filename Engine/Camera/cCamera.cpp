@@ -7,12 +7,15 @@
 // Implementation
 //===============
 
+// Initialize / Clean Up
+//----------------------
+
 eae6320::Camera::cCamera::cCamera(const Math::sVector& i_position /*= Math::sVector()*/, 
 	const Math::cQuaternion& i_orientation /*= Math::cQuaternion()*/, 
 	const float i_verticalFieldOfView_inDegrees /*= 45*/,
-	const float i_aspectRatio /*= 1.0f*/,
-	const float i_z_nearPlane /*= 0.1f*/, 
-	const float i_z_farPlane /*= 10.0f*/)
+	const float i_z_nearPlane /*= 0.001f*/, 
+	const float i_z_farPlane /*= 1000.0f*/,
+	const float i_aspectRatio /*= 1.0f*/)
 	:
 	verticalFieldOfView_inDegrees(i_verticalFieldOfView_inDegrees),
 	aspectRatio(i_aspectRatio),
@@ -28,9 +31,6 @@ eae6320::Camera::cCamera::cCamera(const Math::sVector& i_position /*= Math::sVec
 	m_cameraToProjectedTransform_perspective = Math::cMatrix_transformation::CreateCameraToProjectedTransform_perspective(
 		verticalFieldOfView_inRadians, aspectRatio, z_nearPlane, z_farPlane);
 }
-
-// Initialize / Clean Up
-//----------------------
 
 eae6320::Camera::cCamera::~cCamera()
 {
