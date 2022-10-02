@@ -11,6 +11,8 @@
 #include <Engine/Graphics/cMesh.h>
 #include <Engine/Graphics/cEffect.h>
 #include <Engine/Graphics/MeshEffectPair.h>
+#include <Engine/Math/cMatrix_transformation.h>
+#include <Engine/Math/Functions.h>
 
 
 namespace
@@ -285,9 +287,14 @@ eae6320::cResult eae6320::cMyGame::InitializePairs()
 
 	m_meshEffectPair[0].mesh = m_newMesh;
 	m_meshEffectPair[0].effect = m_newEffect;
+	eae6320::Math::cQuaternion mesh_rotation1(eae6320::Math::ConvertDegreesToRadians(60), eae6320::Math::sVector(0.0f, 0.0f, 1.0f));
+	m_meshEffectPair[0].localToWorld_transform = eae6320::Math::cMatrix_transformation(mesh_rotation1, eae6320::Math::sVector(1.0f, 1.0f, 0.0f));
+	//m_meshEffectPair[0].localToWorld_transform = Math::cMatrix_transformation::CreateWorldToCameraTransform(mesh_rotation1, eae6320::Math::sVector(1.0f, 1.0f, 0.0f));
 	s_numberOfPairsToRender++;
 	m_meshEffectPair[1].mesh = m_secondMesh;
 	m_meshEffectPair[1].effect = m_secondEffect;
+	eae6320::Math::cQuaternion mesh_rotation2 = eae6320::Math::cQuaternion();
+	m_meshEffectPair[0].localToWorld_transform = eae6320::Math::cMatrix_transformation(mesh_rotation2, eae6320::Math::sVector(0.0f, 0.0f, 0.0f));
 	s_numberOfPairsToRender++;
 
 	return result;

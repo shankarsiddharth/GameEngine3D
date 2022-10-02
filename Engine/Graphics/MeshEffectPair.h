@@ -26,6 +26,7 @@ namespace eae6320
 		{			
 			eae6320::Graphics::cMesh* mesh = nullptr;
 			eae6320::Graphics::cEffect* effect = nullptr;
+			eae6320::Math::cMatrix_transformation localToWorld_transform;
 		};
 	}
 }
