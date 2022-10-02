@@ -19,9 +19,9 @@
 	#define vec2 float2 
 	#define vec3 float3
 	#define vec4 float4
-	#define gl_Position o_vertexPosition_projected
 	#define MatrixMultiplication( i_matrix_a, i_matrix_b ) mul(i_matrix_a, i_matrix_b)
-	
+	#define WriteVertexOutput(i_matrix, out_matrix) out_matrix = i_matrix;
+
 #elif defined( EAE6320_PLATFORM_GL )
 
 	#define DeclareConstantBuffer( i_name, i_id ) layout( std140, binding = i_id ) uniform i_name
@@ -29,9 +29,9 @@
 	#define float2 vec2
 	#define float3 vec3
 	#define float4 vec4
-	#define o_vertexPosition_projected gl_Position
 	#define MatrixMultiplication( i_matrix_a, i_matrix_b ) i_matrix_a * i_matrix_b
-	
+	#define WriteVertexOutput(i_matrix, out_matrix) gl_Position = i_matrix;
+
 #endif
 
 // Constant Buffers
