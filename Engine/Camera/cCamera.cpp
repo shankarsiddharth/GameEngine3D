@@ -21,7 +21,12 @@ eae6320::Camera::cCamera::cCamera(const Math::sVector& i_position /*= Math::sVec
 {
 	m_rigidBodyState.position = i_position;
 	m_rigidBodyState.orientation = i_orientation;
-	UpdateTransforms();
+	
+	m_worldToCameraTransform = Math::cMatrix_transformation::CreateWorldToCameraTransform(i_orientation, i_position);
+
+	float verticalFieldOfView_inRadians = Math::ConvertDegreesToRadians(verticalFieldOfView_inDegrees);
+	m_cameraToProjectedTransform_perspective = Math::cMatrix_transformation::CreateCameraToProjectedTransform_perspective(
+		verticalFieldOfView_inRadians, aspectRatio, z_nearPlane, z_farPlane);
 }
 
 // Initialize / Clean Up
@@ -35,7 +40,7 @@ eae6320::Camera::cCamera::~cCamera()
 void eae6320::Camera::cCamera::Update(const float i_elapsedSecondCount_sinceLastUpdate)
 {
 	m_rigidBodyState.Update(i_elapsedSecondCount_sinceLastUpdate);
-	UpdateTransforms();
+	UpdateTransforms(i_elapsedSecondCount_sinceLastUpdate);
 }
 
 void eae6320::Camera::cCamera::Move(const Math::sVector& i_directionVector)
@@ -43,14 +48,15 @@ void eae6320::Camera::cCamera::Move(const Math::sVector& i_directionVector)
 	m_rigidBodyState.velocity = i_directionVector;
 }
 
-void eae6320::Camera::cCamera::UpdateTransforms()
+void eae6320::Camera::cCamera::UpdateTransforms(const float i_elapsedSecondCount_sinceLastUpdate)
 {
-	m_worldToCameraTransform = Math::cMatrix_transformation::CreateWorldToCameraTransform(m_rigidBodyState.orientation, m_rigidBodyState.position);
+	eae6320::Math::sVector position = m_rigidBodyState.PredictFuturePosition(i_elapsedSecondCount_sinceLastUpdate);
+	eae6320::Math::cQuaternion orientation = m_rigidBodyState.PredictFutureOrientation(i_elapsedSecondCount_sinceLastUpdate);
+	m_worldToCameraTransform = Math::cMatrix_transformation::CreateWorldToCameraTransform(orientation, position);
 
 	float verticalFieldOfView_inRadians = Math::ConvertDegreesToRadians(verticalFieldOfView_inDegrees);
 	m_cameraToProjectedTransform_perspective = Math::cMatrix_transformation::CreateCameraToProjectedTransform_perspective(
-		verticalFieldOfView_inRadians, aspectRatio, z_nearPlane, z_farPlane
-	);
+		verticalFieldOfView_inRadians, aspectRatio, z_nearPlane, z_farPlane);
 }
 
 eae6320::Math::cMatrix_transformation eae6320::Camera::cCamera::GetWorldToCameraTransform() const
