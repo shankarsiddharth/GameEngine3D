@@ -86,10 +86,32 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 	{
 		s_GameState.bShouldSwapEffects = false;
 	}
+
+	//Camera Movement
+	if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Left))
+	{
+		m_camera->Move(eae6320::Math::sVector(-0.25f, 0.0f, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Right))
+	{
+		m_camera->Move(eae6320::Math::sVector(0.25f, 0.0f, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Up))
+	{
+		m_camera->Move(eae6320::Math::sVector(0.0f, 0.25f, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Down))
+	{
+		m_camera->Move(eae6320::Math::sVector(0.0f, -0.25f, 0.0f));
+	}
+
 }
 
 void eae6320::cMyGame::UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
 {
+	//Update Camera
+	m_camera->Update(i_elapsedSecondCount_sinceLastUpdate);
+
 	//Update RigidBody
 }
 
