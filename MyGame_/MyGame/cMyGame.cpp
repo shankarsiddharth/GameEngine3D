@@ -70,7 +70,7 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 {
 	// Is the user pressing the Q key?
-	if (UserInput::IsKeyPressed('Q'))
+	if (UserInput::IsKeyPressed('R'))
 	{
 		//eae6320::Logging::OutputMessage("Q Input Key Pressed");
 		s_GameState.numberOfPairsToDraw = s_numberOfPairsToRender - 1;
@@ -80,7 +80,7 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 		s_GameState.numberOfPairsToDraw = s_numberOfPairsToRender;
 	}
 
-	if (UserInput::IsKeyPressed('E'))
+	if (UserInput::IsKeyPressed('F'))
 	{
 		s_GameState.bShouldSwapEffects = true;
 	}
@@ -105,6 +105,14 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 	else if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Down))
 	{
 		m_camera->Move(eae6320::Math::sVector(0.0f, -0.25f, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed('Q'))
+	{
+		m_camera->Move(eae6320::Math::sVector(0.0f, 0.0f, 1.0f));
+	}
+	else if (UserInput::IsKeyPressed('E'))
+	{
+		m_camera->Move(eae6320::Math::sVector(0.0f, 0.0f, -1.0f));
 	}
 
 }
@@ -288,13 +296,15 @@ eae6320::cResult eae6320::cMyGame::InitializePairs()
 	m_meshEffectPair[0].mesh = m_newMesh;
 	m_meshEffectPair[0].effect = m_newEffect;
 	eae6320::Math::cQuaternion mesh_rotation1(eae6320::Math::ConvertDegreesToRadians(60), eae6320::Math::sVector(0.0f, 0.0f, 1.0f));
-	m_meshEffectPair[0].localToWorld_transform = eae6320::Math::cMatrix_transformation(mesh_rotation1, eae6320::Math::sVector(1.0f, 1.0f, 0.0f));
-	//m_meshEffectPair[0].localToWorld_transform = Math::cMatrix_transformation::CreateWorldToCameraTransform(mesh_rotation1, eae6320::Math::sVector(1.0f, 1.0f, 0.0f));
+	//m_meshEffectPair[0].mesh->InitializeTransform(eae6320::Math::cMatrix_transformation(mesh_rotation1, eae6320::Math::sVector(1.0f, 1.0f, 0.0f)));
+	m_meshEffectPair[0].drawCallData.g_transform_localToWorld = eae6320::Math::cMatrix_transformation(mesh_rotation1, eae6320::Math::sVector(1.0f, 1.0f, 0.0f));
+	//m_meshEffectPair[0].localToWorld_transform = eae6320::Math::cMatrix_transformation::CreateWorldToCameraTransform(eae6320::Math::cMatrix_transformation(mesh_rotation1, eae6320::Math::sVector(1.0f, 1.0f, 0.0f)));
+	//m_meshEffectPair[0].localToWorld_transform = Math::cMatrix_transformation(Math::cMatrix_transformation::CreateWorldToCameraTransform(mesh_rotation1, eae6320::Math::sVector(1.0f, 1.0f, 0.0f)));
 	s_numberOfPairsToRender++;
 	m_meshEffectPair[1].mesh = m_secondMesh;
 	m_meshEffectPair[1].effect = m_secondEffect;
 	eae6320::Math::cQuaternion mesh_rotation2 = eae6320::Math::cQuaternion();
-	m_meshEffectPair[0].localToWorld_transform = eae6320::Math::cMatrix_transformation(mesh_rotation2, eae6320::Math::sVector(0.0f, 0.0f, 0.0f));
+	m_meshEffectPair[1].drawCallData.g_transform_localToWorld = eae6320::Math::cMatrix_transformation(mesh_rotation2, eae6320::Math::sVector(0.0f, 0.0f, 0.0f));
 	s_numberOfPairsToRender++;
 
 	return result;

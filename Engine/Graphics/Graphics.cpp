@@ -108,12 +108,19 @@ void eae6320::Graphics::SetBackgroundClearColor(float i_red, float i_green, floa
 
 void eae6320::Graphics::SubmitMeshEffectPairs(eae6320::Graphics::MeshEffectPair*& i_meshEffectPair, size_t i_numberOfPairsToRender)
 {
-	s_dataBeingSubmittedByApplicationThread->numberOfPairsToRender = i_numberOfPairsToRender;
+	size_t index = s_dataBeingSubmittedByApplicationThread->numberOfPairsToRender;
 
-	for (size_t index = 0; index < i_numberOfPairsToRender; index++)
+	size_t checkIndex = s_dataBeingSubmittedByApplicationThread->numberOfPairsToRender + i_numberOfPairsToRender;
+
+	EAE6320_ASSERT(checkIndex < std::numeric_limits<uint16_t>::max());
+
+	s_dataBeingSubmittedByApplicationThread->numberOfPairsToRender += i_numberOfPairsToRender;
+
+	for (; index < s_dataBeingSubmittedByApplicationThread->numberOfPairsToRender; index++)
 	{
 		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].mesh = i_meshEffectPair[index].mesh;
 		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].mesh->IncrementReferenceCount();
+		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].drawCallData = i_meshEffectPair[index].drawCallData;
 		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].effect = i_meshEffectPair[index].effect;
 		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].effect->IncrementReferenceCount();
 	}
@@ -177,13 +184,15 @@ void eae6320::Graphics::RenderFrame()
 		if (dataRequiredToRenderFrame->meshEffectPair[index].mesh != nullptr 
 			&& dataRequiredToRenderFrame->meshEffectPair[index].effect != nullptr)
 		{
+			dataRequiredToRenderFrame->meshEffectPair[index].effect->Bind();			
 			// Update the draw call constant buffer
 			{
 				// Copy the data from the system memory that the application owns to GPU memory
-				auto& constantData_drawCall = dataRequiredToRenderFrame->meshEffectPair[index].localToWorld_transform;
+				//eae6320::Graphics::ConstantBufferFormats::sDrawCall constantData_drawCall;
+				//constantData_drawCall.g_transform_localToWorld = dataRequiredToRenderFrame->meshEffectPair[index].mesh->GetTransform();
+				auto& constantData_drawCall = dataRequiredToRenderFrame->meshEffectPair[index].drawCallData;
 				s_constantBuffer_drawCall.Update(&constantData_drawCall);
 			}
-			dataRequiredToRenderFrame->meshEffectPair[index].effect->Bind();			
 			dataRequiredToRenderFrame->meshEffectPair[index].mesh->Draw();
 		}
 	}	
