@@ -48,6 +48,8 @@ namespace eae6320
 
 		void UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate) override;
 
+		void UpdateBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate) override;
+
 	private:
 
 		eae6320::Graphics::cMesh* m_newMesh = nullptr;
@@ -57,7 +59,7 @@ namespace eae6320
 
 		eae6320::Camera::cCamera* m_camera = nullptr;
 
-		eae6320::GameFramework::cGameObject newGameObject;
+		eae6320::GameFramework::cGameObject* m_newGameObject = nullptr;
 
 		static const size_t MAXIMUM_NUMBER_OF_PAIRS = 500;
 		static size_t s_numberOfPairsToRender;
@@ -123,6 +125,8 @@ namespace eae6320
 		eae6320::cResult InitializeGeometry();
 		eae6320::cResult InitializeShadingData();
 		eae6320::cResult InitializePairs();
+		eae6320::cResult InitializeGameObjects();
+				
 	};
 }
 
