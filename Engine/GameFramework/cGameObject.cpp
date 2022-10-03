@@ -80,27 +80,27 @@ void eae6320::GameFramework::cGameObject::AddMeshEffectPair(eae6320::Graphics::c
 	m_totalPairSize++;
 }
 
-void eae6320::GameFramework::cGameObject::AddMeshEffectPair(const eae6320::Math::sVector& i_position, const eae6320::Math::cQuaternion& i_orientation, eae6320::Graphics::cMesh* i_mesh, eae6320::Graphics::cEffect* i_effect)
-{
-	EAE6320_ASSERT(m_totalPairSize <= MAXIMUM_NUMBER_OF_PAIRS);
+//void eae6320::GameFramework::cGameObject::AddMeshEffectPair(const eae6320::Math::sVector& i_position, const eae6320::Math::cQuaternion& i_orientation, eae6320::Graphics::cMesh* i_mesh, eae6320::Graphics::cEffect* i_effect)
+//{
+//	EAE6320_ASSERT(m_totalPairSize <= MAXIMUM_NUMBER_OF_PAIRS);
+//
+//	m_meshEffectPair[m_totalPairSize].mesh = i_mesh;
+//	m_meshEffectPair[m_totalPairSize].effect = i_effect;
+//	m_meshEffectPair[m_totalPairSize].drawCallData.g_transform_localToWorld = eae6320::Math::cMatrix_transformation(i_orientation, i_position);
+//	m_totalPairSize++;
+//}
 
-	m_meshEffectPair[m_totalPairSize].mesh = i_mesh;
-	m_meshEffectPair[m_totalPairSize].effect = i_effect;
-	m_meshEffectPair[m_totalPairSize].drawCallData.g_transform_localToWorld = eae6320::Math::cMatrix_transformation(i_orientation, i_position);
-	m_totalPairSize++;
-}
-
-eae6320::Graphics::MeshEffectPair* eae6320::GameFramework::cGameObject::GetMeshEffectPairAtIndex(const size_t i_index) const
-{
-	EAE6320_ASSERT(i_index < m_totalPairSize);
-
-	return &(m_meshEffectPair[i_index]);
-}
-
-eae6320::Graphics::MeshEffectPair* eae6320::GameFramework::cGameObject::GetAllMeshEffectPairs() const
-{
-	return nullptr;
-}
+//eae6320::Graphics::MeshEffectPair* eae6320::GameFramework::cGameObject::GetMeshEffectPairAtIndex(const size_t i_index) const
+//{
+//	EAE6320_ASSERT(i_index < m_totalPairSize);
+//
+//	return &(m_meshEffectPair[i_index]);
+//}
+//
+//eae6320::Graphics::MeshEffectPair* eae6320::GameFramework::cGameObject::GetAllMeshEffectPairs() const
+//{
+//	return nullptr;
+//}
 
 size_t eae6320::GameFramework::cGameObject::GetActiveMeshEffectPairIndex() const
 {
