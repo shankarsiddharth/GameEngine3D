@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ConstantBufferFormats.h"
 
 // Forward Declaration
 //==================
@@ -26,7 +27,7 @@ namespace eae6320
 		{			
 			eae6320::Graphics::cMesh* mesh = nullptr;
 			eae6320::Graphics::cEffect* effect = nullptr;
-			eae6320::Math::cMatrix_transformation localToWorld_transform;
+			eae6320::Graphics::ConstantBufferFormats::sDrawCall drawCallData;
 		};
 	}
 }
