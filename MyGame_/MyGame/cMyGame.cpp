@@ -148,11 +148,30 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 		m_newGameObject->Move(eae6320::Math::sVector(0.0f, 0.0f, 0.0f));
 	}*/
 
+	if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Space))
+	{
+		m_newGameObject->SetActiveMeshEffectPairIndex(1);
+	}
+	else
+	{
+		m_newGameObject->SetActiveMeshEffectPairIndex(0);
+	}
+
 }
 
 void eae6320::cMyGame::UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
 {
 	
+}
+
+
+void eae6320::cMyGame::UpdateBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
+{
+	//Update Camera
+	m_camera->Update(i_elapsedSecondCount_sinceLastUpdate);
+
+	//Update RigidBody
+	m_newGameObject->Update(i_elapsedSecondCount_sinceLastUpdate);
 }
 
 // Run
@@ -315,7 +334,15 @@ eae6320::cResult eae6320::cMyGame::InitializeGeometry()
 		0, 1, 2
 	};
 
+	uint16_t newIndexData3[] =
+	{
+		// Direct3D is left-handed
+		0, 3, 1
+	};
+
 	result = eae6320::Graphics::cMesh::CreateMesh(newVertexData, 3, newIndexData, 3, m_secondMesh);
+
+	result = eae6320::Graphics::cMesh::CreateMesh(vertexData, 4, newIndexData3, 3, m_thirdMesh);
 
 	return result;
 }
@@ -339,16 +366,15 @@ eae6320::cResult eae6320::cMyGame::InitializePairs()
 
 	m_meshEffectPair[0].mesh = m_newMesh;
 	m_meshEffectPair[0].effect = m_newEffect;
-	eae6320::Math::cQuaternion mesh_rotation1(eae6320::Math::ConvertDegreesToRadians(60), eae6320::Math::sVector(0.0f, 0.0f, 1.0f));
-	//m_meshEffectPair[0].mesh->InitializeTransform(eae6320::Math::cMatrix_transformation(mesh_rotation1, eae6320::Math::sVector(1.0f, 1.0f, 0.0f)));
-	m_meshEffectPair[0].drawCallData.g_transform_localToWorld = eae6320::Math::cMatrix_transformation(mesh_rotation1, eae6320::Math::sVector(1.0f, 1.0f, 0.0f));
-	//m_meshEffectPair[0].localToWorld_transform = eae6320::Math::cMatrix_transformation::CreateWorldToCameraTransform(eae6320::Math::cMatrix_transformation(mesh_rotation1, eae6320::Math::sVector(1.0f, 1.0f, 0.0f)));
-	//m_meshEffectPair[0].localToWorld_transform = Math::cMatrix_transformation(Math::cMatrix_transformation::CreateWorldToCameraTransform(mesh_rotation1, eae6320::Math::sVector(1.0f, 1.0f, 0.0f)));
+	eae6320::Math::cQuaternion mesh_rotation1(eae6320::Math::ConvertDegreesToRadians(45), eae6320::Math::sVector(0.0f, 0.0f, 1.0f));
+	eae6320::Math::sVector mesh_position1(1.0f, 1.0f, 0.0f);
+	m_meshEffectPair[0].drawCallData.g_transform_localToWorld = eae6320::Math::cMatrix_transformation(mesh_rotation1, mesh_position1);
 	s_numberOfPairsToRender++;
 	m_meshEffectPair[1].mesh = m_secondMesh;
 	m_meshEffectPair[1].effect = m_secondEffect;
 	eae6320::Math::cQuaternion mesh_rotation2 = eae6320::Math::cQuaternion();
-	m_meshEffectPair[1].drawCallData.g_transform_localToWorld = eae6320::Math::cMatrix_transformation(mesh_rotation2, eae6320::Math::sVector(0.0f, 0.0f, 0.0f));
+	eae6320::Math::sVector mesh_position2(0.0f, 0.0f, 0.0f);
+	m_meshEffectPair[1].drawCallData.g_transform_localToWorld = eae6320::Math::cMatrix_transformation(mesh_rotation2, mesh_position2);
 	s_numberOfPairsToRender++;
 
 	return result;
@@ -358,17 +384,14 @@ eae6320::cResult eae6320::cMyGame::InitializeGameObjects()
 {
 	auto result = eae6320::Results::Success;
 
+	//eae6320::Math::cQuaternion mesh_rotation1(eae6320::Math::ConvertDegreesToRadians(-180), eae6320::Math::sVector(0.0f, 0.0f, 1.0f));
+	//eae6320::Math::sVector mesh_position1(1.0f, 1.0f, 0.0f);
 	m_newGameObject = new eae6320::GameFramework::cGameObject();
+	//m_newGameObject = new eae6320::GameFramework::cGameObject(mesh_position1, mesh_rotation1);
+	//m_newGameObject->AddMeshEffectPair(m_newMesh, m_newEffect);
 	m_newGameObject->AddMeshEffectPair(m_newMesh, m_secondEffect);
+	m_newGameObject->AddMeshEffectPair(m_thirdMesh, m_newEffect);
 
 	return result;
 }
 
-void eae6320::cMyGame::UpdateBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
-{
-	//Update Camera
-	m_camera->Update(i_elapsedSecondCount_sinceLastUpdate);
-
-	//Update RigidBody
-	m_newGameObject->Update(i_elapsedSecondCount_sinceLastUpdate);
-}

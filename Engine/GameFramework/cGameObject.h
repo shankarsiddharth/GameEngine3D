@@ -40,9 +40,6 @@ namespace eae6320
 
 			void Move(const Math::sVector& i_directionVector);
 
-			size_t GetTotalMeshEffectPairs() const;
-
-			void AddMeshEffectPair(const eae6320::Math::sVector& i_position, const eae6320::Math::cQuaternion& i_orientation, eae6320::Graphics::cMesh* i_mesh, eae6320::Graphics::cEffect* i_effect);
 			void AddMeshEffectPair(eae6320::Graphics::cMesh* i_mesh, eae6320::Graphics::cEffect* i_effect);
 			
 			size_t GetActiveMeshEffectPairIndex() const;
@@ -52,10 +49,14 @@ namespace eae6320
 			
 			void UpdateTransforms(const float i_elapsedSecondCount_sinceLastUpdate);
 
-			eae6320::Graphics::MeshEffectPair* GetMeshEffectPairAtIndex(const size_t i_index) const;
+			size_t GetTotalMeshEffectPairs() const;
 
-			eae6320::Graphics::MeshEffectPair* GetAllMeshEffectPairs() const;
+			/*eae6320::Graphics::MeshEffectPair* GetMeshEffectPairAtIndex(const size_t i_index) const;
 
+			eae6320::Graphics::MeshEffectPair* GetAllMeshEffectPairs() const;			
+			
+			void AddMeshEffectPair(const eae6320::Math::sVector& i_position, const eae6320::Math::cQuaternion& i_orientation, eae6320::Graphics::cMesh* i_mesh, eae6320::Graphics::cEffect* i_effect);
+			*/
 
 			eae6320::Physics::sRigidBodyState m_rigidBodyState;
 			eae6320::Graphics::MeshEffectPair* m_meshEffectPair = nullptr;
