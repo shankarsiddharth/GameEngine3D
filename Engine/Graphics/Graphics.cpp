@@ -303,6 +303,8 @@ eae6320::cResult eae6320::Graphics::Initialize(const sInitializationParameters& 
 #endif
 	eae6320::Logging::OutputMessage("Size of Render Data in  %s  using sizeof operator : %zu bytes", gPlatformName.c_str(), (sizeOfRenderData * 2));
 
+	size_t sizeOfDrawCallData = sizeof(eae6320::Graphics::ConstantBufferFormats::sDrawCall);
+	eae6320::Logging::OutputMessage("Size of Draw Call Cache Data for a Mesh in  %s  using sizeof operator : %zu bytes", gPlatformName.c_str(), (sizeOfDrawCallData));
 
 	return result;
 }
