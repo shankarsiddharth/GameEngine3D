@@ -62,7 +62,10 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 		m_meshEffectPair[0].effect = m_newEffect;
 		m_meshEffectPair[1].effect = m_secondEffect;
 	}
-	eae6320::Graphics::SubmitMeshEffectPairs(m_meshEffectPair, s_GameState.numberOfPairsToDraw);
+	
+	//eae6320::Graphics::SubmitMeshEffectPairs(m_meshEffectPair, s_GameState.numberOfPairsToDraw);
+
+	m_newGameObject->Render();
 
 	eae6320::Graphics::SubmitCameraTransform(m_camera->GetWorldToCameraTransform(), m_camera->GetCameraToProjectedTransform_Perspective());
 }
@@ -90,39 +93,66 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 	}
 
 	//Camera Movement
+	float velocity = 1.25f;
+
 	if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Left))
 	{
-		m_camera->Move(eae6320::Math::sVector(-0.25f, 0.0f, 0.0f));
+		m_camera->Move(eae6320::Math::sVector(-velocity, 0.0f, 0.0f));
 	}
 	else if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Right))
 	{
-		m_camera->Move(eae6320::Math::sVector(0.25f, 0.0f, 0.0f));
+		m_camera->Move(eae6320::Math::sVector(velocity, 0.0f, 0.0f));
 	}
 	else if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Up))
 	{
-		m_camera->Move(eae6320::Math::sVector(0.0f, 0.25f, 0.0f));
+		m_camera->Move(eae6320::Math::sVector(0.0f, velocity, 0.0f));
 	}
 	else if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Down))
 	{
-		m_camera->Move(eae6320::Math::sVector(0.0f, -0.25f, 0.0f));
+		m_camera->Move(eae6320::Math::sVector(0.0f, -velocity, 0.0f));
 	}
 	else if (UserInput::IsKeyPressed('Q'))
 	{
-		m_camera->Move(eae6320::Math::sVector(0.0f, 0.0f, 1.0f));
+		m_camera->Move(eae6320::Math::sVector(0.0f, 0.0f, velocity * 4));
 	}
 	else if (UserInput::IsKeyPressed('E'))
 	{
-		m_camera->Move(eae6320::Math::sVector(0.0f, 0.0f, -1.0f));
+		m_camera->Move(eae6320::Math::sVector(0.0f, 0.0f, -velocity * 4));
 	}
+	/*else
+	{
+		m_camera->Move(eae6320::Math::sVector(0.0f, 0.0f, 0.0f));
+	}*/
+
+
+	//Game Object Movement
+	//velocity = 0.75f;
+	if (UserInput::IsKeyPressed('W'))
+	{
+		m_newGameObject->Move(eae6320::Math::sVector(0.0f, velocity, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed('A'))
+	{
+		m_newGameObject->Move(eae6320::Math::sVector(-velocity, 0.0f, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed('S'))
+	{
+		m_newGameObject->Move(eae6320::Math::sVector(0.0f, -velocity, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed('D'))
+	{
+		m_newGameObject->Move(eae6320::Math::sVector(velocity, 0.0f, 0.0f));
+	}
+	/*else
+	{
+		m_newGameObject->Move(eae6320::Math::sVector(0.0f, 0.0f, 0.0f));
+	}*/
 
 }
 
 void eae6320::cMyGame::UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
 {
-	//Update Camera
-	m_camera->Update(i_elapsedSecondCount_sinceLastUpdate);
-
-	//Update RigidBody
+	
 }
 
 // Run
@@ -166,6 +196,8 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 	m_meshEffectPair = new eae6320::Graphics::MeshEffectPair[MAXIMUM_NUMBER_OF_PAIRS];
 
 	InitializePairs();
+
+	InitializeGameObjects();
 
 	s_GameState.numberOfPairsToDraw = s_numberOfPairsToRender;
 
@@ -225,10 +257,22 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 		}
 	}
 
+	if (m_meshEffectPair)
+	{
+		delete[] m_meshEffectPair;
+		m_meshEffectPair = nullptr;
+	}
+
 	if (m_camera)
 	{
 		delete m_camera;
 		m_camera = nullptr;
+	}
+
+	if (m_newGameObject)
+	{
+		delete m_newGameObject;
+		m_newGameObject = nullptr;
 	}
 
 	eae6320::Logging::OutputMessage("My Game CleanUp");
@@ -308,4 +352,23 @@ eae6320::cResult eae6320::cMyGame::InitializePairs()
 	s_numberOfPairsToRender++;
 
 	return result;
+}
+
+eae6320::cResult eae6320::cMyGame::InitializeGameObjects()
+{
+	auto result = eae6320::Results::Success;
+
+	m_newGameObject = new eae6320::GameFramework::cGameObject();
+	m_newGameObject->AddMeshEffectPair(m_newMesh, m_secondEffect);
+
+	return result;
+}
+
+void eae6320::cMyGame::UpdateBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
+{
+	//Update Camera
+	m_camera->Update(i_elapsedSecondCount_sinceLastUpdate);
+
+	//Update RigidBody
+	m_newGameObject->Update(i_elapsedSecondCount_sinceLastUpdate);
 }

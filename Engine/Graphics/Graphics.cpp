@@ -108,7 +108,7 @@ void eae6320::Graphics::SetBackgroundClearColor(float i_red, float i_green, floa
 
 void eae6320::Graphics::SubmitMeshEffectPairs(eae6320::Graphics::MeshEffectPair*& i_meshEffectPair, size_t i_numberOfPairsToRender)
 {
-	size_t index = s_dataBeingSubmittedByApplicationThread->numberOfPairsToRender;
+	size_t cache_index = s_dataBeingSubmittedByApplicationThread->numberOfPairsToRender;
 
 	size_t checkIndex = s_dataBeingSubmittedByApplicationThread->numberOfPairsToRender + i_numberOfPairsToRender;
 
@@ -116,14 +116,16 @@ void eae6320::Graphics::SubmitMeshEffectPairs(eae6320::Graphics::MeshEffectPair*
 
 	s_dataBeingSubmittedByApplicationThread->numberOfPairsToRender += i_numberOfPairsToRender;
 
-	for (; index < s_dataBeingSubmittedByApplicationThread->numberOfPairsToRender; index++)
+	for (size_t input_index = 0; cache_index < s_dataBeingSubmittedByApplicationThread->numberOfPairsToRender; cache_index++, input_index++)
 	{
-		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].mesh = i_meshEffectPair[index].mesh;
-		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].mesh->IncrementReferenceCount();
-		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].drawCallData = i_meshEffectPair[index].drawCallData;
-		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].effect = i_meshEffectPair[index].effect;
-		s_dataBeingSubmittedByApplicationThread->meshEffectPair[index].effect->IncrementReferenceCount();
+		s_dataBeingSubmittedByApplicationThread->meshEffectPair[cache_index].mesh = i_meshEffectPair[input_index].mesh;
+		s_dataBeingSubmittedByApplicationThread->meshEffectPair[cache_index].mesh->IncrementReferenceCount();
+		s_dataBeingSubmittedByApplicationThread->meshEffectPair[cache_index].drawCallData = i_meshEffectPair[input_index].drawCallData;
+		s_dataBeingSubmittedByApplicationThread->meshEffectPair[cache_index].effect = i_meshEffectPair[input_index].effect;
+		s_dataBeingSubmittedByApplicationThread->meshEffectPair[cache_index].effect->IncrementReferenceCount();
 	}
+
+	EAE6320_ASSERT(true);
 }
 
 void eae6320::Graphics::SubmitCameraTransform(const eae6320::Math::cMatrix_transformation& i_worldToCameraTransform, const eae6320::Math::cMatrix_transformation& i_cameraToProjectedTransform_perspective)
