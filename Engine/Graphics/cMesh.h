@@ -40,6 +40,8 @@ namespace eae6320
 
 			static cResult CreateMesh(eae6320::Graphics::VertexFormats::sVertex_mesh* i_vertexArray, size_t i_vertexArraySize, uint16_t* i_indexArray, size_t i_indexArraySize, cMesh*& o_mesh);
 
+			static cResult CreateMesh(const std::string& i_path, cMesh*& o_mesh);
+
 		private:
 
 			cMesh() = default;
