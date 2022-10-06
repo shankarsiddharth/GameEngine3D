@@ -13,8 +13,8 @@ return
 	},
 	meshes =
 	{
-		{ path = "Meshes/newMesh.json"},
-		{ path = "Meshes/secondMesh.json"},
-		{ path = "Meshes/thirdMesh.json"},
+		"Meshes/newMesh.json",
+		"Meshes/secondMesh.json",
+		"Meshes/thirdMesh.json",
 	},
 }
