@@ -303,48 +303,12 @@ eae6320::cResult eae6320::cMyGame::InitializeGeometry()
 	auto result = eae6320::Results::Success;
 
 	// Initialize Meshes
-	eae6320::Graphics::VertexFormats::sVertex_mesh vertexData[] =
-	{
-		// Direct3D is left-handed
-		{0.0f, 0.0f, 0.0f},
-		{1.0f, 1.0f, 0.0f},
-		{1.0f, 0.0f, 0.0f},
-		{0.0f, 1.0f, 0.0f}
-	};
+	// Direct3D is left-handed	
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/newMesh.json", m_newMesh);	
+	
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/secondMesh.json", m_secondMesh);
 
-	uint16_t indexData[] =
-	{
-		// Direct3D is left-handed
-		0, 1, 2, 0, 3, 1
-	};
-
-	result = eae6320::Graphics::cMesh::CreateMesh(vertexData, 4, indexData, 6, m_newMesh);
-
-	eae6320::Graphics::VertexFormats::sVertex_mesh newVertexData[] =
-	{
-		// Direct3D is left-handed
-		{0.0f, 0.0f, 0.0f},
-		{-1.0f, -1.0f, 0.0f},
-		{-1.0f, 0.0f, 0.0f}
-	};
-
-	uint16_t newIndexData[] =
-	{
-		// Direct3D is left-handed
-		0, 1, 2
-	};
-
-	uint16_t newIndexData3[] =
-	{
-		// Direct3D is left-handed
-		0, 3, 1
-	};
-
-	result = eae6320::Graphics::cMesh::CreateMesh(newVertexData, 3, newIndexData, 3, m_secondMesh);
-
-	result = eae6320::Graphics::cMesh::CreateMesh(vertexData, 4, newIndexData3, 3, m_thirdMesh);
-
-	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/thirdMesh.json", m_testMesh);
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/thirdMesh.json", m_thirdMesh);
 	
 	return result;
 }
@@ -392,7 +356,7 @@ eae6320::cResult eae6320::cMyGame::InitializeGameObjects()
 	//m_newGameObject = new eae6320::GameFramework::cGameObject(mesh_position1, mesh_rotation1);
 	//m_newGameObject->AddMeshEffectPair(m_newMesh, m_newEffect);
 	m_newGameObject->AddMeshEffectPair(m_newMesh, m_secondEffect);
-	m_newGameObject->AddMeshEffectPair(m_testMesh, m_newEffect);
+	m_newGameObject->AddMeshEffectPair(m_thirdMesh, m_newEffect);
 
 	return result;
 }
