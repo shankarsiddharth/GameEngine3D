@@ -293,7 +293,7 @@ eae6320::cResult eae6320::Graphics::Initialize(const sInitializationParameters& 
 
 	//Size Information:
 	size_t sizeOfRenderData = sizeof(sDataRequiredToRenderAFrame);
-	std::string gPlatformName = "";
+	std::string gPlatformName;
 #if defined( EAE6320_PLATFORM_WINDOWS )	
 #if defined( EAE6320_PLATFORM_D3D )
 	gPlatformName = "Direct3D";

@@ -11,4 +11,10 @@ return
 		{ path = "Shaders/Fragment/testsample.shader", arguments = { "fragment" } },
 		{ path = "Shaders/Vertex/vertexInputLayout_mesh.shader", arguments = { "vertex" } },
 	},
+	meshes =
+	{
+		{ path = "Meshes/newMesh.json"},
+		{ path = "Meshes/secondMesh.json"},
+		{ path = "Meshes/thirdMesh.json"},
+	},
 }
