@@ -55,6 +55,7 @@ namespace eae6320
 		eae6320::Graphics::cMesh* m_newMesh = nullptr;
 		eae6320::Graphics::cMesh* m_secondMesh = nullptr;
 		eae6320::Graphics::cMesh* m_thirdMesh = nullptr;
+		eae6320::Graphics::cMesh* m_testMesh = nullptr;
 		eae6320::Graphics::cEffect* m_newEffect = nullptr;
 		eae6320::Graphics::cEffect* m_secondEffect = nullptr;
 

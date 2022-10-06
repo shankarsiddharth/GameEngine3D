@@ -344,6 +344,8 @@ eae6320::cResult eae6320::cMyGame::InitializeGeometry()
 
 	result = eae6320::Graphics::cMesh::CreateMesh(vertexData, 4, newIndexData3, 3, m_thirdMesh);
 
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/thirdMesh.json", m_testMesh);
+	
 	return result;
 }
 
@@ -390,7 +392,7 @@ eae6320::cResult eae6320::cMyGame::InitializeGameObjects()
 	//m_newGameObject = new eae6320::GameFramework::cGameObject(mesh_position1, mesh_rotation1);
 	//m_newGameObject->AddMeshEffectPair(m_newMesh, m_newEffect);
 	m_newGameObject->AddMeshEffectPair(m_newMesh, m_secondEffect);
-	m_newGameObject->AddMeshEffectPair(m_thirdMesh, m_newEffect);
+	m_newGameObject->AddMeshEffectPair(m_testMesh, m_newEffect);
 
 	return result;
 }
