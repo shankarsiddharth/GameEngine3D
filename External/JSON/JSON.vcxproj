@@ -38,41 +38,6 @@
   <ItemGroup>
     <ClInclude Include="3.9.1\json.hpp" />
     <ClInclude Include="Includes.h" />
-    <ClInclude Include="rapidjson-1.1.0\allocators.h" />
-    <ClInclude Include="rapidjson-1.1.0\document.h" />
-    <ClInclude Include="rapidjson-1.1.0\encodedstream.h" />
-    <ClInclude Include="rapidjson-1.1.0\encodings.h" />
-    <ClInclude Include="rapidjson-1.1.0\error\en.h" />
-    <ClInclude Include="rapidjson-1.1.0\error\error.h" />
-    <ClInclude Include="rapidjson-1.1.0\filereadstream.h" />
-    <ClInclude Include="rapidjson-1.1.0\filewritestream.h" />
-    <ClInclude Include="rapidjson-1.1.0\fwd.h" />
-    <ClInclude Include="rapidjson-1.1.0\internal\biginteger.h" />
-    <ClInclude Include="rapidjson-1.1.0\internal\diyfp.h" />
-    <ClInclude Include="rapidjson-1.1.0\internal\dtoa.h" />
-    <ClInclude Include="rapidjson-1.1.0\internal\ieee754.h" />
-    <ClInclude Include="rapidjson-1.1.0\internal\itoa.h" />
-    <ClInclude Include="rapidjson-1.1.0\internal\meta.h" />
-    <ClInclude Include="rapidjson-1.1.0\internal\pow10.h" />
-    <ClInclude Include="rapidjson-1.1.0\internal\regex.h" />
-    <ClInclude Include="rapidjson-1.1.0\internal\stack.h" />
-    <ClInclude Include="rapidjson-1.1.0\internal\strfunc.h" />
-    <ClInclude Include="rapidjson-1.1.0\internal\strtod.h" />
-    <ClInclude Include="rapidjson-1.1.0\internal\swap.h" />
-    <ClInclude Include="rapidjson-1.1.0\istreamwrapper.h" />
-    <ClInclude Include="rapidjson-1.1.0\memorybuffer.h" />
-    <ClInclude Include="rapidjson-1.1.0\memorystream.h" />
-    <ClInclude Include="rapidjson-1.1.0\msinttypes\inttypes.h" />
-    <ClInclude Include="rapidjson-1.1.0\msinttypes\stdint.h" />
-    <ClInclude Include="rapidjson-1.1.0\ostreamwrapper.h" />
-    <ClInclude Include="rapidjson-1.1.0\pointer.h" />
-    <ClInclude Include="rapidjson-1.1.0\prettywriter.h" />
-    <ClInclude Include="rapidjson-1.1.0\rapidjson.h" />
-    <ClInclude Include="rapidjson-1.1.0\reader.h" />
-    <ClInclude Include="rapidjson-1.1.0\schema.h" />
-    <ClInclude Include="rapidjson-1.1.0\stream.h" />
-    <ClInclude Include="rapidjson-1.1.0\stringbuffer.h" />
-    <ClInclude Include="rapidjson-1.1.0\writer.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Engine\Asserts\Asserts.vcxproj">

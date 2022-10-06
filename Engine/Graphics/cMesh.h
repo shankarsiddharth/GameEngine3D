@@ -8,6 +8,7 @@
 #include <Engine/Results/Results.h>
 
 #include <vector>
+#include <string>
 
 
 // Class Declaration
