@@ -350,11 +350,7 @@ eae6320::cResult eae6320::cMyGame::InitializeGameObjects()
 {
 	auto result = eae6320::Results::Success;
 
-	//eae6320::Math::cQuaternion mesh_rotation1(eae6320::Math::ConvertDegreesToRadians(-180), eae6320::Math::sVector(0.0f, 0.0f, 1.0f));
-	//eae6320::Math::sVector mesh_position1(1.0f, 1.0f, 0.0f);
 	m_newGameObject = new eae6320::GameFramework::cGameObject();
-	//m_newGameObject = new eae6320::GameFramework::cGameObject(mesh_position1, mesh_rotation1);
-	//m_newGameObject->AddMeshEffectPair(m_newMesh, m_newEffect);
 	m_newGameObject->AddMeshEffectPair(m_newMesh, m_secondEffect);
 	m_newGameObject->AddMeshEffectPair(m_thirdMesh, m_newEffect);
 
