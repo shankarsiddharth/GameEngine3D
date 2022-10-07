@@ -127,10 +127,21 @@ eae6320::cResult eae6320::Graphics::cMesh::CreateMesh(const std::string& i_path,
 							eae6320::Graphics::VertexFormats::sVertex_mesh vertex{};
 
 							const auto position = vertexData["position"];
-
-							vertex.x = position["x"];
-							vertex.y = position["y"];
-							vertex.z = position["z"];
+							const auto position_x = position["x"];
+							const auto position_y = position["y"];
+							const auto position_z = position["z"];
+							if (position_x.is_number())
+							{
+								vertex.x = position_x.get<float>();
+							}
+							if (position_x.is_number())
+							{
+								vertex.y = position_y.get<float>();
+							}
+							if (position_x.is_number())
+							{
+								vertex.z = position_z.get<float>();
+							}
 
 							vertexArray[vertexArrayCount] = vertex;
 							vertexArrayCount++;
