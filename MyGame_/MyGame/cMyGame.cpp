@@ -250,6 +250,16 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 		m_sphereMesh->DecrementReferenceCount();
 		m_sphereMesh = nullptr;
 	}
+	if (m_sphereLargeMesh)
+	{
+		m_sphereLargeMesh->DecrementReferenceCount();
+		m_sphereLargeMesh = nullptr;
+	}
+	if (m_helixMesh)
+	{
+		m_helixMesh->DecrementReferenceCount();
+		m_helixMesh = nullptr;
+	}
 
 	if (m_animColorEffect)
 	{
@@ -321,6 +331,8 @@ eae6320::cResult eae6320::cMyGame::InitializeGeometry()
 	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/plane.json", m_planeMesh);	
 	
 	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sphere.json", m_sphereMesh);
+	
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sphere_large.json", m_sphereLargeMesh);
 
 	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/helix.json", m_helixMesh);
 	
@@ -366,7 +378,7 @@ eae6320::cResult eae6320::cMyGame::InitializeGameObjects()
 
 	m_sphereGameObject = new eae6320::GameFramework::cGameObject();
 	m_sphereGameObject->AddMeshEffectPair(m_sphereMesh, m_defaultEffect);
-	m_sphereGameObject->AddMeshEffectPair(m_helixMesh, m_animColorEffect);
+	m_sphereGameObject->AddMeshEffectPair(m_sphereLargeMesh, m_animColorEffect);
 
 	m_planeGameObject = new eae6320::GameFramework::cGameObject();
 	m_planeGameObject->AddMeshEffectPair(m_planeMesh, m_defaultEffect);

@@ -54,6 +54,7 @@ namespace eae6320
 
 		eae6320::Graphics::cMesh* m_planeMesh = nullptr;
 		eae6320::Graphics::cMesh* m_sphereMesh = nullptr;
+		eae6320::Graphics::cMesh* m_sphereLargeMesh = nullptr;
 		eae6320::Graphics::cMesh* m_helixMesh = nullptr;
 		eae6320::Graphics::cEffect* m_animColorEffect = nullptr;
 		eae6320::Graphics::cEffect* m_defaultEffect = nullptr;
