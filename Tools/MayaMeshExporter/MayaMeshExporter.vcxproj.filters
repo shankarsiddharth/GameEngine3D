@@ -9,10 +9,16 @@
     <ClInclude Include="Windows\ExternalLibraries.win.h">
       <Filter>Windows</Filter>
     </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>JSON</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Windows">
       <UniqueIdentifier>{1fbd9088-51c1-46db-8051-f1bb6724720a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JSON">
+      <UniqueIdentifier>{7dbfc078-81ac-49d7-80bf-46071440546b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

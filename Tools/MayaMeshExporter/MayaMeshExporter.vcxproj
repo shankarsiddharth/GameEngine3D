@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cMayaMeshExporter.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="Windows\ExternalLibraries.win.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -58,12 +59,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.mll</TargetExt>
-    <TargetName>eae6320_OWNBY_JOHN-PAUL_mesh_DEBUG</TargetName>
+    <TargetName>eae6320_AnbalaganShankar_mesh_DEBUG</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.mll</TargetExt>
-    <TargetName>eae6320_OWNBY_JOHN-PAUL_mesh</TargetName>
+    <TargetName>eae6320_AnbalaganShankar_mesh</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
