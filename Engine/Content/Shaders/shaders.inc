@@ -34,6 +34,7 @@
 	#define float4 vec4
 	#define MatrixMultiplication( i_matrix_a, i_matrix_b ) i_matrix_a * i_matrix_b
 	#define WriteVertexOutput(i_matrix, out_matrix) gl_Position = i_matrix;
+	#define WriteVertexColor(i_color, out_color) out_color = i_color;
 
 #endif
 

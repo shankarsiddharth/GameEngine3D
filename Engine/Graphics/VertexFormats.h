@@ -43,7 +43,7 @@ namespace eae6320
 
 				// COLOR
 				// 4 8-bit ints == 4 bytes
-				uint8_t r, g, b, a;
+				uint8_t r = 255, g = 255, b = 255, a = 255;
 			};
 		}
 	}

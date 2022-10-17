@@ -37,6 +37,11 @@ void main(
 
 #elif defined( EAE6320_PLATFORM_GL )
 
+// Input
+//=======
+
+layout( location = 1 ) in vec4 i_color;
+
 // Output
 //=======
 

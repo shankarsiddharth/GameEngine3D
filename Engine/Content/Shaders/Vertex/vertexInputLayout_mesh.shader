@@ -45,13 +45,14 @@ void main(
 
 // These values come from one of the VertexFormats::sVertex_mesh that the vertex buffer was filled with in C code
 layout( location = 0 ) in vec3 i_position;
-
+layout( location = 1 ) in vec4 i_color;
 // Output
 //=======
 
 // The vertex shader must always output a position value,
 // but unlike HLSL where the value is explicit
 // GLSL has an automatically-required variable named "gl_Position"
+layout( location = 1 ) out vec4 o_color;
 
 // Entry Point
 //============
