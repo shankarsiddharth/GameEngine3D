@@ -54,18 +54,20 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 
 	if (s_GameState.bShouldSwapEffects)
 	{
-		m_meshEffectPair[0].effect = m_secondEffect;
-		m_meshEffectPair[1].effect = m_newEffect;
+		m_meshEffectPair[0].effect = m_defaultEffect;
+		m_meshEffectPair[1].effect = m_animColorEffect;
 	}
 	else
 	{
-		m_meshEffectPair[0].effect = m_newEffect;
-		m_meshEffectPair[1].effect = m_secondEffect;
+		m_meshEffectPair[0].effect = m_animColorEffect;
+		m_meshEffectPair[1].effect = m_defaultEffect;
 	}
 	
 	//eae6320::Graphics::SubmitMeshEffectPairs(m_meshEffectPair, s_GameState.numberOfPairsToDraw);
 
-	m_newGameObject->Render();
+	m_sphereGameObject->Render();
+	m_planeGameObject->Render();
+	m_helixGameObject->Render();
 
 	eae6320::Graphics::SubmitCameraTransform(m_camera->GetWorldToCameraTransform(), m_camera->GetCameraToProjectedTransform_Perspective());
 }
@@ -129,19 +131,19 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 	//velocity = 0.75f;
 	if (UserInput::IsKeyPressed('W'))
 	{
-		m_newGameObject->Move(eae6320::Math::sVector(0.0f, velocity, 0.0f));
+		m_sphereGameObject->Move(eae6320::Math::sVector(0.0f, velocity, 0.0f));
 	}
 	else if (UserInput::IsKeyPressed('A'))
 	{
-		m_newGameObject->Move(eae6320::Math::sVector(-velocity, 0.0f, 0.0f));
+		m_sphereGameObject->Move(eae6320::Math::sVector(-velocity, 0.0f, 0.0f));
 	}
 	else if (UserInput::IsKeyPressed('S'))
 	{
-		m_newGameObject->Move(eae6320::Math::sVector(0.0f, -velocity, 0.0f));
+		m_sphereGameObject->Move(eae6320::Math::sVector(0.0f, -velocity, 0.0f));
 	}
 	else if (UserInput::IsKeyPressed('D'))
 	{
-		m_newGameObject->Move(eae6320::Math::sVector(velocity, 0.0f, 0.0f));
+		m_sphereGameObject->Move(eae6320::Math::sVector(velocity, 0.0f, 0.0f));
 	}
 	/*else
 	{
@@ -150,11 +152,11 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 
 	if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Space))
 	{
-		m_newGameObject->SetActiveMeshEffectPairIndex(1);
+		m_sphereGameObject->SetActiveMeshEffectPairIndex(1);
 	}
 	else
 	{
-		m_newGameObject->SetActiveMeshEffectPairIndex(0);
+		m_sphereGameObject->SetActiveMeshEffectPairIndex(0);
 	}
 
 }
@@ -171,7 +173,7 @@ void eae6320::cMyGame::UpdateBasedOnTime(const float i_elapsedSecondCount_sinceL
 	m_camera->Update(i_elapsedSecondCount_sinceLastUpdate);
 
 	//Update RigidBody
-	m_newGameObject->Update(i_elapsedSecondCount_sinceLastUpdate);
+	m_sphereGameObject->Update(i_elapsedSecondCount_sinceLastUpdate);
 }
 
 // Run
@@ -238,26 +240,26 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 
 	auto result = eae6320::Results::Success;
 	
-	if (m_newMesh)
+	if (m_planeMesh)
 	{
-		m_newMesh->DecrementReferenceCount();
-		m_newMesh = nullptr;
+		m_planeMesh->DecrementReferenceCount();
+		m_planeMesh = nullptr;
 	}
-	if (m_secondMesh)
+	if (m_sphereMesh)
 	{
-		m_secondMesh->DecrementReferenceCount();
-		m_secondMesh = nullptr;
+		m_sphereMesh->DecrementReferenceCount();
+		m_sphereMesh = nullptr;
 	}
 
-	if (m_newEffect)
+	if (m_animColorEffect)
 	{
-		m_newEffect->DecrementReferenceCount();
-		m_newEffect = nullptr;
+		m_animColorEffect->DecrementReferenceCount();
+		m_animColorEffect = nullptr;
 	}
-	if (m_secondEffect)
+	if (m_defaultEffect)
 	{
-		m_secondEffect->DecrementReferenceCount();
-		m_secondEffect = nullptr;
+		m_defaultEffect->DecrementReferenceCount();
+		m_defaultEffect = nullptr;
 	}
 
 	size_t numberOfPairsToRender = s_numberOfPairsToRender;
@@ -288,10 +290,22 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 		m_camera = nullptr;
 	}
 
-	if (m_newGameObject)
+	if (m_sphereGameObject)
 	{
-		delete m_newGameObject;
-		m_newGameObject = nullptr;
+		delete m_sphereGameObject;
+		m_sphereGameObject = nullptr;
+	}
+
+	if (m_planeGameObject)
+	{
+		delete m_planeGameObject;
+		m_planeGameObject = nullptr;
+	}
+
+	if (m_helixGameObject)
+	{
+		delete m_helixGameObject;
+		m_helixGameObject = nullptr;
 	}
 
 	eae6320::Logging::OutputMessage("My Game CleanUp");
@@ -304,11 +318,11 @@ eae6320::cResult eae6320::cMyGame::InitializeGeometry()
 
 	// Initialize Meshes
 	// Direct3D is left-handed	
-	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/newMesh.json", m_newMesh);	
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/plane.json", m_planeMesh);	
 	
-	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/secondMesh.json", m_secondMesh);
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sphere.json", m_sphereMesh);
 
-	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/thirdMesh.json", m_thirdMesh);
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/helix.json", m_helixMesh);
 	
 	return result;
 }
@@ -319,9 +333,9 @@ eae6320::cResult eae6320::cMyGame::InitializeShadingData()
 
 	// Initialize Effects
 
-	result = eae6320::Graphics::cEffect::CreateEffect(m_newEffect, "data/Shaders/Fragment/testsample.shader");
+	result = eae6320::Graphics::cEffect::CreateEffect(m_animColorEffect, "data/Shaders/Fragment/testsample.shader");
 
-	result = eae6320::Graphics::cEffect::CreateEffect(m_secondEffect);
+	result = eae6320::Graphics::cEffect::CreateEffect(m_defaultEffect);
 
 	return result;
 }
@@ -330,14 +344,14 @@ eae6320::cResult eae6320::cMyGame::InitializePairs()
 {
 	auto result = eae6320::Results::Success;
 
-	m_meshEffectPair[0].mesh = m_newMesh;
-	m_meshEffectPair[0].effect = m_newEffect;
+	m_meshEffectPair[0].mesh = m_planeMesh;
+	m_meshEffectPair[0].effect = m_animColorEffect;
 	eae6320::Math::cQuaternion mesh_rotation1(eae6320::Math::ConvertDegreesToRadians(45), eae6320::Math::sVector(0.0f, 0.0f, 1.0f));
 	eae6320::Math::sVector mesh_position1(1.0f, 1.0f, 0.0f);
 	m_meshEffectPair[0].drawCallData.g_transform_localToWorld = eae6320::Math::cMatrix_transformation(mesh_rotation1, mesh_position1);
 	s_numberOfPairsToRender++;
-	m_meshEffectPair[1].mesh = m_secondMesh;
-	m_meshEffectPair[1].effect = m_secondEffect;
+	m_meshEffectPair[1].mesh = m_sphereMesh;
+	m_meshEffectPair[1].effect = m_defaultEffect;
 	eae6320::Math::cQuaternion mesh_rotation2 = eae6320::Math::cQuaternion();
 	eae6320::Math::sVector mesh_position2(0.0f, 0.0f, 0.0f);
 	m_meshEffectPair[1].drawCallData.g_transform_localToWorld = eae6320::Math::cMatrix_transformation(mesh_rotation2, mesh_position2);
@@ -350,9 +364,15 @@ eae6320::cResult eae6320::cMyGame::InitializeGameObjects()
 {
 	auto result = eae6320::Results::Success;
 
-	m_newGameObject = new eae6320::GameFramework::cGameObject();
-	m_newGameObject->AddMeshEffectPair(m_newMesh, m_secondEffect);
-	m_newGameObject->AddMeshEffectPair(m_thirdMesh, m_newEffect);
+	m_sphereGameObject = new eae6320::GameFramework::cGameObject();
+	m_sphereGameObject->AddMeshEffectPair(m_sphereMesh, m_defaultEffect);
+	m_sphereGameObject->AddMeshEffectPair(m_helixMesh, m_animColorEffect);
+
+	m_planeGameObject = new eae6320::GameFramework::cGameObject();
+	m_planeGameObject->AddMeshEffectPair(m_planeMesh, m_defaultEffect);
+
+	m_helixGameObject = new eae6320::GameFramework::cGameObject();
+	m_helixGameObject->AddMeshEffectPair(m_helixMesh, m_defaultEffect);
 
 	return result;
 }
