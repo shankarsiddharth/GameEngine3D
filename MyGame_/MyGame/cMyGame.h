@@ -52,16 +52,18 @@ namespace eae6320
 
 	private:
 
-		eae6320::Graphics::cMesh* m_newMesh = nullptr;
-		eae6320::Graphics::cMesh* m_secondMesh = nullptr;
-		eae6320::Graphics::cMesh* m_thirdMesh = nullptr;
-		eae6320::Graphics::cEffect* m_newEffect = nullptr;
-		eae6320::Graphics::cEffect* m_secondEffect = nullptr;
+		eae6320::Graphics::cMesh* m_planeMesh = nullptr;
+		eae6320::Graphics::cMesh* m_sphereMesh = nullptr;
+		eae6320::Graphics::cMesh* m_helixMesh = nullptr;
+		eae6320::Graphics::cEffect* m_animColorEffect = nullptr;
+		eae6320::Graphics::cEffect* m_defaultEffect = nullptr;
 
 
 		eae6320::Camera::cCamera* m_camera = nullptr;
 
-		eae6320::GameFramework::cGameObject* m_newGameObject = nullptr;
+		eae6320::GameFramework::cGameObject* m_sphereGameObject = nullptr;
+		eae6320::GameFramework::cGameObject* m_planeGameObject = nullptr;
+		eae6320::GameFramework::cGameObject* m_helixGameObject = nullptr;
 
 		static const size_t MAXIMUM_NUMBER_OF_PAIRS = 500;
 		static size_t s_numberOfPairsToRender;
