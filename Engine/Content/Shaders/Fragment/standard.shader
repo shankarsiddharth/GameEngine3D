@@ -17,7 +17,7 @@ void main(
 	//======
 
 	in const float4 i_fragmentPosition : SV_POSITION,
-
+	in const float4 i_color : COLOR,
 	// Output
 	//=======
 
@@ -61,9 +61,10 @@ void main()
 
 {
 	// Output solid white
-	o_color = float4(
+	//o_color = float4(
 		// RGB (color)
-		1.0, 1.0, 1.0,
+	//	1.0, 1.0, 1.0,
 		// Alpha (opacity)
-		1.0 );
+	//	1.0 );
+	WriteVertexColor(i_color, o_color)
 }

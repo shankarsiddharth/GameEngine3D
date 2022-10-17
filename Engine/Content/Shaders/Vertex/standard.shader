@@ -25,14 +25,14 @@ void main(
 
 	// These values come from one of the VertexFormats::sVertex_mesh that the vertex buffer was filled with in C code
 	in const float3 i_vertexPosition_local : POSITION,
-
+	in const float4 i_color : COLOR,
 	// Output
 	//=======
 
 	// An SV_POSITION value must always be output from every vertex shader
 	// so that the GPU can figure out which fragments need to be shaded
-	out float4 o_vertexPosition_projected : SV_POSITION
-
+	out float4 o_vertexPosition_projected : SV_POSITION,
+	out float4 o_color : COLOR
 )
 // {
 // 	// Transform the local vertex into world space
@@ -110,5 +110,6 @@ void main()
 		// Project the vertex from camera space into projected space
 		float4 vertexPosition_projected = MatrixMultiplication( g_transform_cameraToProjected, vertexPosition_camera );
 		WriteVertexOutput(vertexPosition_projected, o_vertexPosition_projected)
+		WriteVertexColor(i_color, o_color)
 	}
 }

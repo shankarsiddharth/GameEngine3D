@@ -7,6 +7,8 @@
 #include <Engine/Platform/Platform.h>
 #include <External/JSON/Includes.h>
 
+#include <cmath>
+
 // Factory Method
 //-------
 
@@ -122,10 +124,10 @@ eae6320::cResult eae6320::Graphics::cMesh::CreateMesh(const std::string& i_path,
 				{
 					if (vertexData.is_object())
 					{
+						eae6320::Graphics::VertexFormats::sVertex_mesh vertex{};
+
 						if (vertexData.contains("position"))
 						{
-							eae6320::Graphics::VertexFormats::sVertex_mesh vertex{};
-
 							const auto position = vertexData["position"];
 							const auto position_x = position["x"];
 							const auto position_y = position["y"];
@@ -141,15 +143,46 @@ eae6320::cResult eae6320::Graphics::cMesh::CreateMesh(const std::string& i_path,
 							if (position_x.is_number())
 							{
 								vertex.z = position_z.get<float>();
-							}
-
-							vertexArray[vertexArrayCount] = vertex;
-							vertexArrayCount++;
+							}							
 						}
 						else
 						{
 							//TODO: Log Parse Error
+							//Should have position value
+							EAE6320_ASSERT(false);
 						}
+
+						if (vertexData.contains("color"))
+						{
+							const auto color = vertexData["color"];
+							const auto color_r = color["r"];
+							const auto color_g = color["g"];
+							const auto color_b = color["b"];
+							const auto color_a = color["a"];
+							if (color_r.is_number())
+							{
+								auto r = color_r.get<float>();
+								vertex.r = (uint8_t)std::round(r * 255.0f);
+							}
+							if (color_g.is_number())
+							{
+								auto g = color_g.get<float>();
+								vertex.g = (uint8_t)std::round(g * 255.0f);
+							}
+							if (color_b.is_number())
+							{
+								auto b = color_b.get<float>();
+								vertex.b = (uint8_t)std::round(b * 255.0f);
+							}
+							if (color_a.is_number())
+							{
+								auto a = color_a.get<float>();
+								vertex.a = (uint8_t)std::round(a * 255.0f);
+							}
+						}
+
+						vertexArray[vertexArrayCount] = vertex;
+						vertexArrayCount++;
 					}
 					else
 					{
