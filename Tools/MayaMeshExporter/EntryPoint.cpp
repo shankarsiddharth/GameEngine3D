@@ -45,7 +45,7 @@ __declspec(dllexport) MStatus initializePlugin( MObject io_object )
 			MGlobal::displayError( MString( "Failed to register mesh exporter: " ) + status.errorString() );
 		}
 	}
-    return status;
+	return status;
 }
 
 __declspec(dllexport) MStatus uninitializePlugin( MObject io_object )
@@ -61,5 +61,5 @@ __declspec(dllexport) MStatus uninitializePlugin( MObject io_object )
 			MGlobal::displayError( MString( "Failed to deregister mesh exporter: " ) + status.errorString() );
 		}
 	}
-    return status;
+	return status;
 }

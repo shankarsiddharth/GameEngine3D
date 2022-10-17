@@ -26,6 +26,9 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <iomanip>
+
+#include "json.hpp"
 
 // Vertex Definition
 //==================
@@ -792,13 +795,75 @@ namespace
 
 			// Open table
 			// (If you want to use JSON instead of Lua you will have to change this slightly)
-			fout << "return" "\n"
-				"{" "\n";
+			//fout << "return" "\n"
+			//	"{" "\n";
+			//{
+			//	//EAE6320_TODO
+
+			//}
+			//// Close table
+			//fout << "}" "\n";
+
+			nlohmann::json meshJSON;
+
+			nlohmann::json vertex_data = nlohmann::json::array();			
+			for (size_t array_index = 0; array_index < i_vertexArray.size(); array_index++)
 			{
-				//EAE6320_TODO
+				sVertexInfo vertexInfo = i_vertexArray[array_index];
+
+				nlohmann::json currentVertexInfo = nlohmann::json::object();
+
+				nlohmann::json position = nlohmann::json::object();
+				position["x"] = vertexInfo.vertex.x;
+				position["y"] = vertexInfo.vertex.y;
+				position["z"] = -1.0f * vertexInfo.vertex.z;
+				currentVertexInfo["position"] = position;
+
+				nlohmann::json normal = nlohmann::json::object();
+				normal["nx"] = vertexInfo.vertex.nx;
+				normal["ny"] = vertexInfo.vertex.ny;
+				normal["nz"] = -1.0f * vertexInfo.vertex.nz;
+				currentVertexInfo["normal"] = normal;
+
+				nlohmann::json tangent = nlohmann::json::object();
+				tangent["tx"] = vertexInfo.vertex.tx;
+				tangent["ty"] = vertexInfo.vertex.ty;
+				tangent["tz"] = -1.0f * vertexInfo.vertex.tz;
+				currentVertexInfo["tangent"] = tangent;
+
+				nlohmann::json bitangent = nlohmann::json::object();
+				bitangent["btx"] = -1.0f * vertexInfo.vertex.btx;
+				bitangent["bty"] = -1.0f * vertexInfo.vertex.bty;
+				bitangent["btz"] = vertexInfo.vertex.btz;
+				currentVertexInfo["bitangent"] = bitangent;
+
+				nlohmann::json texcoord = nlohmann::json::object();
+				texcoord["u"] = vertexInfo.vertex.u;
+				texcoord["v"] = 1.0f - vertexInfo.vertex.v;			
+				currentVertexInfo["texcoord"] = texcoord;
+
+				nlohmann::json color = nlohmann::json::object();
+				color["r"] = vertexInfo.vertex.r;
+				color["g"] = vertexInfo.vertex.g;
+				color["b"] = vertexInfo.vertex.b;
+				color["a"] = vertexInfo.vertex.a;
+				currentVertexInfo["color"] = color;
+
+				vertex_data.emplace_back(currentVertexInfo);
 			}
-			// Close table
-			fout << "}" "\n";
+			meshJSON["vertex_data"] = vertex_data;
+
+			nlohmann::json index_data = nlohmann::json::array();
+			for (size_t array_index = 0; array_index < i_indexArray.size(); array_index = array_index + 3)
+			{
+				index_data.emplace_back(i_indexArray[array_index]);
+				index_data.emplace_back(i_indexArray[array_index + 2]);
+				index_data.emplace_back(i_indexArray[array_index + 1]);
+			}
+			meshJSON["index_data"] = index_data;
+
+			fout << std::setw(4) << meshJSON << std::endl;
+
 			fout.close();
 
 			return MStatus::kSuccess;
