@@ -13,6 +13,9 @@ return
 	},
 	meshes =
 	{
+		"Meshes/plane.json",
+		"Meshes/sphere.json",
+		"Meshes/helix.json",
 		"Meshes/newMesh.json",
 		"Meshes/secondMesh.json",
 		"Meshes/thirdMesh.json",
