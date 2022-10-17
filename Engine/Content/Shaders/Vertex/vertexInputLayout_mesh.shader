@@ -19,14 +19,15 @@ void main(
 
 	// These values come from one of the VertexFormats::sVertex_mesh that the vertex buffer was filled with in C code
 	in const float3 i_position : POSITION,
+	in const float4 i_color : COLOR,
 
 	// Output
 	//=======
 
 	// An SV_POSITION value must always be output from every vertex shader
 	// so that the GPU can figure out which fragments need to be shaded
-	out float4 o_position : SV_POSITION
-
+	out float4 o_position : SV_POSITION,
+	out float4 o_color : COLOR
 )
 // {
 // 	// The shader program is only used to generate a vertex input layout object;
@@ -68,4 +69,5 @@ void main()
 	// the actual shading code is never used
 	float4 out_position = float4( i_position, 1.0 );
 	WriteVertexOutput(out_position, o_position)
+	WriteVertexColor(i_color, o_color)
 }

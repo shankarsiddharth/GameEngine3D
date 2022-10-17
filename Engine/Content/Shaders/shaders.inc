@@ -22,6 +22,7 @@
 	#define vec4 float4
 	#define MatrixMultiplication( i_matrix_a, i_matrix_b ) mul(i_matrix_a, i_matrix_b)
 	#define WriteVertexOutput(i_matrix, out_matrix) out_matrix = i_matrix;
+	#define WriteVertexColor(i_color, out_color) out_color = i_color;
 
 #elif defined( EAE6320_PLATFORM_GL )
 
