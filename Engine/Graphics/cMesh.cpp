@@ -8,6 +8,7 @@
 #include <External/JSON/Includes.h>
 
 #include <cmath>
+#include <limits>
 
 // Factory Method
 //-------
@@ -106,12 +107,15 @@ eae6320::cResult eae6320::Graphics::cMesh::CreateMesh(const std::string& i_path,
 	const auto parsedFile = nlohmann::json::parse(static_cast<const char*>(dataFromFile.data),
 		static_cast<const char*>(dataFromFile.data) + dataFromFile.size);
 	
-	size_t vertexArrayCount = 0;
-	size_t indexArrayCount = 0;
+	size_t vertexArrayIndex = 0;
+	size_t indexArrayIndex = 0;
+	
+	constexpr size_t maxVertexCount = std::numeric_limits<uint16_t>::max();
 
 	// TODO: Error Check max size and print log information and error
-	auto* vertexArray = new eae6320::Graphics::VertexFormats::sVertex_mesh[std::numeric_limits<uint16_t>::max()];
-	auto* indexArray = new uint16_t[std::numeric_limits<uint16_t>::max()];
+	auto* vertexArray = new eae6320::Graphics::VertexFormats::sVertex_mesh[maxVertexCount];
+	auto* indexArray = new uint16_t[maxVertexCount];
+
 	
 	if (parsedFile.is_object())
 	{
@@ -181,8 +185,20 @@ eae6320::cResult eae6320::Graphics::cMesh::CreateMesh(const std::string& i_path,
 							}
 						}
 
-						vertexArray[vertexArrayCount] = vertex;
-						vertexArrayCount++;
+						if (vertexArrayIndex < maxVertexCount)
+						{
+							vertexArray[vertexArrayIndex] = vertex;
+							vertexArrayIndex++;
+						}
+						else
+						{
+							//TODO: Log Vertex Count Exceeded / Mesh File Too Large to load
+							result = Results::OutOfMemory;
+							EAE6320_ASSERTF(false, "Couldn't process mesh file \"%s\", vertex/index count/size larger than 65535.", i_path.c_str());
+							Logging::OutputError("Couldn't process mesh file \"%s\", vertex/index count/size larger than 65535.", i_path.c_str());
+							break;
+						}
+						
 					}
 					else
 					{
@@ -195,8 +211,9 @@ eae6320::cResult eae6320::Graphics::cMesh::CreateMesh(const std::string& i_path,
 				//TODO: Log Parse Error
 			}
 		}
-		
+
 		//Parse Index Data
+		if(result == Results::Success)
 		{
 			const auto indexDataArray = parsedFile["index_data"];
 			if (indexDataArray.is_array())
@@ -205,8 +222,8 @@ eae6320::cResult eae6320::Graphics::cMesh::CreateMesh(const std::string& i_path,
 				{
 					if (indexData.is_number())
 					{
-						indexArray[indexArrayCount] = indexData;
-						indexArrayCount++;
+						indexArray[indexArrayIndex] = indexData;
+						indexArrayIndex++;												
 					}
 					else
 					{
@@ -221,13 +238,19 @@ eae6320::cResult eae6320::Graphics::cMesh::CreateMesh(const std::string& i_path,
 		}		
 	}
 
-
-	// Initialize the platform-specific mesh
-	if (!(result = newMesh->Initialize(vertexArray, vertexArrayCount, indexArray, indexArrayCount)))
+	if (result == Results::OutOfMemory)
 	{
-		EAE6320_ASSERTF(false, "Initialization of new mesh failed");
-		return result;
+		//Error: Mesh file contains too many vertices to process
 	}
+	else
+	{
+		// Initialize the platform-specific mesh
+		if (!(result = newMesh->Initialize(vertexArray, vertexArrayIndex, indexArray, indexArrayIndex)))
+		{
+			EAE6320_ASSERTF(false, "Initialization of new mesh failed");
+			return result;
+		}
+	}	
 
 	delete[] vertexArray;
 	delete[] indexArray;
