@@ -100,160 +100,64 @@ eae6320::cResult eae6320::Graphics::cMesh::CreateMesh(const std::string& i_path,
 		}
 	}
 
-	// Read the json file
-	eae6320::Platform::sDataFromFile dataFromFile;
-	eae6320::Platform::LoadBinaryFile(i_path.c_str(), dataFromFile);
+	size_t vertexArraySize = 0;
+	size_t indexArraySize = 0;
 
-	const auto parsedFile = nlohmann::json::parse(static_cast<const char*>(dataFromFile.data),
-		static_cast<const char*>(dataFromFile.data) + dataFromFile.size);
-	
-	size_t vertexArrayIndex = 0;
-	size_t indexArrayIndex = 0;
-	
-	constexpr size_t maxVertexCount = std::numeric_limits<uint16_t>::max();
+	eae6320::Graphics::VertexFormats::sVertex_mesh* vertexArray = nullptr;
+	uint16_t* indexArray = nullptr;
 
-	// TODO: Error Check max size and print log information and error
-	auto* vertexArray = new eae6320::Graphics::VertexFormats::sVertex_mesh[maxVertexCount];
-	auto* indexArray = new uint16_t[maxVertexCount];
-
-	
-	if (parsedFile.is_object())
+	// Read the file
 	{
-		//Parse Vertex Data
+		std::string errorMessage;
+		eae6320::Platform::sDataFromFile dataFromFile;
+		if (eae6320::Platform::LoadBinaryFile(i_path.c_str(), dataFromFile, &errorMessage))
 		{
-			const auto vertexDataArray = parsedFile["vertex_data"];
-			if (vertexDataArray.is_array())
-			{
-				for (const auto& vertexData : vertexDataArray)
-				{
-					if (vertexData.is_object())
-					{
-						eae6320::Graphics::VertexFormats::sVertex_mesh vertex{};
+			result = Results::Failure;
 
-						if (vertexData.contains("position"))
-						{
-							const auto position = vertexData["position"];
-							const auto position_x = position["x"];
-							const auto position_y = position["y"];
-							const auto position_z = position["z"];
-							if (position_x.is_number())
-							{
-								vertex.x = position_x.get<float>();
-							}
-							if (position_x.is_number())
-							{
-								vertex.y = position_y.get<float>();
-							}
-							if (position_x.is_number())
-							{
-								vertex.z = position_z.get<float>();
-							}							
-						}
-						else
-						{
-							//TODO: Log Parse Error
-							//Should have position value
-							EAE6320_ASSERT(false);
-						}
+			auto currentOffset = reinterpret_cast<uintptr_t>(dataFromFile.data);
+			const auto finalOffset = currentOffset + dataFromFile.size;
 
-						if (vertexData.contains("color"))
-						{
-							const auto color = vertexData["color"];
-							const auto color_r = color["r"];
-							const auto color_g = color["g"];
-							const auto color_b = color["b"];
-							const auto color_a = color["a"];
-							if (color_r.is_number())
-							{
-								auto r = color_r.get<float>();
-								vertex.r = (uint8_t)std::round(r * 255.0f);
-							}
-							if (color_g.is_number())
-							{
-								auto g = color_g.get<float>();
-								vertex.g = (uint8_t)std::round(g * 255.0f);
-							}
-							if (color_b.is_number())
-							{
-								auto b = color_b.get<float>();
-								vertex.b = (uint8_t)std::round(b * 255.0f);
-							}
-							if (color_a.is_number())
-							{
-								auto a = color_a.get<float>();
-								vertex.a = (uint8_t)std::round(a * 255.0f);
-							}
-						}
+			uint16_t vertexArraySize;
+			memcpy(&vertexArraySize, reinterpret_cast<void*>(currentOffset), sizeof(vertexArraySize));
 
-						if (vertexArrayIndex < maxVertexCount)
-						{
-							vertexArray[vertexArrayIndex] = vertex;
-							vertexArrayIndex++;
-						}
-						else
-						{
-							//TODO: Log Vertex Count Exceeded / Mesh File Too Large to load
-							result = Results::OutOfMemory;
-							EAE6320_ASSERTF(false, "Couldn't process mesh file \"%s\", vertex/index count/size larger than 65535.", i_path.c_str());
-							Logging::OutputError("Couldn't process mesh file \"%s\", vertex/index count/size larger than 65535.", i_path.c_str());
-							break;
-						}
-						
-					}
-					else
-					{
-						//TODO: Log Parse Error
-					}
-				}
-			}
-			else
-			{
-				//TODO: Log Parse Error
-			}
+			currentOffset += sizeof(vertexArraySize);
+			uint16_t indexArraySize;
+			memcpy(&indexArraySize, reinterpret_cast<void*>(currentOffset), sizeof(indexArraySize));
+
+
+			currentOffset += sizeof(indexArraySize);
+			const auto* vertexArray = reinterpret_cast<eae6320::Graphics::VertexFormats::sVertex_mesh*>(currentOffset);
+
+			currentOffset += (vertexArraySize * sizeof(eae6320::Graphics::VertexFormats::sVertex_mesh));
+			const auto* indexArray = reinterpret_cast<uint16_t*>(currentOffset);	
+
+			result = Results::Success;
 		}
-
-		//Parse Index Data
-		if(result == Results::Success)
+		else
 		{
-			const auto indexDataArray = parsedFile["index_data"];
-			if (indexDataArray.is_array())
-			{
-				for (const auto& indexData : indexDataArray)
-				{
-					if (indexData.is_number())
-					{
-						indexArray[indexArrayIndex] = indexData;
-						indexArrayIndex++;												
-					}
-					else
-					{
-						//TODO: Log Parse Error
-					}
-				}
-			}
-			else
-			{
-				//TODO: Log Parse Error
-			}
-		}		
-	}
-
-	if (result == Results::OutOfMemory)
-	{
-		//Error: Mesh file contains too many vertices to process
-	}
-	else
-	{
-		// Initialize the platform-specific mesh
-		if (!(result = newMesh->Initialize(vertexArray, vertexArrayIndex, indexArray, indexArrayIndex)))
-		{
-			EAE6320_ASSERTF(false, "Initialization of new mesh failed");
-			return result;
+			Logging::OutputError("Failed to load mesh %s\n Error: %s", i_path.c_str(), errorMessage.c_str());
+			result = Results::Failure;
 		}
 	}	
 
+	if (result == Results::Success)
+	{
+		// Initialize the platform-specific mesh
+		if (!(result = newMesh->Initialize(vertexArray, vertexArraySize, indexArray, indexArraySize)))
+		{
+			EAE6320_ASSERTF(false, "Initialization of new mesh failed");
+			return result;
+		}		
+	}
+	else
+	{
+		//Error: Failed to load mesh
+	}	
+
 	delete[] vertexArray;
+	vertexArray = nullptr;
 	delete[] indexArray;
+	indexArray = nullptr;
 
 	return result;
 }
