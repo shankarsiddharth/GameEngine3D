@@ -24,22 +24,22 @@ eae6320::cResult eae6320::Graphics::cMesh::CreateMesh(eae6320::Graphics::VertexF
 
 	cMesh* newMesh = nullptr;
 	cScopeGuard scopeGuard([&o_mesh, &result, &newMesh]
-	{
-		if (result)
 		{
-			EAE6320_ASSERT(newMesh != nullptr);
-			o_mesh = newMesh;
-		}
-		else
-		{
-			if (newMesh)
+			if (result)
 			{
-				newMesh->DecrementReferenceCount();
-				newMesh = nullptr;
+				EAE6320_ASSERT(newMesh != nullptr);
+				o_mesh = newMesh;
 			}
-			o_mesh = nullptr;
-		}
-	});
+			else
+			{
+				if (newMesh)
+				{
+					newMesh->DecrementReferenceCount();
+					newMesh = nullptr;
+				}
+				o_mesh = nullptr;
+			}
+		});
 
 	// Allocate a new Mesh
 	{
@@ -100,64 +100,47 @@ eae6320::cResult eae6320::Graphics::cMesh::CreateMesh(const std::string& i_path,
 		}
 	}
 
-	size_t vertexArraySize = 0;
-	size_t indexArraySize = 0;
-
-	eae6320::Graphics::VertexFormats::sVertex_mesh* vertexArray = nullptr;
-	uint16_t* indexArray = nullptr;
-
 	// Read the file
-	{
-		std::string errorMessage;
-		eae6320::Platform::sDataFromFile dataFromFile;
-		if (eae6320::Platform::LoadBinaryFile(i_path.c_str(), dataFromFile, &errorMessage))
-		{
-			result = Results::Failure;
-
-			auto currentOffset = reinterpret_cast<uintptr_t>(dataFromFile.data);
-			const auto finalOffset = currentOffset + dataFromFile.size;
-
-			uint16_t vertexArraySize;
-			memcpy(&vertexArraySize, reinterpret_cast<void*>(currentOffset), sizeof(vertexArraySize));
-
-			currentOffset += sizeof(vertexArraySize);
-			uint16_t indexArraySize;
-			memcpy(&indexArraySize, reinterpret_cast<void*>(currentOffset), sizeof(indexArraySize));
-
-
-			currentOffset += sizeof(indexArraySize);
-			const auto* vertexArray = reinterpret_cast<eae6320::Graphics::VertexFormats::sVertex_mesh*>(currentOffset);
-
-			currentOffset += (vertexArraySize * sizeof(eae6320::Graphics::VertexFormats::sVertex_mesh));
-			const auto* indexArray = reinterpret_cast<uint16_t*>(currentOffset);	
-
-			result = Results::Success;
-		}
-		else
-		{
-			Logging::OutputError("Failed to load mesh %s\n Error: %s", i_path.c_str(), errorMessage.c_str());
-			result = Results::Failure;
-		}
-	}	
+	std::string errorMessage;
+	eae6320::Platform::sDataFromFile dataFromFile;
+	result = eae6320::Platform::LoadBinaryFile(i_path.c_str(), dataFromFile, &errorMessage);
 
 	if (result == Results::Success)
 	{
+		size_t vertexArraySize = 0;
+		size_t indexArraySize = 0;
+
+		auto currentOffset = reinterpret_cast<uintptr_t>(dataFromFile.data);
+		const auto finalOffset = currentOffset + dataFromFile.size;
+
+		uint16_t vertexCount;
+		memcpy(&vertexCount, reinterpret_cast<void*>(currentOffset), sizeof(uint16_t));
+		vertexArraySize = static_cast<size_t>(vertexCount);
+
+		currentOffset += sizeof(vertexCount);
+		uint16_t indexCount;
+		memcpy(&indexCount, reinterpret_cast<void*>(currentOffset), sizeof(uint16_t));
+		indexArraySize = static_cast<size_t>(indexCount);
+
+		currentOffset += sizeof(indexCount);
+		auto* vertexArray = reinterpret_cast<eae6320::Graphics::VertexFormats::sVertex_mesh*>(currentOffset);
+
+		size_t vertexDataOffset = (static_cast<size_t>(vertexCount) * sizeof(eae6320::Graphics::VertexFormats::sVertex_mesh));
+		currentOffset += vertexDataOffset;
+		auto* indexArray = reinterpret_cast<uint16_t*>(currentOffset);
+
 		// Initialize the platform-specific mesh
 		if (!(result = newMesh->Initialize(vertexArray, vertexArraySize, indexArray, indexArraySize)))
 		{
 			EAE6320_ASSERTF(false, "Initialization of new mesh failed");
 			return result;
-		}		
+		}
 	}
 	else
 	{
-		//Error: Failed to load mesh
-	}	
-
-	delete[] vertexArray;
-	vertexArray = nullptr;
-	delete[] indexArray;
-	indexArray = nullptr;
+		Logging::OutputError("Failed to load mesh %s\n Error: %s", i_path.c_str(), errorMessage.c_str());
+		result = Results::Failure;
+	}
 
 	return result;
 }

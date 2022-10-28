@@ -166,12 +166,18 @@ eae6320::cResult eae6320::Assets::cMeshBuilder::Build(const std::vector<std::str
 	}
 	else
 	{
+		// Change the Index Ordering for OpenGL before writing the file
+		result = ProcessIndexArray(indexArray, indexArrayIndex);
+
 		// #dev08 TODO: Write Binary Data to File
+		// #dev08 TODO: Error Handling while writing File
 		std::ofstream outBinaryFile(m_path_target, std::ofstream::binary);		
 		outBinaryFile.write(reinterpret_cast<char*>(&vertexArrayIndex), sizeof(uint16_t));
 		outBinaryFile.write(reinterpret_cast<char*>(&indexArrayIndex), sizeof(uint16_t));
-		outBinaryFile.write(reinterpret_cast<char*>(vertexArray), vertexArrayIndex * sizeof(eae6320::Graphics::VertexFormats::sVertex_mesh));
-		outBinaryFile.write(reinterpret_cast<char*>(indexArray), indexArrayIndex * sizeof(uint16_t));
+		const size_t vertexArraySize = sizeof(eae6320::Graphics::VertexFormats::sVertex_mesh) * (static_cast<size_t>(vertexArrayIndex));
+		outBinaryFile.write(reinterpret_cast<char*>(vertexArray), vertexArraySize);
+		const size_t indexArraySize = sizeof(uint16_t) * (static_cast<size_t>(indexArrayIndex));
+		outBinaryFile.write(reinterpret_cast<char*>(indexArray), indexArraySize);
 		outBinaryFile.close();
 	}
 

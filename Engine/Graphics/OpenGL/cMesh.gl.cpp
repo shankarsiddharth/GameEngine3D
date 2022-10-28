@@ -120,12 +120,12 @@ eae6320::cResult eae6320::Graphics::cMesh::Initialize(eae6320::Graphics::VertexF
 		EAE6320_ASSERT(i_indexArraySize != 0)
 		EAE6320_ASSERT(i_indexArraySize % indexCountPerTriangle == 0)
 		m_indexBufferSize = i_indexArraySize;
-		for (size_t index = 0; index < m_indexBufferSize; index += 3)
+		/*for (size_t index = 0; index < m_indexBufferSize; index += 3)
 		{
 			uint16_t cacheValue = i_indexArray[index + 2];
 			i_indexArray[index + 2] = i_indexArray[index + 1];
 			i_indexArray[index + 1] = cacheValue;
-		}
+		}*/
 		const auto bufferSize = sizeof(i_indexArray[0]) * m_indexBufferSize;
 		EAE6320_ASSERT(static_cast<GLsizeiptr>(bufferSize) <= std::numeric_limits<GLsizeiptr>::max());
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizeiptr>(bufferSize), reinterpret_cast<GLvoid*>(i_indexArray),
