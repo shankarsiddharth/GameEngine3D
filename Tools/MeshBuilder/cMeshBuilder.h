@@ -36,6 +36,8 @@ namespace eae6320
 
 		private:
 
+			cResult ProcessIndexArray(uint16_t* i_indexArray, size_t i_indexArraySize);
+
 		};
 	}
 }
