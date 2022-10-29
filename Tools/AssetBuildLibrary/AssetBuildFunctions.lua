@@ -258,7 +258,9 @@ NewAssetTypeInfo( "shaders",
 			-- The line below just puts the original pieces back together,
 			-- but you could change this to customize the way that you build assets
 			-- (you could, for example, use a different extension for binary shaders)
-			return relativeDirectory .. fileName .. extensionWithPeriod
+			-- Custom Extension for Binary files - (.bsasset)(Built Shader Asset)
+			local newExtensionWithPeriod = ".bsasset"
+			return relativeDirectory .. fileName .. newExtensionWithPeriod
 		end,
 		GetBuilderRelativePath = function()
 			return "ShaderBuilder.exe"
@@ -284,7 +286,9 @@ NewAssetTypeInfo( "meshes",
 			-- The line below just puts the original pieces back together,
 			-- but you could change this to customize the way that you build assets
 			-- (you could, for example, use a different extension for binary shaders)
-			return relativeDirectory .. fileName .. extensionWithPeriod
+			-- Custom Extension for Binary files - (.bmasset)(Binary Mesh Asset)
+			local newExtensionWithPeriod = ".bmasset"
+			return relativeDirectory .. fileName .. newExtensionWithPeriod
 		end,
 		GetBuilderRelativePath = function()
 			return "MeshBuilder.exe"

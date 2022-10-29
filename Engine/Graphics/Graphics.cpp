@@ -408,7 +408,7 @@ namespace
 	{
 		auto result = eae6320::Results::Success;
 
-		//result = eae6320::Graphics::cEffect::CreateEffect(s_newEffect, "data/Shaders/Fragment/testsample.shader");
+		//result = eae6320::Graphics::cEffect::CreateEffect(s_newEffect, "data/Shaders/Fragment/testsample.bsasset");
 
 		//result = eae6320::Graphics::cEffect::CreateEffect(s_secondEffect);
 

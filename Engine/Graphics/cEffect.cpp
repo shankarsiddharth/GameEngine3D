@@ -70,11 +70,11 @@ eae6320::cResult eae6320::Graphics::cEffect::Initialize(const std::string& i_fra
 
 	if (i_vertexShaderPath.empty())
 	{
-		vertexShaderPath = "data/Shaders/Vertex/standard.shader";
+		vertexShaderPath = "data/Shaders/Vertex/standard.bsasset";
 	}
 	if (i_fragmentShaderPath.empty())
 	{
-		fragmentShaderPath = "data/Shaders/Fragment/standard.shader";
+		fragmentShaderPath = "data/Shaders/Fragment/standard.bsasset";
 	}
 
 	if (!(result = eae6320::Graphics::cShader::Load(vertexShaderPath,

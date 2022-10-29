@@ -328,13 +328,13 @@ eae6320::cResult eae6320::cMyGame::InitializeGeometry()
 
 	// Initialize Meshes
 	// Direct3D is left-handed	
-	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/plane.json", m_planeMesh);	
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/plane.bmasset", m_planeMesh);	
 	
-	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sonic.json", m_sphereMesh);
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sonic.bmasset", m_sphereMesh);
 	
-	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sphere.json", m_sphereLargeMesh);
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sphere.bmasset", m_sphereLargeMesh);
 
-	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/helix.json", m_helixMesh);
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/helix.bmasset", m_helixMesh);
 	
 	return result;
 }
@@ -345,7 +345,7 @@ eae6320::cResult eae6320::cMyGame::InitializeShadingData()
 
 	// Initialize Effects
 
-	result = eae6320::Graphics::cEffect::CreateEffect(m_animColorEffect, "data/Shaders/Fragment/testsample.shader");
+	result = eae6320::Graphics::cEffect::CreateEffect(m_animColorEffect, "data/Shaders/Fragment/testsample.bsasset");
 
 	result = eae6320::Graphics::cEffect::CreateEffect(m_defaultEffect);
 
