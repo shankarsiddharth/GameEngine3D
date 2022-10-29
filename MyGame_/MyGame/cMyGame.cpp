@@ -330,9 +330,9 @@ eae6320::cResult eae6320::cMyGame::InitializeGeometry()
 	// Direct3D is left-handed	
 	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/plane.json", m_planeMesh);	
 	
-	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sphere.json", m_sphereMesh);
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sonic.json", m_sphereMesh);
 	
-	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sphere_large.json", m_sphereLargeMesh);
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sphere.json", m_sphereLargeMesh);
 
 	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/helix.json", m_helixMesh);
 	
@@ -376,7 +376,9 @@ eae6320::cResult eae6320::cMyGame::InitializeGameObjects()
 {
 	auto result = eae6320::Results::Success;
 
-	m_sphereGameObject = new eae6320::GameFramework::cGameObject();
+	eae6320::Math::cQuaternion game_object_rotation(eae6320::Math::ConvertDegreesToRadians(0), eae6320::Math::sVector(0.0f, 1.0f, 0.0f));
+	eae6320::Math::sVector game_object_position(1.0f, -1.0f, 3.5f);
+	m_sphereGameObject = new eae6320::GameFramework::cGameObject(game_object_position, game_object_rotation);
 	m_sphereGameObject->AddMeshEffectPair(m_sphereMesh, m_defaultEffect);
 	m_sphereGameObject->AddMeshEffectPair(m_sphereLargeMesh, m_animColorEffect);
 

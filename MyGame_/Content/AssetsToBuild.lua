@@ -16,6 +16,7 @@ return
 		"Meshes/plane.json",
 		"Meshes/sphere.json",
 		"Meshes/sphere_large.json",
+		"Meshes/sonic.json",
 		"Meshes/helix.json",
 		"Meshes/newMesh.json",
 		"Meshes/secondMesh.json",
