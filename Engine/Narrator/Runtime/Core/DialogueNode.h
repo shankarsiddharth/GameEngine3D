@@ -6,12 +6,13 @@ namespace Narrator
 {
 	namespace Runtime
 	{
-		class StartNode : public Node
+		class DialogueNode : public Node
 		{
 
 		public:
-			StartNode(); 
-			~StartNode();
+
+			DialogueNode(); 
+			~DialogueNode();
 		};
 	}
 }
