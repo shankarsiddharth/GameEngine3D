@@ -18,7 +18,7 @@ namespace Narrator
 			//Link Node
 			kDivert,
 			//Section Node
-			kKnots,
+			kKnot,
 			//Choice Node
 			kChoice,
 			//Decision Node

@@ -147,11 +147,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\ChoiceNode.cpp" />
+    <ClCompile Include="Core\DesicionNode.cpp" />
+    <ClCompile Include="Core\DialogueNode.cpp" />
+    <ClCompile Include="Core\DivertNode.cpp" />
+    <ClCompile Include="Core\Edge.cpp" />
+    <ClCompile Include="Core\EndNode.cpp" />
+    <ClCompile Include="Core\Graph.cpp" />
+    <ClCompile Include="Core\KnotNode.cpp" />
     <ClCompile Include="Core\Node.cpp" />
     <ClCompile Include="Core\StartNode.cpp" />
     <ClCompile Include="NarratorRuntime.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\ChoiceNode.h" />
+    <ClInclude Include="Core\DesicionNode.h" />
+    <ClInclude Include="Core\DialogueNode.h" />
+    <ClInclude Include="Core\DivertNode.h" />
+    <ClInclude Include="Core\Edge.h" />
+    <ClInclude Include="Core\EndNode.h" />
+    <ClInclude Include="Core\Graph.h" />
+    <ClInclude Include="Core\KnotNode.h" />
     <ClInclude Include="Core\Node.h" />
     <ClInclude Include="Core\NodeType.h" />
     <ClInclude Include="Core\StartNode.h" />
