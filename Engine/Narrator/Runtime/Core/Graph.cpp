@@ -68,7 +68,7 @@ void Narrator::Runtime::Graph::AddToAdjacencyListMap(Narrator::Runtime::Node* i_
 		{
 			std::vector<Narrator::Runtime::Node*> adjacencyList;
 			adjacencyList.emplace_back(i_AdjacentNode);
- 			//AdjacencyList Not found for the Source Node
+			//AdjacencyList Not found for the Source Node
 			m_AdjacencyListMap.insert(std::pair<uint32_t, std::vector<Narrator::Runtime::Node*>>(i_SourceNode->GetID(), adjacencyList));
 		}
 		else
