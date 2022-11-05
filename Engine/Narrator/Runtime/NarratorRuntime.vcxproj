@@ -180,6 +180,9 @@
     <ClInclude Include="Core\UniInFlowNode.h" />
     <ClInclude Include="Core\UniOutFlowNode.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="story.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

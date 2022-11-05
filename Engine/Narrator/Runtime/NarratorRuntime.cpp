@@ -2,6 +2,10 @@
 //
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+
 #include "Core/StartNode.h"
 #include "Core/EndNode.h"
 #include "Core/DialogueNode.h"
@@ -20,6 +24,15 @@ int main()
 	Narrator::Runtime::DialogueNode startNode1("dialogue");
 	std::cout << std::to_string(startNode1.GetID()) << std::endl;
 */
+
+	//Read a text file
+	std::ifstream inFile("story.txt");
+	std::string line;
+	while (std::getline(inFile, line))
+	{
+		std::istringstream iss(line);
+		std::cout << line << std::endl;
+	}
 
 	Narrator::Runtime::StartNode startNode;
 
