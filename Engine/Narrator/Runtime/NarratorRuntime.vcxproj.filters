@@ -32,6 +32,18 @@
     <ClCompile Include="Core\Edge.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\MultiInFlowNode.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\MultiOutFlowNode.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\UniInFlowNode.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\UniOutFlowNode.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -70,6 +82,18 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\Edge.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\MultiInFlowNode.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\MultiOutFlowNode.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\UniInFlowNode.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\UniOutFlowNode.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>

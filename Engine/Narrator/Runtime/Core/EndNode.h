@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Node.h"
+#include "MultiInFlowNode.h"
 
 namespace Narrator
 {
 	namespace Runtime
 	{
-		class EndNode : public Node
+		class EndNode : public MultiInFlowNode
 		{
 
 		public:

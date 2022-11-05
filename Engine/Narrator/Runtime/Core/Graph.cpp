@@ -16,7 +16,7 @@ void Narrator::Runtime::Graph::AddEdge(Narrator::Runtime::Node* i_SourceNode, Na
 {
 	if (i_SourceNode == nullptr)
 	{
-		//TODO: #NarratorToDo Error Log / Assert
+		//TODO: #NarratorToDoAssert Error Log / Assert
 		return;
 	}
 
@@ -31,15 +31,21 @@ void Narrator::Runtime::Graph::AddToNodeMap(Narrator::Runtime::Node* i_NodeToAdd
 {
 	if (i_NodeToAdd)
 	{
-		if (m_NodeMap.find(i_NodeToAdd->GetID()) == m_NodeMap.end())
+		std::uint32_t nodeID = i_NodeToAdd->GetID();
+		if (m_NodeMap.find(nodeID) == m_NodeMap.end())
 		{
 			//Node Does not Exist
-			m_NodeMap.insert(std::pair<uint32_t, Narrator::Runtime::Node*>(i_NodeToAdd->GetID(), i_NodeToAdd));
+			m_NodeMap.insert(std::pair<uint32_t, Narrator::Runtime::Node*>(nodeID, i_NodeToAdd));
+		}
+		else
+		{
+			//TODO: #NarratorToDoLog Add Log that the nodeID is replaced
+			m_NodeMap[nodeID] = i_NodeToAdd;
 		}
 	}
 	else
 	{
-		//TODO: #NarratorToDo Error Log / Assert
+		//TODO: #NarratorToDoAssert Error Log / Assert
 	}
 }
 
@@ -47,15 +53,21 @@ void Narrator::Runtime::Graph::AddToEdgeMap(Narrator::Runtime::Edge* i_EdgeToAdd
 {
 	if (i_EdgeToAdd)
 	{
-		if (m_EdgeMap.find(i_EdgeToAdd->GetID()) == m_EdgeMap.end())
+		std::uint64_t edgeID = i_EdgeToAdd->GetID();
+		if (m_EdgeMap.find(edgeID) == m_EdgeMap.end())
 		{
 			//Edge Does not Exist
 			m_EdgeMap.insert(std::pair<uint64_t, Narrator::Runtime::Edge*>(i_EdgeToAdd->GetID(), i_EdgeToAdd));
 		}
+		else
+		{
+			//TODO: #NarratorToDoLog Add Log that the edgeID is replaced
+			m_EdgeMap[edgeID] = i_EdgeToAdd;
+		}
 	}
 	else
 	{
-		//TODO: #NarratorToDo Error Log / Assert
+		//TODO: #NarratorToDoAssert Error Log / Assert
 	}
 }
 
@@ -63,13 +75,17 @@ void Narrator::Runtime::Graph::AddToAdjacencyListMap(Narrator::Runtime::Node* i_
 {
 	if (i_SourceNode != nullptr && i_AdjacentNode != nullptr)
 	{
-		std::map<uint32_t, std::vector<Narrator::Runtime::Node*>>::iterator mapIterator = m_AdjacencyListMap.find(i_SourceNode->GetID());
+		std::uint32_t sourceNodeID = i_SourceNode->GetID();
+		std::map<uint32_t, std::vector<Narrator::Runtime::Node*>>::iterator mapIterator = m_AdjacencyListMap.find(sourceNodeID);
 		if (mapIterator == m_AdjacencyListMap.end())
 		{
+			//AdjacencyList Not found for the Source Node
+			
+			//Create a new Adjacency List and add the adjacent Node
 			std::vector<Narrator::Runtime::Node*> adjacencyList;
 			adjacencyList.emplace_back(i_AdjacentNode);
-			//AdjacencyList Not found for the Source Node
-			m_AdjacencyListMap.insert(std::pair<uint32_t, std::vector<Narrator::Runtime::Node*>>(i_SourceNode->GetID(), adjacencyList));
+			
+			m_AdjacencyListMap.insert(std::pair<uint32_t, std::vector<Narrator::Runtime::Node*>>(sourceNodeID, adjacencyList));
 		}
 		else
 		{
@@ -78,6 +94,6 @@ void Narrator::Runtime::Graph::AddToAdjacencyListMap(Narrator::Runtime::Node* i_
 	}
 	else
 	{
-		//TODO: #NarratorToDo Error Log / Assert
+		//TODO: #NarratorToDoAssert Error Log / Assert
 	}
 }
