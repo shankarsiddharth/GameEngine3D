@@ -1,12 +1,13 @@
 #pragma once
 
-#include "Node.h"
+#include "UniInFlowNode.h"
+#include "UniOutFlowNode.h"
 
 namespace Narrator
 {
 	namespace Runtime
 	{
-		class KnotNode : public Node
+		class KnotNode : public UniInFlowNode, public UniOutFlowNode
 		{
 
 		public:

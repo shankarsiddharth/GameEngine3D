@@ -8,12 +8,12 @@ namespace Narrator
 	{
 		enum class TNodeType : std::uint16_t
 		{
-			kNone = 0,
+			kNodeBase = 0,
 			//Start Node
 			kStart,
 			//End Node
 			kEnd,
-			//Text Dialogue Content Node
+			//Text Content Node (Dialogues)
 			kDialogue,
 			//Link Node
 			kDivert,

@@ -16,7 +16,7 @@ namespace Narrator
 			static size_t GetTotalNodeCount();
 			static	size_t GetMaxNodeCount();
 			
-			Node(TNodeType i_Type = TNodeType::kNone);
+			Node(TNodeType i_Type = TNodeType::kNodeBase);
 			virtual ~Node();
 
 			TNodeType GetType() const;

@@ -1,18 +1,23 @@
 #pragma once
 
-#include "Node.h"
+#include "UniInFlowNode.h"
+#include "UniOutFlowNode.h"
 
 namespace Narrator
 {
 	namespace Runtime
 	{
-		class DivertNode : public Node
+		class DivertNode : public UniInFlowNode, public UniOutFlowNode
 		{
 
 		public:
 
 			DivertNode(); 
 			~DivertNode();
+
+		protected:
+
+			
 		};
 	}
 }

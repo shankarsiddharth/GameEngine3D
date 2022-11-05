@@ -1,4 +1,5 @@
 #include "Node.h"
+#include <iostream>
 
 std::uint32_t Narrator::Runtime::Node::m_CurrentIndex = 0;
 
@@ -12,11 +13,11 @@ size_t Narrator::Runtime::Node::GetMaxNodeCount()
 	return std::numeric_limits<uint32_t>::max();
 }
 
-Narrator::Runtime::Node::Node(TNodeType i_Type)
+Narrator::Runtime::Node::Node(TNodeType i_Type /*= TNodeType::kNone*/)
 	:m_Type(i_Type),
 	m_ID(m_CurrentIndex++)
 {
-
+	
 }
 
 Narrator::Runtime::Node::~Node()
