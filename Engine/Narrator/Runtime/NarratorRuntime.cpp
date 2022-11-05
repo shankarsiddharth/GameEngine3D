@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 #include "Core/StartNode.h"
 #include "Core/EndNode.h"
@@ -13,9 +14,31 @@
 #include "Core/KnotNode.h"
 #include "Core/ChoiceNode.h"
 #include "Core/Graph.h"
+#include "Utils/StringUtils.h"
 
 int main()
 {
+	std::vector<std::string> FileLines;
+
+	//Read a text file
+	std::ifstream inFile("story.txt");
+	std::string line;
+	while (std::getline(inFile, line))
+	{
+		std::istringstream iss(line);
+// 		std::cout << line << std::endl;
+		line = Narrator::Runtime::StringUtils::TrimCopy(line);
+		if (!line.empty())
+		{
+			FileLines.emplace_back(line);
+		}
+	}
+		
+
+	for (const std::string& fileLine : FileLines)
+	{
+		std::cout << fileLine << std::endl;
+	}
 
 /*
 	Narrator::Runtime::StartNode startNode;
@@ -25,15 +48,7 @@ int main()
 	std::cout << std::to_string(startNode1.GetID()) << std::endl;
 */
 
-	//Read a text file
-	std::ifstream inFile("story.txt");
-	std::string line;
-	while (std::getline(inFile, line))
-	{
-		std::istringstream iss(line);
-		std::cout << line << std::endl;
-	}
-
+/*
 	Narrator::Runtime::StartNode startNode;
 
 	Narrator::Runtime::DialogueNode dialogueNode1("Hi");
@@ -69,16 +84,6 @@ int main()
 
 	std::cout << std::to_string(Narrator::Runtime::Node::GetMaxNodeCount()) << std::endl;
 	std::cout << std::to_string(Narrator::Runtime::Node::GetTotalNodeCount()) << std::endl;
+*/
 
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

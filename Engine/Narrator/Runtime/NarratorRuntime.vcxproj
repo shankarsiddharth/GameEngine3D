@@ -162,6 +162,7 @@
     <ClCompile Include="Core\UniInFlowNode.cpp" />
     <ClCompile Include="Core\UniOutFlowNode.cpp" />
     <ClCompile Include="NarratorRuntime.cpp" />
+    <ClCompile Include="Utils\StringUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\ChoiceNode.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Core\StartNode.h" />
     <ClInclude Include="Core\UniInFlowNode.h" />
     <ClInclude Include="Core\UniOutFlowNode.h" />
+    <ClInclude Include="Utils\StringUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="story.txt" />
