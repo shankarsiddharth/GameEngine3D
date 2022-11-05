@@ -97,4 +97,7 @@
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="story.txt" />
+  </ItemGroup>
 </Project>
