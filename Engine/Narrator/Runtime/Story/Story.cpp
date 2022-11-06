@@ -12,7 +12,8 @@ Narrator::Runtime::Story::Story()
 	m_StartNode(nullptr),
 	m_EndNode(nullptr),
 	m_CurrentNode(nullptr),
-	m_LastDesicionNode(nullptr)
+	m_LastDesicionNode(nullptr),
+	m_LastChoiceNode(nullptr)
 {
 	m_StartNode = new Narrator::Runtime::StartNode();
 	AddToNodeMap(m_StartNode);
@@ -42,7 +43,7 @@ void Narrator::Runtime::Story::Read()
 std::vector<Narrator::Runtime::ChoiceNode*> Narrator::Runtime::Story::GetChoices()
 {
 	//TODO: #NarratorToDo Implementation
-	return std::vector<Narrator::Runtime::ChoiceNode*>();
+	return {};
 }
 
 void Narrator::Runtime::Story::SelectChoice(uint32_t i_ChoiceIndex)
@@ -122,6 +123,43 @@ void Narrator::Runtime::Story::ClearLastDecisionNode()
 	m_LastDesicionNode = nullptr;
 }
 
+bool Narrator::Runtime::Story::HasAValidDecisionNode()
+{
+	if (m_LastDesicionNode != nullptr)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Narrator::Runtime::Story::HasAValidChoiceNode()
+{
+	if (m_LastChoiceNode != nullptr)
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+void Narrator::Runtime::Story::SetLastChoiceNode(Narrator::Runtime::Node* i_ChoiceNode)
+{
+	if (i_ChoiceNode->GetType() != TNodeType::kChoice)
+	{
+		//TODO: #NarratorToDoAssert Throw Parsing Error
+	}
+	else
+	{
+		m_LastChoiceNode = i_ChoiceNode;
+	}
+}
+
+void Narrator::Runtime::Story::ClearLastChoiceNode()
+{
+	m_LastChoiceNode = nullptr;
+}
+
 void Narrator::Runtime::Story::Traverse()
 {
 	BreadthFirstSearch();
@@ -150,6 +188,9 @@ void Narrator::Runtime::Story::BreadthFirstSearch()
 			std::cout << frontNode->ToString() << std::endl;
 
 			nodeQueue.pop();
+
+			//TODO: #NarratorToDo Check the Previous Valid Nodes and add error checks for invalid flow
+
 
 			std::vector<Narrator::Runtime::Node*> adjacentList = m_AdjacencyListMap[frontNode->GetID()];
 

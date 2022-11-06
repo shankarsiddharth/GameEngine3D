@@ -35,6 +35,11 @@ namespace Narrator
 			Narrator::Runtime::Node* CreateDecisionNode();
 			void ClearLastDecisionNode();
 
+			bool HasAValidDecisionNode();
+			bool HasAValidChoiceNode();
+			void SetLastChoiceNode(Narrator::Runtime::Node* i_ChoiceNode);
+			void ClearLastChoiceNode();
+
 			void Traverse() override;
 
 		private:
@@ -47,6 +52,7 @@ namespace Narrator
 			Narrator::Runtime::Node* m_CurrentNode;
 
 			Narrator::Runtime::Node* m_LastDesicionNode;
+			Narrator::Runtime::Node* m_LastChoiceNode;
 			std::uint32_t m_CurrentChoiceIndex = 0;
 
 		
