@@ -16,7 +16,9 @@ namespace Narrator
 
 			DivertNode(); 
 			~DivertNode();
-						
+			
+			std::string ToString() override;
+
 			std::string GetTargetNodeName() const;
 			void SetTargetNodeName(std::string i_TargetNodeName);
 
@@ -27,6 +29,7 @@ namespace Narrator
 
 			std::string m_TargetNodeName;
 			Narrator::Runtime::Node* m_TargetNode;
+
 		};
 	}
 }

@@ -4,6 +4,9 @@
 #include "../Core/Edge.h"
 #include "../Core/DecisionNode.h"
 
+#include <queue>
+#include <iostream>
+
 Narrator::Runtime::Story::Story()
 	: Narrator::Runtime::Graph(),
 	m_StartNode(nullptr),
@@ -121,6 +124,47 @@ void Narrator::Runtime::Story::ClearLastDecisionNode()
 
 void Narrator::Runtime::Story::Traverse()
 {
-	//throw std::logic_error("The method or operation is not implemented.");
+	BreadthFirstSearch();
+}
+
+void Narrator::Runtime::Story::BreadthFirstSearch()
+{
+	std::queue<Narrator::Runtime::Node*> nodeQueue;
+
+	for (std::map<uint32_t, Narrator::Runtime::Node*>::iterator mapIterator = m_NodeMap.begin(); 
+		mapIterator != m_NodeMap.end(); 
+		mapIterator++)
+	{
+		Narrator::Runtime::Node* currentNode = mapIterator->second;
+		if (!currentNode->IsVisited())
+		{
+			nodeQueue.push(currentNode);
+		}
+
+		while (!nodeQueue.empty())
+		{
+			Narrator::Runtime::Node* frontNode = nodeQueue.front();
+			frontNode->MarkAsVisited();
+
+			//Print to standard output stream std::cout
+			std::cout << frontNode->ToString() << std::endl;
+
+			nodeQueue.pop();
+
+			std::vector<Narrator::Runtime::Node*> adjacentList = m_AdjacencyListMap[frontNode->GetID()];
+
+			for (std::vector<Narrator::Runtime::Node*>::iterator adjacentListIterator = adjacentList.begin();
+				adjacentListIterator != adjacentList.end();
+				adjacentListIterator++)
+			{
+				Narrator::Runtime::Node* adjacentNode = *adjacentListIterator;
+				if (!adjacentNode->IsVisited())
+				{
+					adjacentNode->MarkAsVisited();
+					nodeQueue.push(adjacentNode);
+				}
+			}
+		}
+	}
 }
 

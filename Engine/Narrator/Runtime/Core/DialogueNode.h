@@ -15,6 +15,8 @@ namespace Narrator
 			DialogueNode(const std::string& i_Text); 
 			~DialogueNode();
 
+			std::string ToString() override; 
+			
 			std::string GetText();
 
 		protected:

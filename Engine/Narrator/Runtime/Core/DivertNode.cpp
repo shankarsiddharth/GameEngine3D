@@ -31,3 +31,8 @@ void Narrator::Runtime::DivertNode::SetTargetNode(Narrator::Runtime::Node* i_Tar
 {
 	m_TargetNode = i_TargetNode;
 }
+
+std::string Narrator::Runtime::DivertNode::ToString()
+{
+	return GetName() + " : ->" + m_TargetNodeName;
+}

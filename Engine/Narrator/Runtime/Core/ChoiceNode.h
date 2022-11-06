@@ -15,6 +15,8 @@ namespace Narrator
 			ChoiceNode(const std::uint32_t i_Index, const std::string& i_Text);
 			~ChoiceNode();
 
+			std::string ToString() override;
+
 			std::uint32_t GetChoiceIndex();
 
 		protected:

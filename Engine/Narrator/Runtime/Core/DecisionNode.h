@@ -15,7 +15,10 @@ namespace Narrator
 			DecisionNode(); 
 			~DecisionNode();
 
+			std::string ToString() override;
+
 			std::uint32_t GetDecisionPathCount();
+
 		};
 	}
 }

@@ -172,7 +172,7 @@ int main()
 	}
 
 	//Traverse the Graph to validate the flow
-
+	story->Traverse();
 
 /*
 	Narrator::Runtime::StartNode startNode;
