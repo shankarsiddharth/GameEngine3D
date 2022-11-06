@@ -44,3 +44,7 @@ std::uint32_t Narrator::Runtime::Node::GetID() const
 	return m_ID;
 }
 
+void Narrator::Runtime::Node::SetName(const std::string& i_Name)
+{
+	m_Name = i_Name;
+}

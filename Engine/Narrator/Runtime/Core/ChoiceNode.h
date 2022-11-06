@@ -14,6 +14,11 @@ namespace Narrator
 
 			ChoiceNode(); 
 			~ChoiceNode();
+
+			std::uint32_t GetChoiceIndex();
+
+		protected:
+			std::uint32_t m_Index;
 		};
 	}
 }

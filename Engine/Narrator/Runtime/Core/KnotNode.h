@@ -14,6 +14,8 @@ namespace Narrator
 
 			KnotNode(); 
 			~KnotNode();
+			
+			void SetName(const std::string& i_Name);
 		};
 	}
 }

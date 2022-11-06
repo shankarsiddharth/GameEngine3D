@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <regex>
 
 #include "Core/StartNode.h"
 #include "Core/EndNode.h"
@@ -15,6 +16,9 @@
 #include "Core/ChoiceNode.h"
 #include "Core/Graph.h"
 #include "Utils/StringUtils.h"
+#include "Story/Story.h"
+#include "Story/StorySyntax.h"
+
 
 int main()
 {
@@ -27,17 +31,61 @@ int main()
 	{
 		std::istringstream iss(line);
 // 		std::cout << line << std::endl;
-		line = Narrator::Runtime::StringUtils::TrimCopy(line);
-		if (!line.empty())
+		std::string  lineTrim = Narrator::Runtime::StringUtils::TrimCopy(line);
+		if (!lineTrim.empty())
 		{
-			FileLines.emplace_back(line);
+			FileLines.emplace_back(lineTrim);
 		}
 	}
-		
+	
+	//Create A Story Graph
+	Narrator::Runtime::Story* story = new Narrator::Runtime::Story();
 
+	//Parse the Content
 	for (const std::string& fileLine : FileLines)
 	{
 		std::cout << fileLine << std::endl;
+		if (Narrator::Runtime::StringUtils::StartsWith(fileLine, Narrator::Runtime::StorySyntax::KNOT_DECLARATION))
+		{ 
+			//Get the Knot Name
+			std::string knotName;
+			std::string tLine = fileLine;
+			Narrator::Runtime::StringUtils::RemoveAll(tLine, Narrator::Runtime::StorySyntax::KNOT_DECLARATION);
+			std::string nameToCheck = Narrator::Runtime::StringUtils::TrimCopy(tLine);
+			if (Narrator::Runtime::StringUtils::IsValidKnotName(nameToCheck))
+			{
+				knotName = nameToCheck;
+				//Create Knot Node
+				Narrator::Runtime::KnotNode* knotNode = new Narrator::Runtime::KnotNode();
+				knotNode->SetName(knotName);
+				story->AddNode(knotNode);
+			}
+			else
+			{
+				//TODO: #NarratorToDoAssert Throw Parsing Error
+				std::cout << "Error in knot name" << std::endl;
+			}			
+		}
+		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, "*"))
+		{
+			//Decision Point
+		}
+		else if (Narrator::Runtime::StringUtils::StartsWithIgnoreCase(fileLine, "->END"))
+		{
+			//End Node
+		}
+		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, "->DONE"))
+		{
+			//Done Node is a divert node that redirects to the end node by default
+		}
+		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, "->"))
+		{
+			//Divert Node
+		}
+		else
+		{
+			//Dialogue Node
+		}
 	}
 
 /*

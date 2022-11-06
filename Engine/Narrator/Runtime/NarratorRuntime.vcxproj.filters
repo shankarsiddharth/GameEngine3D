@@ -47,6 +47,12 @@
     <ClCompile Include="Utils\StringUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Story\Story.cpp">
+      <Filter>Story</Filter>
+    </ClCompile>
+    <ClCompile Include="Story\StorySyntax.cpp">
+      <Filter>Story</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -54,6 +60,9 @@
     </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{65857958-3a0e-4c61-9334-a57e8d3ebd8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Story">
+      <UniqueIdentifier>{c9eba3b0-ee6f-4fd0-8684-441877e4d34f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -64,9 +73,6 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\StartNode.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\ChoiceNode.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\DesicionNode.h">
@@ -104,6 +110,15 @@
     </ClInclude>
     <ClInclude Include="Utils\StringUtils.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Story\Story.h">
+      <Filter>Story</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ChoiceNode.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Story\StorySyntax.h">
+      <Filter>Story</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -27,6 +27,8 @@ namespace Narrator
 
 			static std::uint32_t m_CurrentIndex;
 
+			void SetName(const std::string& i_Name);
+
 			std::uint32_t m_ID;
 			std::string m_Name;
 			TNodeType m_Type;
