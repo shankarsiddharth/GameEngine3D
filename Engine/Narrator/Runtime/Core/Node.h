@@ -19,12 +19,17 @@ namespace Narrator
 			Node(TNodeType i_Type = TNodeType::kNodeBase);
 			virtual ~Node();
 
+			virtual std::string ToString();
+
 			TNodeType GetType() const;
 			std::string GetName() const;
 			std::uint32_t GetID() const;
 			TInFlowType GetInFlowType() const;
 			TOutFlowType GetOutFlowType() const;
 
+			bool IsVisited() const;
+			void MarkAsVisited();
+		
 		protected:
 
 			static std::uint32_t m_CurrentIndex;
@@ -36,6 +41,9 @@ namespace Narrator
 			TNodeType m_Type;
 			TInFlowType m_InFlowType;
 			TOutFlowType m_OutFlowType;
+
+			//Traversal Data
+			bool m_IsVisited;
 
 		private:
 

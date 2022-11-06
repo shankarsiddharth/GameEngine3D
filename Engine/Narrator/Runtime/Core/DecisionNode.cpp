@@ -13,5 +13,11 @@ Narrator::Runtime::DecisionNode::~DecisionNode()
 
 std::uint32_t Narrator::Runtime::DecisionNode::GetDecisionPathCount()
 {
-	return m_OutFlowNodeMap.size();
+	std::uint32_t pathCount = static_cast<uint32_t>(m_OutFlowNodeMap.size());
+	return pathCount;
+}
+
+std::string Narrator::Runtime::DecisionNode::ToString()
+{
+	return GetName() + "\t:DN:";
 }

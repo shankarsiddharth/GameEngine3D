@@ -17,3 +17,8 @@ std::string Narrator::Runtime::DialogueNode::GetText()
 {
 	return m_Text;
 }
+
+std::string Narrator::Runtime::DialogueNode::ToString()
+{
+	return GetName() + " : " + m_Text;
+}

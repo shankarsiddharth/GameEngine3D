@@ -38,6 +38,9 @@ namespace Narrator
 			void Traverse() override;
 
 		private:
+
+			void BreadthFirstSearch();
+
 			//Story State
 			Narrator::Runtime::Node* m_StartNode;
 			Narrator::Runtime::Node* m_EndNode;

@@ -17,3 +17,8 @@ std::uint32_t Narrator::Runtime::ChoiceNode::GetChoiceIndex()
 {
 	return m_Index;
 }
+
+std::string Narrator::Runtime::ChoiceNode::ToString()
+{
+	return GetName() + " : " + m_Text;
+}

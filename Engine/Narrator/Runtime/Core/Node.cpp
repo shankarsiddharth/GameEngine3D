@@ -3,6 +3,11 @@
 
 std::uint32_t Narrator::Runtime::Node::m_CurrentIndex = 0;
 
+std::string Narrator::Runtime::Node::ToString()
+{
+	return GetName();
+}
+
 size_t Narrator::Runtime::Node::GetTotalNodeCount()
 {
 	return m_CurrentIndex;
@@ -17,7 +22,8 @@ Narrator::Runtime::Node::Node(TNodeType i_Type /*= TNodeType::kNone*/)
 	: m_ID(m_CurrentIndex++),
 	m_Type(i_Type),
 	m_InFlowType(TInFlowType::kNone),
-	m_OutFlowType(TOutFlowType::kNone)
+	m_OutFlowType(TOutFlowType::kNone),
+	m_IsVisited(false)
 {
 	m_Name = std::to_string(m_ID);
 }
@@ -54,6 +60,16 @@ Narrator::Runtime::TInFlowType Narrator::Runtime::Node::GetInFlowType() const
 Narrator::Runtime::TOutFlowType Narrator::Runtime::Node::GetOutFlowType() const
 {
 	return m_OutFlowType;
+}
+
+bool Narrator::Runtime::Node::IsVisited() const
+{
+	return m_IsVisited;
+}
+
+void Narrator::Runtime::Node::MarkAsVisited()
+{
+	m_IsVisited = true;
 }
 
 void Narrator::Runtime::Node::SetName(const std::string& i_Name)
