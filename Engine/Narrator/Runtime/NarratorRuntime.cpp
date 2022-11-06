@@ -57,10 +57,18 @@ int main()
 			{
 				knotName = nameToCheck;
 				//TODO: #NarratorToDo If KnotName already Preset Throw Parsing Error
-				//Create Knot Node
-				Narrator::Runtime::KnotNode* knotNode = new Narrator::Runtime::KnotNode();
-				knotNode->SetName(knotName);
-				story->AddNode(knotNode);
+				if (story->HasKnotNode(knotName))
+				{
+					//TODO: #NarratorToDoAssert Throw Parser Error 
+					std::cout << "Error Redefinition of knot name" << std::endl;
+				}
+				else
+				{
+					//Create Knot Node
+					Narrator::Runtime::KnotNode* knotNode = new Narrator::Runtime::KnotNode();
+					knotNode->SetName(knotName);
+					story->AddNode(knotNode);
+				}
 			}
 			else
 			{
@@ -126,10 +134,27 @@ int main()
 				if (Narrator::Runtime::StringUtils::IsValidKnotName(divertTargetName))
 				{
 					divertName = divertTargetName;
-					//Create Divert Node
-					Narrator::Runtime::DivertNode* divertNode = new Narrator::Runtime::DivertNode();
-					divertNode->SetTargetNodeName(divertName);
-					story->AddNode(divertNode);
+					//TODO: #NarratorToDo Check the Divert Node is already present
+					if (story->HasDivertNode(divertName))
+					{
+						Narrator::Runtime::Node* foundNode = story->GetDivertNode(divertName);
+						Narrator::Runtime::DivertNode* divertNode = dynamic_cast<Narrator::Runtime::DivertNode*>(foundNode);
+						if (divertNode)
+						{
+							story->AddNode(divertNode);
+						}
+						else
+						{
+							//TODO: #NarratorToDoAssert Throw Parse Error : The Divert Node should not be nullptr
+						}
+					}
+					else
+					{
+						//Create Divert Node
+						Narrator::Runtime::DivertNode* divertNode = new Narrator::Runtime::DivertNode();
+						divertNode->SetTargetNodeName(divertName);
+						story->AddNode(divertNode);
+					}
 				}
 				else
 				{
@@ -145,6 +170,9 @@ int main()
 			story->AddNode(dialogueNode);
 		}
 	}
+
+	//Traverse the Graph to validate the flow
+
 
 /*
 	Narrator::Runtime::StartNode startNode;

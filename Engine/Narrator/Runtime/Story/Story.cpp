@@ -12,7 +12,9 @@ Narrator::Runtime::Story::Story()
 	m_LastDesicionNode(nullptr)
 {
 	m_StartNode = new Narrator::Runtime::StartNode();
+	AddToNodeMap(m_StartNode);
 	m_EndNode = new Narrator::Runtime::EndNode();
+	AddToNodeMap(m_EndNode);
 	
 	m_CurrentNode = m_StartNode;
 
@@ -48,20 +50,51 @@ void Narrator::Runtime::Story::SelectChoice(uint32_t i_ChoiceIndex)
 
 void Narrator::Runtime::Story::AddNode(Narrator::Runtime::Node* i_NodeToAdd)
 {
+/*	
 	AddToNodeMap(i_NodeToAdd);
 	Narrator::Runtime::Edge* newEdge = new Narrator::Runtime::Edge(m_CurrentNode, i_NodeToAdd);
 	AddToEdgeMap(newEdge);
 	AddToAdjacencyListMap(m_CurrentNode, i_NodeToAdd);
 	AddNodeLink(m_CurrentNode, i_NodeToAdd);
+*/
+
+	AddEdge(m_CurrentNode, i_NodeToAdd);
 	m_CurrentNode = i_NodeToAdd;
 }
 
 void Narrator::Runtime::Story::LinkEndNode()
 {
+/*
 	Narrator::Runtime::Edge* newEdge = new Narrator::Runtime::Edge(m_CurrentNode, m_EndNode);
 	AddToEdgeMap(newEdge);
 	AddToAdjacencyListMap(m_CurrentNode, m_EndNode);
 	AddNodeLink(m_CurrentNode, m_EndNode);
+*/
+	
+	AddEdge(m_CurrentNode, m_EndNode);
+}
+
+bool Narrator::Runtime::Story::HasDivertNode(const std::string& i_DivertName)
+{
+	return HasRedirectionNode(i_DivertName);
+}
+
+bool Narrator::Runtime::Story::HasKnotNode(const std::string& i_KnotName)
+{
+	return HasSubGraphStartNode(i_KnotName);
+}
+
+Narrator::Runtime::Node* Narrator::Runtime::Story::GetDivertNode(const std::string& i_DivertName)
+{
+	//TODO: #NarratorToDo Optimize this logic to just return the Node without checking
+	if (HasDivertNode(i_DivertName))
+	{
+		return GetRedirectionNode(i_DivertName);
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 Narrator::Runtime::Node* Narrator::Runtime::Story::CreateDecisionNode()
@@ -84,5 +117,10 @@ Narrator::Runtime::Node* Narrator::Runtime::Story::CreateDecisionNode()
 void Narrator::Runtime::Story::ClearLastDecisionNode()
 {
 	m_LastDesicionNode = nullptr;
+}
+
+void Narrator::Runtime::Story::Traverse()
+{
+	//throw std::logic_error("The method or operation is not implemented.");
 }
 

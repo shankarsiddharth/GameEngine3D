@@ -15,6 +15,7 @@ namespace Narrator
 			Story();
 			virtual ~Story();
 
+			//Runtime Methods
 			bool canRead();
 			void Read();
 
@@ -25,8 +26,16 @@ namespace Narrator
 			void AddNode(Narrator::Runtime::Node* i_NodeToAdd);
 			void LinkEndNode();
 
+			bool HasDivertNode(const std::string& i_DivertName);
+			bool HasKnotNode(const std::string& i_KnotName);
+
+			//Always use HasDivertNode to check if it is present before accessing the Node
+			Narrator::Runtime::Node* GetDivertNode(const std::string& i_DivertName);
+
 			Narrator::Runtime::Node* CreateDecisionNode();
 			void ClearLastDecisionNode();
+
+			void Traverse() override;
 
 		private:
 			//Story State
@@ -36,6 +45,9 @@ namespace Narrator
 
 			Narrator::Runtime::Node* m_LastDesicionNode;
 			std::uint32_t m_CurrentChoiceIndex = 0;
+
+		
+
 		};
 	}
 }

@@ -2,14 +2,14 @@
 
 #include <string>
 
-#include "UniInFlowNode.h"
+#include "MultiInFlowNode.h"
 #include "UniOutFlowNode.h"
 
 namespace Narrator
 {
 	namespace Runtime
 	{
-		class DivertNode : public UniInFlowNode, public UniOutFlowNode
+		class DivertNode : public MultiInFlowNode, public UniOutFlowNode
 		{
 
 		public:
