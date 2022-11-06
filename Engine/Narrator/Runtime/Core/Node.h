@@ -22,6 +22,8 @@ namespace Narrator
 			TNodeType GetType() const;
 			std::string GetName() const;
 			std::uint32_t GetID() const;
+			TInFlowType GetInFlowType() const;
+			TOutFlowType GetOutFlowType() const;
 
 		protected:
 
@@ -32,6 +34,8 @@ namespace Narrator
 			std::uint32_t m_ID;
 			std::string m_Name;
 			TNodeType m_Type;
+			TInFlowType m_InFlowType;
+			TOutFlowType m_OutFlowType;
 
 		private:
 

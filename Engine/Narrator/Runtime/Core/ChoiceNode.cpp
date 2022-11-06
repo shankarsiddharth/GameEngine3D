@@ -1,8 +1,9 @@
 #include "ChoiceNode.h"
 
-Narrator::Runtime::ChoiceNode::ChoiceNode()
+Narrator::Runtime::ChoiceNode::ChoiceNode(const std::uint32_t i_Index, const std::string& i_Text)
 	:Narrator::Runtime::Node(TNodeType::kChoice),
-	m_Index(0)
+	m_Index(i_Index),
+	m_Text(i_Text)
 {
 
 }

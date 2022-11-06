@@ -15,9 +15,10 @@ namespace Narrator
 
 		public:
 			
-			MultiInFlowNode(TNodeType i_Type = TNodeType::kNodeBase);
+			MultiInFlowNode(TNodeType i_Type = TNodeType::kNodeBase, TInFlowType i_InFlowType = TInFlowType::kMultiInFlow);
 			virtual ~MultiInFlowNode();
 
+			//Parser Methods
 			void AddInFlowNode(Narrator::Runtime::Node* i_NextNode);
 			void RemoveInFlowNode(Narrator::Runtime::Node* i_NextNode);
 			void RemoveInFlowNode(std::uint32_t i_NextNodeID);

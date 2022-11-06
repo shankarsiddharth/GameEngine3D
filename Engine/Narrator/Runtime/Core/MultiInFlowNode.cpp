@@ -1,9 +1,10 @@
 #include "MultiInFlowNode.h"
 
-Narrator::Runtime::MultiInFlowNode::MultiInFlowNode(TNodeType i_Type /*= TNodeType::kMultiFlow*/)
+Narrator::Runtime::MultiInFlowNode::MultiInFlowNode(TNodeType i_Type /*= TNodeType::kMultiFlow*/,
+	TInFlowType i_InFlowType /*= TInFlowType::kMultiInFlow*/)
 	: Narrator::Runtime::Node(i_Type)
 {
-
+	m_InFlowType = i_InFlowType;
 }
 
 Narrator::Runtime::MultiInFlowNode::~MultiInFlowNode()

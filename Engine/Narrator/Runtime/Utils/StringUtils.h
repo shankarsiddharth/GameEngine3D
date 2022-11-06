@@ -41,7 +41,7 @@ namespace Narrator
 			/*
 			 * Trim from start (copying)
 			 */
-			static inline std::string LeftTrimCopy(std::string i_StringToProcess) {
+			static inline std::string LeftTrimCopy(const std::string& i_StringToProcess) {
 				std::string stringCopy = i_StringToProcess;
 				LeftTrim(stringCopy);
 				return stringCopy;
@@ -50,7 +50,7 @@ namespace Narrator
 			/*
 			 * Trim from end (copying)
 			 */
-			static inline std::string RightTrimCopy(std::string i_StringToProcess) {
+			static inline std::string RightTrimCopy(const std::string& i_StringToProcess) {
 				std::string stringCopy = i_StringToProcess;
 				RightTrim(stringCopy);
 				return stringCopy;
@@ -59,7 +59,7 @@ namespace Narrator
 			/*
 			 * Trim from both ends (copying)
 			 */
-			static inline std::string TrimCopy(std::string i_StringToProcess) {
+			static inline std::string TrimCopy(const std::string& i_StringToProcess) {
 				std::string stringCopy = i_StringToProcess;
 				Trim(stringCopy);
 				return stringCopy;
@@ -179,6 +179,24 @@ namespace Narrator
 			}
 
 			/*
+			* Remove all Whitespace Characters
+			*/
+			static inline std::string RemoveAllSpaces(const std::string& i_StringToProcess)
+			{
+				std::string stringCopy = i_StringToProcess;
+				/*// defining a regular expression
+				std::regex spaceRegEx("\\s+");
+
+				// using the regular expression to remove spaces
+				stringCopy = std::regex_replace(stringCopy, spaceRegEx, "");*/
+
+				stringCopy.erase(std::remove_if(stringCopy.begin(), stringCopy.end(), ::isspace),
+					stringCopy.end());
+				
+				return stringCopy;
+			}
+
+			/*
 			 * Splits the string into list of substring
 			 */
 			static inline std::vector<std::string> Split(std::string i_StringToProcess, std::string i_StringDelimiter)
@@ -199,7 +217,10 @@ namespace Narrator
 				return resultStringList;
 			}
 
-			static bool IsValidKnotName(const std::string& i_StirngToProcess)
+			/*
+			* Check for Valid Name for Knot
+			*/
+			static inline bool IsValidKnotName(const std::string& i_StirngToProcess)
 			{
 				std::string stringToCheck = i_StirngToProcess;
 				//RegEx: [a-zA-Z0-9_]+

@@ -14,10 +14,12 @@ size_t Narrator::Runtime::Node::GetMaxNodeCount()
 }
 
 Narrator::Runtime::Node::Node(TNodeType i_Type /*= TNodeType::kNone*/)
-	:m_Type(i_Type),
-	m_ID(m_CurrentIndex++)
+	: m_ID(m_CurrentIndex++),
+	m_Type(i_Type),
+	m_InFlowType(TInFlowType::kNone),
+	m_OutFlowType(TOutFlowType::kNone)
 {
-	
+	m_Name = std::to_string(m_ID);
 }
 
 Narrator::Runtime::Node::~Node()
@@ -42,6 +44,16 @@ std::string Narrator::Runtime::Node::GetName() const
 std::uint32_t Narrator::Runtime::Node::GetID() const
 {
 	return m_ID;
+}
+
+Narrator::Runtime::TInFlowType Narrator::Runtime::Node::GetInFlowType() const
+{
+	return m_InFlowType;
+}
+
+Narrator::Runtime::TOutFlowType Narrator::Runtime::Node::GetOutFlowType() const
+{
+	return m_OutFlowType;
 }
 
 void Narrator::Runtime::Node::SetName(const std::string& i_Name)

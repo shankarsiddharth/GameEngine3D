@@ -1,6 +1,7 @@
 Hi
 
 How are you?
+	->Scene1
 
 === Scene1 ===
 
@@ -14,7 +15,7 @@ Make a choice:
 
 * Your Choice 2
 	Choice Dialogue 2
-	-> Scene3
+	-> E N D
 
 * Your Choice 3
 	Choice Dialogue 3
@@ -22,7 +23,9 @@ Make a choice:
 
 * Your Choice 4
 	Choice Dialogue 4
-	-> END
+	-> D                    O	NE
+
+They are falling.
 
 === Scene2 ===
 Starting Dialogue of the Scene2
