@@ -10,3 +10,8 @@ Narrator::Runtime::KnotNode::~KnotNode()
 {
 
 }
+
+void Narrator::Runtime::KnotNode::SetName(const std::string& i_Name)
+{
+	Narrator::Runtime::Node::SetName(i_Name);
+}
