@@ -53,29 +53,37 @@ int main()
 			std::string tLine = fileLine;
 			Narrator::Runtime::StringUtils::RemoveAll(tLine, Narrator::Runtime::StorySyntax::KNOT_DECLARATION);
 			std::string nameToCheck = Narrator::Runtime::StringUtils::TrimCopy(tLine);
-			if (Narrator::Runtime::StringUtils::IsValidKnotName(nameToCheck))
+			if (nameToCheck.empty())
 			{
-				knotName = nameToCheck;
-				//TODO: #NarratorToDo If KnotName already Preset Throw Parsing Error
-				if (story->HasKnotNode(knotName))
-				{
-					//TODO: #NarratorToDoAssert Throw Parser Error 
-					std::cout << "Error Redefinition of knot name" << std::endl;
-				}
-				else
-				{
-					//Create Knot Node
-					Narrator::Runtime::KnotNode* knotNode = new Narrator::Runtime::KnotNode();
-					knotNode->SetName(knotName);
-					story->AddNode(knotNode);
-				}
+				//TODO: #NarratorToDoAssert Throw Parser Error 
+				std::cout << "Error Knot name cannot be empty" << std::endl;
 			}
 			else
 			{
-				//TODO: #NarratorToDoAssert Throw Parsing Error
-				std::cout << "Error in knot name" << std::endl;
-			}
-			story->ClearLastDecisionNode();
+				if (Narrator::Runtime::StringUtils::IsValidKnotName(nameToCheck))
+				{
+					knotName = nameToCheck;
+					//TODO: #NarratorToDo If KnotName already Preset Throw Parsing Error
+					if (story->HasKnotNode(knotName))
+					{
+						//TODO: #NarratorToDoAssert Throw Parser Error 
+						std::cout << "Error Redefinition of knot name" << std::endl;
+					}
+					else
+					{
+						//Create Knot Node
+						Narrator::Runtime::KnotNode* knotNode = new Narrator::Runtime::KnotNode();
+						knotNode->SetName(knotName);
+						story->AddNode(knotNode);
+					}
+				}
+				else
+				{
+					//TODO: #NarratorToDoAssert Throw Parsing Error
+					std::cout << "Error in knot name" << std::endl;
+				}
+				story->ClearLastDecisionNode();
+			}			
 		}
 		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, Narrator::Runtime::StorySyntax::CHOICE_DECLARATION))
 		{
@@ -87,10 +95,19 @@ int main()
 				std::string tLine = fileLine;
 				Narrator::Runtime::StringUtils::RemoveAll(tLine, Narrator::Runtime::StorySyntax::CHOICE_DECLARATION);
 				std::string choiceText = Narrator::Runtime::StringUtils::TrimCopy(tLine);
-				std::uint32_t choiceIndex = decisionNode->GetDecisionPathCount();
-				//Create Choice Node
-				Narrator::Runtime::ChoiceNode* choiceNode = new Narrator::Runtime::ChoiceNode(choiceIndex, choiceText);
-				story->AddNode(choiceNode);
+				if (choiceText.empty())
+				{
+					//TODO: #NarratorToDoAssert Throw Parser Error
+					std::cout << "Choice Text cannot be empty" << std::endl;
+				}
+				else
+				{
+					std::uint32_t choiceIndex = decisionNode->GetDecisionPathCount();
+					//Create Choice Node
+					Narrator::Runtime::ChoiceNode* choiceNode = new Narrator::Runtime::ChoiceNode(choiceIndex, choiceText);
+					story->AddNode(choiceNode);
+					story->SetLastChoiceNode(choiceNode);
+				}				
 			}
 			else
 			{
@@ -126,19 +143,38 @@ int main()
 			}
 			else
 			{
+				Narrator::Runtime::DivertNode* divertNode = nullptr;
+
 				//Get the Divert Name
 				std::string divertName;
 				std::string tLine = fileLine;
 				Narrator::Runtime::StringUtils::RemoveAll(tLine, Narrator::Runtime::StorySyntax::DIVERT_DECLARATION);
 				std::string divertTargetName = Narrator::Runtime::StringUtils::TrimCopy(tLine);
-				if (Narrator::Runtime::StringUtils::IsValidKnotName(divertTargetName))
+				if (divertTargetName.empty())
 				{
-					divertName = divertTargetName;
-					//TODO: #NarratorToDo Check the Divert Node is already present
-					if (story->HasDivertNode(divertName))
+					//TODO: #NarratorToDoAssert Throw Parser Error
+					std::cout << "The Divert Name should not be empty" << std::endl;
+				}
+				else
+				{
+					if (Narrator::Runtime::StringUtils::IsValidKnotName(divertTargetName))
 					{
-						Narrator::Runtime::Node* foundNode = story->GetDivertNode(divertName);
-						Narrator::Runtime::DivertNode* divertNode = dynamic_cast<Narrator::Runtime::DivertNode*>(foundNode);
+						divertName = divertTargetName;
+						//TODO: #NarratorToDo Check the Divert Node is already present
+						if (story->HasDivertNode(divertName))
+						{
+							//Get the existing Divert Node
+							Narrator::Runtime::Node* foundNode = story->GetDivertNode(divertName);
+							divertNode = dynamic_cast<Narrator::Runtime::DivertNode*>(foundNode);
+						}
+						else
+						{
+							//Create Divert Node
+							divertNode = new Narrator::Runtime::DivertNode();
+							divertNode->SetTargetNodeName(divertName);
+						}
+
+						//Add the Node to the story
 						if (divertNode)
 						{
 							story->AddNode(divertNode);
@@ -146,21 +182,15 @@ int main()
 						else
 						{
 							//TODO: #NarratorToDoAssert Throw Parse Error : The Divert Node should not be nullptr
+							std::cout << "The Divert Node should not be nullptr" << std::endl;
 						}
 					}
 					else
 					{
-						//Create Divert Node
-						Narrator::Runtime::DivertNode* divertNode = new Narrator::Runtime::DivertNode();
-						divertNode->SetTargetNodeName(divertName);
-						story->AddNode(divertNode);
+						//TODO: #NarratorToDoAssert Throw Parsing Error
+						std::cout << "Error in divert name" << std::endl;
 					}
-				}
-				else
-				{
-					//TODO: #NarratorToDoAssert Throw Parsing Error
-					std::cout << "Error in divert name" << std::endl;
-				}
+				}				
 			}			
 		}
 		else
