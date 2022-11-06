@@ -175,3 +175,36 @@ void Narrator::Runtime::Graph::AddNodeLink(Narrator::Runtime::Node* i_SourceNode
 	break;
 	}
 }
+
+bool Narrator::Runtime::Graph::HasRedirectionNode(const std::string& i_RedirectionName)
+{
+	std::map<std::string, Narrator::Runtime::Node*>::iterator mapIterator = m_RedirectionNodeMap.find(i_RedirectionName);
+	if (mapIterator != m_RedirectionNodeMap.end())
+	{
+		//Present
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Narrator::Runtime::Graph::HasSubGraphStartNode(const std::string& i_SubGraphStartNodeName)
+{
+	std::map<std::string, Narrator::Runtime::Node*>::iterator mapIterator = m_SubGraphStartNodeMap.find(i_SubGraphStartNodeName);
+	if (mapIterator != m_SubGraphStartNodeMap.end())
+	{
+		//Present
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+Narrator::Runtime::Node* Narrator::Runtime::Graph::GetRedirectionNode(const std::string& i_RedirectionName)
+{
+	return m_RedirectionNodeMap[i_RedirectionName];
+}
