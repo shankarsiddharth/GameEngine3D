@@ -18,6 +18,7 @@
 #include "Utils/StringUtils.h"
 #include "Story/Story.h"
 #include "Story/StorySyntax.h"
+#include "Core/DecisionNode.h"
 
 
 int main()
@@ -55,6 +56,7 @@ int main()
 			if (Narrator::Runtime::StringUtils::IsValidKnotName(nameToCheck))
 			{
 				knotName = nameToCheck;
+				//TODO: #NarratorToDo If KnotName already Preset Throw Parsing Error
 				//Create Knot Node
 				Narrator::Runtime::KnotNode* knotNode = new Narrator::Runtime::KnotNode();
 				knotNode->SetName(knotName);
@@ -64,27 +66,83 @@ int main()
 			{
 				//TODO: #NarratorToDoAssert Throw Parsing Error
 				std::cout << "Error in knot name" << std::endl;
-			}			
+			}
+			story->ClearLastDecisionNode();
 		}
-		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, "*"))
+		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, Narrator::Runtime::StorySyntax::CHOICE_DECLARATION))
 		{
 			//Decision Point
+			Narrator::Runtime::DecisionNode* decisionNode = dynamic_cast<Narrator::Runtime::DecisionNode*>(story->CreateDecisionNode());
+			
+			if (decisionNode)
+			{
+				std::string tLine = fileLine;
+				Narrator::Runtime::StringUtils::RemoveAll(tLine, Narrator::Runtime::StorySyntax::CHOICE_DECLARATION);
+				std::string choiceText = Narrator::Runtime::StringUtils::TrimCopy(tLine);
+				std::uint32_t choiceIndex = decisionNode->GetDecisionPathCount();
+				//Create Choice Node
+				Narrator::Runtime::ChoiceNode* choiceNode = new Narrator::Runtime::ChoiceNode(choiceIndex, choiceText);
+				story->AddNode(choiceNode);
+			}
+			else
+			{
+				//TODO: #NarratorToDoAssert Parse Error
+				std::cout << "Error while Creating Decision Node" << std::endl;
+			}
+
 		}
-		else if (Narrator::Runtime::StringUtils::StartsWithIgnoreCase(fileLine, "->END"))
+		else if (Narrator::Runtime::StringUtils::StartsWithIgnoreCase(fileLine, Narrator::Runtime::StorySyntax::END_DECLARATION))
 		{
 			//End Node
+			story->LinkEndNode();
 		}
-		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, "->DONE"))
+		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, Narrator::Runtime::StorySyntax::DONE_DECLARATION))
 		{
 			//Done Node is a divert node that redirects to the end node by default
+			story->LinkEndNode();
 		}
-		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, "->"))
+		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, Narrator::Runtime::StorySyntax::DIVERT_DECLARATION))
 		{
-			//Divert Node
+			std::string tLine = fileLine;
+			tLine = Narrator::Runtime::StringUtils::RemoveAllSpaces(tLine);
+
+			if (Narrator::Runtime::StringUtils::StartsWithIgnoreCase(tLine, Narrator::Runtime::StorySyntax::END_DECLARATION))
+			{
+				//End Node
+				story->LinkEndNode();
+			}
+			else if (Narrator::Runtime::StringUtils::StartsWith(tLine, Narrator::Runtime::StorySyntax::DONE_DECLARATION))
+			{
+				//Done Node is a divert node that redirects to the end node by default
+				story->LinkEndNode();
+			}
+			else
+			{
+				//Get the Divert Name
+				std::string divertName;
+				std::string tLine = fileLine;
+				Narrator::Runtime::StringUtils::RemoveAll(tLine, Narrator::Runtime::StorySyntax::DIVERT_DECLARATION);
+				std::string divertTargetName = Narrator::Runtime::StringUtils::TrimCopy(tLine);
+				if (Narrator::Runtime::StringUtils::IsValidKnotName(divertTargetName))
+				{
+					divertName = divertTargetName;
+					//Create Divert Node
+					Narrator::Runtime::DivertNode* divertNode = new Narrator::Runtime::DivertNode();
+					divertNode->SetTargetNodeName(divertName);
+					story->AddNode(divertNode);
+				}
+				else
+				{
+					//TODO: #NarratorToDoAssert Throw Parsing Error
+					std::cout << "Error in divert name" << std::endl;
+				}
+			}			
 		}
 		else
 		{
-			//Dialogue Node
+			//Create Dialogue Node
+			Narrator::Runtime::DialogueNode* dialogueNode = new Narrator::Runtime::DialogueNode(fileLine);
+			story->AddNode(dialogueNode);
 		}
 	}
 

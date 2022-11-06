@@ -1,9 +1,10 @@
 #include "MultiOutFlowNode.h"
 
-Narrator::Runtime::MultiOutFlowNode::MultiOutFlowNode(TNodeType i_Type /*= TNodeType::kMultiFlow*/)
+Narrator::Runtime::MultiOutFlowNode::MultiOutFlowNode(TNodeType i_Type /*= TNodeType::kMultiFlow*/,
+	TOutFlowType i_OutFlowType /*= TOutFlowType::kMultiOutFlow*/)
 	: Narrator::Runtime::Node(i_Type)
 {
-
+	m_OutFlowType = i_OutFlowType;
 }
 
 Narrator::Runtime::MultiOutFlowNode::~MultiOutFlowNode()

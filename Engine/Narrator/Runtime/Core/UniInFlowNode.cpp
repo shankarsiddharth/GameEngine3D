@@ -1,10 +1,11 @@
 #include "UniInFlowNode.h"
 
-Narrator::Runtime::UniInFlowNode::UniInFlowNode(TNodeType i_Type /*= TNodeType::kUniFlow*/)
+Narrator::Runtime::UniInFlowNode::UniInFlowNode(TNodeType i_Type /*= TNodeType::kUniFlow*/, 
+	TInFlowType i_InFlowType /*= TInFlowType::kUniInFlow*/)
 	:Narrator::Runtime::Node(i_Type),
 	m_PreviousNode(nullptr)
 {
-
+	m_InFlowType = i_InFlowType;
 }
 
 Narrator::Runtime::UniInFlowNode::~UniInFlowNode()

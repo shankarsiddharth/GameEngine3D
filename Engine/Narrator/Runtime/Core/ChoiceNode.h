@@ -12,13 +12,16 @@ namespace Narrator
 
 		public:
 
-			ChoiceNode(); 
+			ChoiceNode(const std::uint32_t i_Index, const std::string& i_Text);
 			~ChoiceNode();
 
 			std::uint32_t GetChoiceIndex();
 
 		protected:
+
 			std::uint32_t m_Index;
+			std::string m_Text;
+			
 		};
 	}
 }

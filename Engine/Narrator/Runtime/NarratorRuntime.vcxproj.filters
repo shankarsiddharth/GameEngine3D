@@ -11,7 +11,7 @@
     <ClCompile Include="Core\ChoiceNode.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\DesicionNode.cpp">
+    <ClCompile Include="Core\DecisionNode.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\DialogueNode.cpp">
@@ -75,7 +75,7 @@
     <ClInclude Include="Core\StartNode.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\DesicionNode.h">
+    <ClInclude Include="Core\DecisionNode.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\DialogueNode.h">

@@ -15,9 +15,10 @@ namespace Narrator
 
 		public:
 			
-			MultiOutFlowNode(TNodeType i_Type = TNodeType::kNodeBase);
+			MultiOutFlowNode(TNodeType i_Type = TNodeType::kNodeBase, TOutFlowType i_OutFlowType = TOutFlowType::kMultiOutFlow);
 			virtual ~MultiOutFlowNode();
 
+			//Parser Methods
 			void AddOutFlowNode(Narrator::Runtime::Node* i_NextNode);
 			void RemoveOutFlowNode(Narrator::Runtime::Node* i_NextNode);
 			void RemoveOutFlowNode(std::uint32_t i_NextNodeID);

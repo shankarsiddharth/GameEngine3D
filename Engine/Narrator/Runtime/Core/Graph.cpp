@@ -1,6 +1,10 @@
 #include "Graph.h"
 #include "Node.h"
 #include "Edge.h"
+#include "UniOutFlowNode.h"
+#include "MultiOutFlowNode.h"
+#include "UniInFlowNode.h"
+#include "MultiInFlowNode.h"
 
 Narrator::Runtime::Graph::Graph()
 {
@@ -80,11 +84,11 @@ void Narrator::Runtime::Graph::AddToAdjacencyListMap(Narrator::Runtime::Node* i_
 		if (mapIterator == m_AdjacencyListMap.end())
 		{
 			//AdjacencyList Not found for the Source Node
-			
+
 			//Create a new Adjacency List and add the adjacent Node
 			std::vector<Narrator::Runtime::Node*> adjacencyList;
 			adjacencyList.emplace_back(i_AdjacentNode);
-			
+
 			m_AdjacencyListMap.insert(std::pair<uint32_t, std::vector<Narrator::Runtime::Node*>>(sourceNodeID, adjacencyList));
 		}
 		else
@@ -95,5 +99,79 @@ void Narrator::Runtime::Graph::AddToAdjacencyListMap(Narrator::Runtime::Node* i_
 	else
 	{
 		//TODO: #NarratorToDoAssert Error Log / Assert
+	}
+}
+
+void Narrator::Runtime::Graph::AddNodeLink(Narrator::Runtime::Node* i_SourceNode, Narrator::Runtime::Node* i_TargetNode)
+{
+	switch (i_SourceNode->GetOutFlowType())
+	{
+	case Narrator::Runtime::TOutFlowType::kNone:
+	{
+
+	}
+	break;
+	case Narrator::Runtime::TOutFlowType::kUniOutFlow:
+	{
+		Narrator::Runtime::UniOutFlowNode* flowNode = dynamic_cast<Narrator::Runtime::UniOutFlowNode*>(i_SourceNode);
+		if (flowNode)
+		{
+			flowNode->SetNextNode(i_TargetNode);
+		}
+		else
+		{
+			//TODO: #NarratorToDoAssert Should Not be null
+		}
+	}
+	break;
+	case Narrator::Runtime::TOutFlowType::kMultiOutFlow:
+	{
+
+		Narrator::Runtime::MultiOutFlowNode* flowNode = dynamic_cast<Narrator::Runtime::MultiOutFlowNode*>(i_SourceNode);
+		if (flowNode)
+		{
+			flowNode->AddOutFlowNode(i_TargetNode);
+		}
+		else
+		{
+			//TODO: #NarratorToDoAssert Should Not be null
+		}
+	}
+	break;
+	}
+
+	switch (i_TargetNode->GetInFlowType())
+	{
+	case Narrator::Runtime::TInFlowType::kNone:
+	{
+
+	}
+	break;
+	case Narrator::Runtime::TInFlowType::kUniInFlow:
+	{
+		Narrator::Runtime::UniInFlowNode* flowNode = dynamic_cast<Narrator::Runtime::UniInFlowNode*>(i_TargetNode);
+		if (flowNode)
+		{
+			flowNode->SetPreviousNode(i_SourceNode);
+		}
+		else
+		{
+			//TODO: #NarratorToDoAssert Should Not be null
+		}
+	}
+	break;
+	case Narrator::Runtime::TInFlowType::kMultiInFlow:
+	{
+		Narrator::Runtime::MultiInFlowNode* flowNode = dynamic_cast<Narrator::Runtime::MultiInFlowNode*>(i_TargetNode);
+		if (flowNode)
+		{
+			flowNode->AddInFlowNode(i_SourceNode);
+		}
+		else
+		{
+			//TODO: #NarratorToDoAssert Should Not be null
+		}
+	}
+	break;
 	}
 }
