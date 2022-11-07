@@ -22,6 +22,10 @@ namespace Narrator
 			std::vector<Narrator::Runtime::ChoiceNode*> GetChoices();
 			void SelectChoice(uint32_t i_ChoiceIndex);
 
+			static Narrator::Runtime::Story* Parse(const std::string& i_Path);
+		
+		protected:
+
 			//Parser Methods
 			void AddNode(Narrator::Runtime::Node* i_NodeToAdd);
 			void LinkEndNode();
@@ -29,9 +33,12 @@ namespace Narrator
 			bool HasDivertNode(const std::string& i_DivertName);
 			bool HasKnotNode(const std::string& i_KnotName);
 
+			Narrator::Runtime::Node* GetCurrentNode() const;
+
 			//Always use HasDivertNode to check if it is present before accessing the Node
 			Narrator::Runtime::Node* GetDivertNode(const std::string& i_DivertName);
 
+			Narrator::Runtime::Node* GetLastDecisionNode() const;
 			Narrator::Runtime::Node* CreateDecisionNode();
 			void ClearLastDecisionNode();
 
