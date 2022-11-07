@@ -29,6 +29,7 @@ void Narrator::Runtime::Graph::AddEdge(Narrator::Runtime::Node* i_SourceNode, Na
 	AddToNodeMap(i_DestinationNode);
 	AddToEdgeMap(newEdge);
 	AddToAdjacencyListMap(i_SourceNode, i_DestinationNode);
+	AddNodeLink(i_SourceNode, i_DestinationNode);
 }
 
 void Narrator::Runtime::Graph::AddToNodeMap(Narrator::Runtime::Node* i_NodeToAdd)

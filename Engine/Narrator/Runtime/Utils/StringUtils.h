@@ -192,7 +192,7 @@ namespace Narrator
 
 				stringCopy.erase(std::remove_if(stringCopy.begin(), stringCopy.end(), ::isspace),
 					stringCopy.end());
-				
+
 				return stringCopy;
 			}
 
@@ -224,9 +224,9 @@ namespace Narrator
 			{
 				std::string stringToCheck = i_StirngToProcess;
 				//RegEx: [a-zA-Z0-9_]+
-				std::regex knotPattern("\\w+"); 
+				std::regex knotPattern("\\w+");
 				std::cmatch regexMatch;
-				if (std::regex_match(stringToCheck,  knotPattern))
+				if (std::regex_match(stringToCheck, knotPattern))
 				{
 					return true;
 				}

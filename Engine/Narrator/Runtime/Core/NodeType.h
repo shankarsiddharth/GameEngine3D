@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace Narrator 
+namespace Narrator
 {
 	namespace Runtime
 	{
@@ -31,7 +31,7 @@ namespace Narrator
 			//Single In Flow Link
 			kUniInFlow,
 			//Multiple In Flow Links
-			kMultiInFlow			
+			kMultiInFlow
 		};
 
 		enum class TOutFlowType : std::uint16_t

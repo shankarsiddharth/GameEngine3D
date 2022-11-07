@@ -11,7 +11,7 @@ namespace Narrator
 
 		public:
 
-			StartNode(); 
+			StartNode();
 			~StartNode();
 		};
 	}

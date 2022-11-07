@@ -6,7 +6,7 @@
 
 int main()
 {
-	
+
 	Narrator::Runtime::Story::Parse("story.txt");
 /*
 	Narrator::Runtime::StartNode startNode;
@@ -24,11 +24,11 @@ int main()
 
 	Narrator::Runtime::KnotNode knotNode;
 	Narrator::Runtime::DialogueNode dialogueNode2("Knot Start");
-	
+
 	Narrator::Runtime::ChoiceNode choiceNode1;
 	Narrator::Runtime::DialogueNode dialogueNode3("Choice 1 Dialogue");
 	Narrator::Runtime::DivertNode divertNode2;
-	
+
 	Narrator::Runtime::ChoiceNode choiceNode2;
 	Narrator::Runtime::DialogueNode dialogueNode4("Choice 2 Dialogue");
 	Narrator::Runtime::DivertNode divertNode3;

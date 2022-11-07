@@ -6,11 +6,11 @@
 #include <string>
 
 //Forward Declarations
-namespace Narrator { 
-	namespace Runtime { 
-		class Node; 
+namespace Narrator {
+	namespace Runtime {
+		class Node;
 		class Edge;
-	} 
+	}
 }
 
 namespace Narrator
@@ -21,15 +21,15 @@ namespace Narrator
 		{
 
 		public:
-			
+
 			Graph();
 			virtual ~Graph();
-
-			void AddEdge(Narrator::Runtime::Node* i_SourceNode, Narrator::Runtime::Node* i_DestinationNode);
 
 		protected:
 
 			virtual void Traverse() = 0;
+
+			void AddEdge(Narrator::Runtime::Node* i_SourceNode, Narrator::Runtime::Node* i_DestinationNode);
 
 			void AddToNodeMap(Narrator::Runtime::Node* i_NodeToAdd);
 			void AddToEdgeMap(Narrator::Runtime::Edge* i_EdgeToAdd);

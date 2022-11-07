@@ -1,7 +1,9 @@
 #include "DivertNode.h"
 
 Narrator::Runtime::DivertNode::DivertNode()
-	:Narrator::Runtime::UniOutFlowNode(TNodeType::kDivert),
+	:Narrator::Runtime::Node(TNodeType::kDivert),
+	Narrator::Runtime::MultiInFlowNode(TNodeType::kDivert),
+	Narrator::Runtime::UniOutFlowNode(TNodeType::kDivert),
 	m_TargetNode(nullptr)
 {
 	m_NextNode = nullptr;

@@ -14,9 +14,9 @@ namespace Narrator
 
 		public:
 
-			DivertNode(); 
+			DivertNode();
 			~DivertNode();
-			
+
 			std::string ToString() override;
 
 			std::string GetTargetNodeName() const;

@@ -11,7 +11,7 @@ namespace Narrator
 
 		public:
 
-			EndNode(); 
+			EndNode();
 			~EndNode();
 		};
 	}

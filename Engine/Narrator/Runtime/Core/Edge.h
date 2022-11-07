@@ -4,10 +4,10 @@
 #include <string>
 
 //Forward Declarations
-namespace Narrator { 
-	namespace Runtime { 
-		class Node; 
-	} 
+namespace Narrator {
+	namespace Runtime {
+		class Node;
+	}
 }
 
 namespace Narrator
@@ -29,7 +29,7 @@ namespace Narrator
 
 			std::string GetName() const;
 			std::uint64_t GetID() const;
-		protected:	
+		protected:
 
 			static std::uint64_t m_CurrentIndex;
 
