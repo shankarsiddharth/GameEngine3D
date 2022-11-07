@@ -53,9 +53,10 @@ bool Narrator::Runtime::Story::canRead()
 	return false;
 }
 
-void Narrator::Runtime::Story::Read()
+std::string Narrator::Runtime::Story::Read()
 {
 	//TODO: #NarratorToDo Implementation
+	return std::string("");
 }
 
 std::vector<Narrator::Runtime::ChoiceNode*> Narrator::Runtime::Story::GetChoices()
@@ -70,7 +71,7 @@ void Narrator::Runtime::Story::SelectChoice(uint32_t i_ChoiceIndex)
 	//TODO: #NarratorToDo Implementation
 }
 
-Narrator::Runtime::Story* Narrator::Runtime::Story::Parse(const std::string& i_Path)
+Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Path)
 {
 	std::map<std::size_t, std::string> FileLineMap;
 
@@ -91,7 +92,8 @@ Narrator::Runtime::Story* Narrator::Runtime::Story::Parse(const std::string& i_P
 	}
 
 	//Create A Story Graph
-	Narrator::Runtime::Story* story = new Narrator::Runtime::Story();
+	//Narrator::Runtime::Story* story = new Narrator::Runtime::Story();
+	Narrator::Runtime::Story story;
 
 	//Parse the Content
 	for (std::map<std::size_t, std::string>::iterator fileLineMapIterator = FileLineMap.begin();
@@ -120,14 +122,14 @@ Narrator::Runtime::Story* Narrator::Runtime::Story::Parse(const std::string& i_P
 				{
 					knotName = nameToCheck;
 					//TODO: #NarratorToDo If KnotName already Preset Throw Parsing Error
-					if (story->HasKnotNode(knotName))
+					if (story.HasKnotNode(knotName))
 					{
 						//TODO: #NarratorToDoAssert Throw Parser Error 
 						std::cout << "Error Redefinition of knot name" << std::endl;
 					}
 					else
 					{
-						if (story->GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kKnot)
+						if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kKnot)
 						{
 							//TODO: #NarratorToDoAssert Throw Parsing Error
 							std::cout << "At least One Line expected within knot" << std::endl;
@@ -135,7 +137,7 @@ Narrator::Runtime::Story* Narrator::Runtime::Story::Parse(const std::string& i_P
 						//Create Knot Node
 						Narrator::Runtime::KnotNode* knotNode = new Narrator::Runtime::KnotNode();
 						knotNode->SetName(knotName);
-						story->AddNode(knotNode);
+						story.AddNode(knotNode);
 					}
 				}
 				else
@@ -144,20 +146,20 @@ Narrator::Runtime::Story* Narrator::Runtime::Story::Parse(const std::string& i_P
 					std::cout << "Error in knot name" << std::endl;
 				}
 			}
-			story->ClearLastDecisionNode();
+			story.ClearLastDecisionNode();
 		}
 		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, Narrator::Runtime::StorySyntax::CHOICE_DECLARATION))
 		{
-			if (story->GetLastDecisionNode() == nullptr)
+			if (story.GetLastDecisionNode() == nullptr)
 			{
-				if (story->GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert)
+				if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert)
 				{
 					//TODO: #NarratorToDoAssert Throw Parse Error
 					std::cout << "Unreachable Choice after a divert" << std::endl;
 				}
 			}
 			//Decision Point
-			Narrator::Runtime::DecisionNode* decisionNode = dynamic_cast<Narrator::Runtime::DecisionNode*>(story->CreateDecisionNode());
+			Narrator::Runtime::DecisionNode* decisionNode = dynamic_cast<Narrator::Runtime::DecisionNode*>(story.CreateDecisionNode());
 
 			if (decisionNode)
 			{
@@ -174,8 +176,8 @@ Narrator::Runtime::Story* Narrator::Runtime::Story::Parse(const std::string& i_P
 					std::uint32_t choiceIndex = decisionNode->GetDecisionPathCount();
 					//Create Choice Node
 					Narrator::Runtime::ChoiceNode* choiceNode = new Narrator::Runtime::ChoiceNode(choiceIndex, choiceText);
-					story->AddNode(choiceNode);
-					story->SetLastChoiceNode(choiceNode);
+					story.AddNode(choiceNode);
+					story.SetLastChoiceNode(choiceNode);
 				}
 			}
 			else
@@ -185,21 +187,21 @@ Narrator::Runtime::Story* Narrator::Runtime::Story::Parse(const std::string& i_P
 			}
 
 		}
-		else if (Narrator::Runtime::StringUtils::StartsWithIgnoreCase(fileLine, Narrator::Runtime::StorySyntax::END_DECLARATION))
+		/*else if (Narrator::Runtime::StringUtils::StartsWithIgnoreCase(fileLine, Narrator::Runtime::StorySyntax::END_DECLARATION))
 		{
 			//End Node
-			story->LinkEndNode();
+			story.LinkEndNode();
 		}
 		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, Narrator::Runtime::StorySyntax::DONE_DECLARATION))
 		{
 			//Done Node is a divert node that redirects to the end node by default
-			story->LinkEndNode();
-		}
+			story.LinkEndNode();
+		}*/
 		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, Narrator::Runtime::StorySyntax::DIVERT_DECLARATION))
 		{
 
-			if (story->GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert
-				|| story->GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kEnd)
+			if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert
+				|| story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kEnd)
 			{
 				//TODO: #NarratorToDoAssert Throw Parse Error
 				std::cout << "Unreachable Divert after a divert/END/DONE." << std::endl;
@@ -211,12 +213,12 @@ Narrator::Runtime::Story* Narrator::Runtime::Story::Parse(const std::string& i_P
 			if (Narrator::Runtime::StringUtils::StartsWithIgnoreCase(tLine, Narrator::Runtime::StorySyntax::END_DECLARATION))
 			{
 				//End Node
-				story->LinkEndNode();
+				story.LinkEndNode();
 			}
 			else if (Narrator::Runtime::StringUtils::StartsWith(tLine, Narrator::Runtime::StorySyntax::DONE_DECLARATION))
 			{
 				//Done Node is a divert node that redirects to the end node by default
-				story->LinkEndNode();
+				story.LinkEndNode();
 			}
 			else
 			{
@@ -239,10 +241,10 @@ Narrator::Runtime::Story* Narrator::Runtime::Story::Parse(const std::string& i_P
 						divertName = divertTargetName;
 
 						//TODO: #NarratorToDo Check the Divert Node is already present
-						if (story->HasDivertNode(divertName))
+						if (story.HasDivertNode(divertName))
 						{
 							//Get the existing Divert Node
-							Narrator::Runtime::Node* foundNode = story->GetDivertNode(divertName);
+							Narrator::Runtime::Node* foundNode = story.GetDivertNode(divertName);
 							divertNode = dynamic_cast<Narrator::Runtime::DivertNode*>(foundNode);
 						}
 						else
@@ -255,7 +257,7 @@ Narrator::Runtime::Story* Narrator::Runtime::Story::Parse(const std::string& i_P
 						//Add the Node to the story
 						if (divertNode)
 						{
-							story->AddNode(divertNode);
+							story.AddNode(divertNode);
 						}
 						else
 						{
@@ -273,20 +275,21 @@ Narrator::Runtime::Story* Narrator::Runtime::Story::Parse(const std::string& i_P
 		}
 		else
 		{
-			if (story->GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert)
+			if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert 
+				|| story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kEnd)
 			{
 				//TODO: #NarratorToDoAssert Throw Parse Error
-				std::cout << "Unreachable Dialogue after a divert" << std::endl;
+				std::cout << "Unreachable Dialogue after a divert / END / DONE" << std::endl;
 			}
 
 			//Create Dialogue Node
 			Narrator::Runtime::DialogueNode* dialogueNode = new Narrator::Runtime::DialogueNode(fileLine);
-			story->AddNode(dialogueNode);
+			story.AddNode(dialogueNode);
 		}
 	}
 
 	//Traverse the Graph to validate the flow
-	story->Traverse();
+	story.Traverse();
 
 	return story;
 }
@@ -315,6 +318,8 @@ void Narrator::Runtime::Story::LinkEndNode()
 */
 	
 	AddEdge(m_CurrentNode, m_EndNode);
+	//TODO: #NarratorToDo #HighPriority
+	m_CurrentNode = m_EndNode;
 }
 
 bool Narrator::Runtime::Story::HasDivertNode(const std::string& i_DivertName)
