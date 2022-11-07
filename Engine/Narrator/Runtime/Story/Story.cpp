@@ -1,5 +1,6 @@
 #include "Story.h"
 #include "StorySyntax.h"
+#include "ParseMetaData.h"
 
 #include "../Core/StartNode.h"
 #include "../Core/EndNode.h"
@@ -70,6 +71,8 @@ void Narrator::Runtime::Story::SelectChoice(uint32_t i_ChoiceIndex)
 Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Path)
 {
 	std::map<std::size_t, std::string> FileLineMap;
+	//Line Number and Corresponding ParseMetaData Map
+	std::map<std::size_t, Narrator::Parser::ParseMetaData> ParseMetaDataMap;
 
 	//Read a text file
 	std::ifstream inFile(i_Path);
@@ -96,21 +99,25 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 		fileLineMapIterator != FileLineMap.end();
 		fileLineMapIterator++)
 	{
-		const std::string& fileLine = fileLineMapIterator->second;
+		const std::size_t& fileLineNumber = fileLineMapIterator->first;
+		const std::string& fileLineString = fileLineMapIterator->second;
 
-		std::cout << fileLineMapIterator->first << " : " << fileLine << std::endl;
+		std::cout << fileLineMapIterator->first << " : " << fileLineString << std::endl;
 
-		if (Narrator::Runtime::StringUtils::StartsWith(fileLine, Narrator::Runtime::StorySyntax::KNOT_DECLARATION))
+		if (Narrator::Runtime::StringUtils::StartsWith(fileLineString, Narrator::Runtime::StorySyntax::KNOT_DECLARATION))
 		{
 			//Get the Knot Name
 			std::string knotName;
-			std::string tLine = fileLine;
+			std::string tLine = fileLineString;
 			Narrator::Runtime::StringUtils::RemoveAll(tLine, Narrator::Runtime::StorySyntax::KNOT_DECLARATION);
 			std::string nameToCheck = Narrator::Runtime::StringUtils::TrimCopy(tLine);
 			if (nameToCheck.empty())
 			{
 				//TODO: #NarratorToDoAssert Throw Parser Error 
-				std::cout << "Error Knot name cannot be empty" << std::endl;
+				std::string message = "Error Knot name cannot be empty";
+				std::cout <<  message << std::endl;
+				Narrator::Parser::ParseMetaData newParseMetaData(Narrator::Parser::TParseMessageType::kError, fileLineNumber, message);
+				ParseMetaDataMap.insert(std::pair<std::size_t, Narrator::Parser::ParseMetaData>(fileLineNumber, newParseMetaData));
 			}
 			else
 			{
@@ -145,7 +152,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			}
 			story.ClearLastDecisionNode();
 		}
-		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, Narrator::Runtime::StorySyntax::CHOICE_DECLARATION))
+		else if (Narrator::Runtime::StringUtils::StartsWith(fileLineString, Narrator::Runtime::StorySyntax::CHOICE_DECLARATION))
 		{
 			if (story.GetLastDecisionNode() == nullptr)
 			{
@@ -160,7 +167,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 
 			if (decisionNode)
 			{
-				std::string tLine = fileLine;
+				std::string tLine = fileLineString;
 				Narrator::Runtime::StringUtils::RemoveAll(tLine, Narrator::Runtime::StorySyntax::CHOICE_DECLARATION);
 				std::string choiceText = Narrator::Runtime::StringUtils::TrimCopy(tLine);
 				if (choiceText.empty())
@@ -184,17 +191,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			}
 
 		}
-		/*else if (Narrator::Runtime::StringUtils::StartsWithIgnoreCase(fileLine, Narrator::Runtime::StorySyntax::END_DECLARATION))
-		{
-			//End Node
-			story.LinkEndNode();
-		}
-		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, Narrator::Runtime::StorySyntax::DONE_DECLARATION))
-		{
-			//Done Node is a divert node that redirects to the end node by default
-			story.LinkEndNode();
-		}*/
-		else if (Narrator::Runtime::StringUtils::StartsWith(fileLine, Narrator::Runtime::StorySyntax::DIVERT_DECLARATION))
+		else if (Narrator::Runtime::StringUtils::StartsWith(fileLineString, Narrator::Runtime::StorySyntax::DIVERT_DECLARATION))
 		{
 
 			if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert
@@ -204,7 +201,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 				std::cout << "Unreachable Divert after a divert/END/DONE." << std::endl;
 			}
 
-			std::string tLine = fileLine;
+			std::string tLine = fileLineString;
 			//tLine = Narrator::Runtime::StringUtils::RemoveAllSpaces(tLine);
 			
 			tLine = Narrator::Runtime::StringUtils::TrimCopy(tLine);
@@ -282,8 +279,38 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			}
 
 			//Create Dialogue Node
-			Narrator::Runtime::DialogueNode* dialogueNode = new Narrator::Runtime::DialogueNode(fileLine);
+			Narrator::Runtime::DialogueNode* dialogueNode = new Narrator::Runtime::DialogueNode(fileLineString);
 			story.AddNode(dialogueNode);
+		}
+	}
+
+
+	std::map<std::string, Narrator::Runtime::Node*> divertNodeMap = story.GetDivertNodeMap();
+	//Check the Validity of the Divert Nodes
+	for (std::map<std::string, Narrator::Runtime::Node*>::iterator divertNodeMapIterator = divertNodeMap.begin();
+		divertNodeMapIterator != divertNodeMap.end();
+		divertNodeMapIterator++)
+	{
+		Narrator::Runtime::DivertNode* divertNode = dynamic_cast<Narrator::Runtime::DivertNode*>(divertNodeMapIterator->second);
+		if (divertNode)
+		{
+			std::string divertTargetName = divertNode->GetTargetNodeName();
+			if (story.HasKnotNode(divertTargetName))
+			{
+				Narrator::Runtime::KnotNode* knotNode = dynamic_cast<Narrator::Runtime::KnotNode*>(story.GetKnotNode(divertTargetName));
+				story.AddNodeLink(divertNode, knotNode);
+			}
+			else
+			{
+				//TODO: #NarratorToDoAssert Throw Parse Error.
+				//TODO: #NarratorToDo Add A DebugData Struct that has additional info for the node such as line number
+				std::cout << "Divert Target not Found" << std::endl;
+			}
+		}
+		else
+		{
+			//TODO: #NarratorToDoAssert Throw Parse Error. This should not be null.
+			std::cout << "DivertNode should not be null" << std::endl;
 		}
 	}
 
@@ -296,12 +323,12 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 
 void Narrator::Runtime::Story::Play()
 {
-
-	/*while (true)
+	Narrator::Runtime::Node* currentNode = m_StartNode;
+	while (currentNode->GetType() != TNodeType::kEnd)
 	{
 
 	}
-	std::cout << "End of Story" << std::endl;*/
+	std::cout << "End of Story" << std::endl;
 }
 
 void Narrator::Runtime::Story::Traverse()
@@ -330,35 +357,6 @@ void Narrator::Runtime::Story::BreadthFirstSearch()
 
 			//Print to standard output stream std::cout
 			std::cout << frontNode->ToString() << std::endl;
-
-			switch (frontNode->GetType())
-			{
-			case TNodeType::kDivert:
-			{
-				Narrator::Runtime::DivertNode* divertNode = dynamic_cast<Narrator::Runtime::DivertNode*>(frontNode);
-				if (divertNode)
-				{
-					std::string divertTargetName = divertNode->GetTargetNodeName();
-					if (HasKnotNode(divertTargetName))
-					{
-						Narrator::Runtime::KnotNode* knotNode = dynamic_cast<Narrator::Runtime::KnotNode*>(GetKnotNode(divertTargetName));
-						AddNodeLink(divertNode, knotNode);
-					}
-					else
-					{
-						//TODO: #NarratorToDoAssert Throw Parse Error.
-						//TODO: #NarratorToDo Add A DebugData Struct that has additional info for the node such as line number
-						std::cout << "Divert Target not Found" << std::endl;
-					}
-				}
-				else
-				{
-					//TODO: #NarratorToDoAssert Throw Parse Error. This should not be null.
-					std::cout << "DivertNode should not be null" << std::endl;
-				}
-			}
-			break;
-			}
 
 			nodeQueue.pop();
 
@@ -391,27 +389,12 @@ void Narrator::Runtime::Story::BreadthFirstSearch()
 
 void Narrator::Runtime::Story::AddNode(Narrator::Runtime::Node* i_NodeToAdd)
 {
-	/*
-		AddToNodeMap(i_NodeToAdd);
-		Narrator::Runtime::Edge* newEdge = new Narrator::Runtime::Edge(m_CurrentNode, i_NodeToAdd);
-		AddToEdgeMap(newEdge);
-		AddToAdjacencyListMap(m_CurrentNode, i_NodeToAdd);
-		AddNodeLink(m_CurrentNode, i_NodeToAdd);
-	*/
-
 	AddEdge(m_CurrentNode, i_NodeToAdd);
 	m_CurrentNode = i_NodeToAdd;
 }
 
 void Narrator::Runtime::Story::LinkEndNode()
 {
-	/*
-		Narrator::Runtime::Edge* newEdge = new Narrator::Runtime::Edge(m_CurrentNode, m_EndNode);
-		AddToEdgeMap(newEdge);
-		AddToAdjacencyListMap(m_CurrentNode, m_EndNode);
-		AddNodeLink(m_CurrentNode, m_EndNode);
-	*/
-
 	AddEdge(m_CurrentNode, m_EndNode);
 	//TODO: #NarratorToDo #HighPriority If its an END Node is it necessary to make it as CurrentNode?
 	m_CurrentNode = m_EndNode;
@@ -463,9 +446,19 @@ void Narrator::Runtime::Story::AddToDivertNodeMap(const std::string& i_DivertNam
 	AddToRedirectionNodeMap(i_DivertName, i_DivertNode);
 }
 
+std::map<std::string, Narrator::Runtime::Node*> Narrator::Runtime::Story::GetDivertNodeMap()
+{
+	return m_RedirectionNodeMap;
+}
+
 void Narrator::Runtime::Story::AddToKnotNodeMap(const std::string& i_KnotName, Narrator::Runtime::Node* i_KnotNode)
 {
 	AddToSubGraphStartNodeMap(i_KnotName, i_KnotNode);
+}
+
+std::map<std::string, Narrator::Runtime::Node*> Narrator::Runtime::Story::GetKnotNodeMap()
+{
+	return m_SubGraphStartNodeMap;
 }
 
 Narrator::Runtime::Node* Narrator::Runtime::Story::GetLastDecisionNode() const
@@ -479,13 +472,7 @@ Narrator::Runtime::Node* Narrator::Runtime::Story::CreateDecisionNode()
 	{
 		Narrator::Runtime::DecisionNode* newDecisionNode = new Narrator::Runtime::DecisionNode();
 		AddEdge(m_CurrentNode, newDecisionNode);
-	/*
-		AddToNodeMap(newDecisionNode);
-		Narrator::Runtime::Edge* newEdge = new Narrator::Runtime::Edge(m_CurrentNode, newDecisionNode);
-		AddToEdgeMap(newEdge);
-		AddToAdjacencyListMap(m_CurrentNode, newDecisionNode);
-		AddNodeLink(m_CurrentNode, newDecisionNode);
-	*/
+
 		m_CurrentNode = newDecisionNode;
 		m_LastDesicionNode = newDecisionNode;
 	}
@@ -497,42 +484,3 @@ void Narrator::Runtime::Story::ClearLastDecisionNode()
 {
 	m_LastDesicionNode = nullptr;
 }
-
-/*
-bool Narrator::Runtime::Story::HasAValidDecisionNode()
-{
-	if (m_LastDesicionNode != nullptr)
-	{
-		return true;
-	}
-
-	return false;
-}
-
-bool Narrator::Runtime::Story::HasAValidChoiceNode()
-{
-	if (m_LastChoiceNode != nullptr)
-	{
-		return true;
-	}
-
-	return false;
-}
-
-void Narrator::Runtime::Story::SetLastChoiceNode(Narrator::Runtime::Node* i_ChoiceNode)
-{
-	if (i_ChoiceNode->GetType() != TNodeType::kChoice)
-	{
-		//TODO: #NarratorToDoAssert Throw Parsing Error
-	}
-	else
-	{
-		m_LastChoiceNode = i_ChoiceNode;
-	}
-}
-
-void Narrator::Runtime::Story::ClearLastChoiceNode()
-{
-	m_LastChoiceNode = nullptr;
-}
-*/
