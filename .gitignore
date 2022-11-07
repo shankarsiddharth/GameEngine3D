@@ -64,3 +64,8 @@ Thumbs.db
 #===========
 
 .idea
+
+# Visual Assist X Files
+#======================
+
+.va
