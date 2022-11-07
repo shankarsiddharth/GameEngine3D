@@ -21,10 +21,6 @@
 #include <map>
 #include <queue>
 
-
-
-
-
 Narrator::Runtime::Story::Story()
 	: Narrator::Runtime::Graph(),
 	m_StartNode(nullptr),
@@ -138,6 +134,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 						Narrator::Runtime::KnotNode* knotNode = new Narrator::Runtime::KnotNode();
 						knotNode->SetName(knotName);
 						story.AddNode(knotNode);
+						story.AddToKnotNodeMap(knotName, knotNode);
 					}
 				}
 				else
@@ -178,7 +175,6 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 					Narrator::Runtime::ChoiceNode* choiceNode = new Narrator::Runtime::ChoiceNode(choiceIndex, choiceText);
 					story.AddNode(choiceNode);
 					story.AddNodeLink(decisionNode, choiceNode);
-					story.SetLastChoiceNode(choiceNode);
 				}
 			}
 			else
@@ -209,37 +205,38 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			}
 
 			std::string tLine = fileLine;
-			tLine = Narrator::Runtime::StringUtils::RemoveAllSpaces(tLine);
+			//tLine = Narrator::Runtime::StringUtils::RemoveAllSpaces(tLine);
+			
+			tLine = Narrator::Runtime::StringUtils::TrimCopy(tLine);
+			std::string possibleDivertName = tLine;
+			Narrator::Runtime::StringUtils::RemoveAll(possibleDivertName, Narrator::Runtime::StorySyntax::DIVERT_DECLARATION);
+			possibleDivertName = Narrator::Runtime::StringUtils::TrimCopy(possibleDivertName);
 
-			if (Narrator::Runtime::StringUtils::StartsWithIgnoreCase(tLine, Narrator::Runtime::StorySyntax::END_DECLARATION))
+			if (possibleDivertName.empty())
 			{
-				//End Node
-				story.LinkEndNode();
-			}
-			else if (Narrator::Runtime::StringUtils::StartsWith(tLine, Narrator::Runtime::StorySyntax::DONE_DECLARATION))
-			{
-				//Done Node is a divert node that redirects to the end node by default
-				story.LinkEndNode();
+				//TODO: #NarratorToDoAssert Throw Parser Error
+				std::cout << "The Divert Name should not be empty" << std::endl;
 			}
 			else
 			{
-				Narrator::Runtime::DivertNode* divertNode = nullptr;
-
-				//Get the Divert Name
-				std::string divertName;
-				std::string tLine = fileLine;
-				Narrator::Runtime::StringUtils::RemoveAll(tLine, Narrator::Runtime::StorySyntax::DIVERT_DECLARATION);
-				std::string divertTargetName = Narrator::Runtime::StringUtils::TrimCopy(tLine);
-				if (divertTargetName.empty())
+				if (Narrator::Runtime::StringUtils::IsValidKnotName(possibleDivertName))
 				{
-					//TODO: #NarratorToDoAssert Throw Parser Error
-					std::cout << "The Divert Name should not be empty" << std::endl;
-				}
-				else
-				{
-					if (Narrator::Runtime::StringUtils::IsValidKnotName(divertTargetName))
+					if (Narrator::Runtime::StringUtils::StartsWithIgnoreCase(possibleDivertName, Narrator::Runtime::StorySyntax::END_DECLARATION))
 					{
-						divertName = divertTargetName;
+						//End Node
+						story.LinkEndNode();
+					}
+					else if (Narrator::Runtime::StringUtils::StartsWith(possibleDivertName, Narrator::Runtime::StorySyntax::DONE_DECLARATION))
+					{
+						//Done Node is a divert node that redirects to the end node by default
+						story.LinkEndNode();
+					}
+					else
+					{
+						Narrator::Runtime::DivertNode* divertNode = nullptr;
+
+						//Get the Divert Name
+						std::string divertName = possibleDivertName;
 
 						//TODO: #NarratorToDo Check the Divert Node is already present
 						if (story.HasDivertNode(divertName))
@@ -259,6 +256,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 						if (divertNode)
 						{
 							story.AddNode(divertNode);
+							story.AddToDivertNodeMap(divertName, divertNode);
 						}
 						else
 						{
@@ -266,13 +264,13 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 							std::cout << "The Divert Node should not be nullptr" << std::endl;
 						}
 					}
-					else
-					{
-						//TODO: #NarratorToDoAssert Throw Parsing Error
-						std::cout << "Error in divert name" << std::endl;
-					}
 				}
-			}
+				else
+				{
+					//TODO: #NarratorToDoAssert Throw Parse Error
+					std::cout << "Error - Not a Valid Divert Name" << std::endl;
+				}
+			}			
 		}
 		else
 		{
@@ -293,6 +291,102 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 	story.Traverse();
 
 	return story;
+}
+
+
+void Narrator::Runtime::Story::Play()
+{
+
+	/*while (true)
+	{
+
+	}
+	std::cout << "End of Story" << std::endl;*/
+}
+
+void Narrator::Runtime::Story::Traverse()
+{
+	BreadthFirstSearch();
+}
+
+void Narrator::Runtime::Story::BreadthFirstSearch()
+{
+	std::queue<Narrator::Runtime::Node*> nodeQueue;
+
+	for (std::map<uint32_t, Narrator::Runtime::Node*>::iterator mapIterator = m_NodeMap.begin();
+		mapIterator != m_NodeMap.end();
+		mapIterator++)
+	{
+		Narrator::Runtime::Node* currentNode = mapIterator->second;
+		if (!currentNode->IsVisited())
+		{
+			nodeQueue.push(currentNode);
+		}
+
+		while (!nodeQueue.empty())
+		{
+			Narrator::Runtime::Node* frontNode = nodeQueue.front();
+			frontNode->MarkAsVisited();
+
+			//Print to standard output stream std::cout
+			std::cout << frontNode->ToString() << std::endl;
+
+			switch (frontNode->GetType())
+			{
+			case TNodeType::kDivert:
+			{
+				Narrator::Runtime::DivertNode* divertNode = dynamic_cast<Narrator::Runtime::DivertNode*>(frontNode);
+				if (divertNode)
+				{
+					std::string divertTargetName = divertNode->GetTargetNodeName();
+					if (HasKnotNode(divertTargetName))
+					{
+						Narrator::Runtime::KnotNode* knotNode = dynamic_cast<Narrator::Runtime::KnotNode*>(GetKnotNode(divertTargetName));
+						AddNodeLink(divertNode, knotNode);
+					}
+					else
+					{
+						//TODO: #NarratorToDoAssert Throw Parse Error.
+						//TODO: #NarratorToDo Add A DebugData Struct that has additional info for the node such as line number
+						std::cout << "Divert Target not Found" << std::endl;
+					}
+				}
+				else
+				{
+					//TODO: #NarratorToDoAssert Throw Parse Error. This should not be null.
+					std::cout << "DivertNode should not be null" << std::endl;
+				}
+			}
+			break;
+			}
+
+			nodeQueue.pop();
+
+			//TODO: #NarratorToDo Check the Previous Valid Nodes and add error checks for invalid flow
+
+			if (frontNode)
+			{
+				std::vector<Narrator::Runtime::Node*> adjacentList = m_AdjacencyListMap[frontNode->GetID()];
+
+				for (std::vector<Narrator::Runtime::Node*>::iterator adjacentListIterator = adjacentList.begin();
+					adjacentListIterator != adjacentList.end();
+					adjacentListIterator++)
+				{
+					Narrator::Runtime::Node* adjacentNode = *adjacentListIterator;
+					if (!adjacentNode->IsVisited())
+					{
+						adjacentNode->MarkAsVisited();
+						nodeQueue.push(adjacentNode);
+					}
+				}
+			}
+			else
+			{
+				//TODO: #NarratorToDoAssert Throw Parse Error. This should not be null.
+				std::cout << "FrontNode in the queue should not be null" << std::endl;
+			}
+		}
+	}
 }
 
 void Narrator::Runtime::Story::AddNode(Narrator::Runtime::Node* i_NodeToAdd)
@@ -333,6 +427,19 @@ bool Narrator::Runtime::Story::HasKnotNode(const std::string& i_KnotName)
 	return HasSubGraphStartNode(i_KnotName);
 }
 
+Narrator::Runtime::Node* Narrator::Runtime::Story::GetKnotNode(const std::string& i_KnotName)
+{
+	//TODO: #NarratorToDo Optimize this logic to just return the Node without checking / Return a nullptr if its not present
+	if (HasDivertNode(i_KnotName))
+	{
+		return GetSubGraphStartNode(i_KnotName);
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
 Narrator::Runtime::Node* Narrator::Runtime::Story::GetCurrentNode() const
 {
 	return m_CurrentNode;
@@ -340,7 +447,7 @@ Narrator::Runtime::Node* Narrator::Runtime::Story::GetCurrentNode() const
 
 Narrator::Runtime::Node* Narrator::Runtime::Story::GetDivertNode(const std::string& i_DivertName)
 {
-	//TODO: #NarratorToDo Optimize this logic to just return the Node without checking
+	//TODO: #NarratorToDo Optimize this logic to just return the Node without checking / Return a nullptr if its not present
 	if (HasDivertNode(i_DivertName))
 	{
 		return GetRedirectionNode(i_DivertName);
@@ -349,6 +456,16 @@ Narrator::Runtime::Node* Narrator::Runtime::Story::GetDivertNode(const std::stri
 	{
 		return nullptr;
 	}
+}
+
+void Narrator::Runtime::Story::AddToDivertNodeMap(const std::string& i_DivertName, Narrator::Runtime::Node* i_DivertNode)
+{
+	AddToRedirectionNodeMap(i_DivertName, i_DivertNode);
+}
+
+void Narrator::Runtime::Story::AddToKnotNodeMap(const std::string& i_KnotName, Narrator::Runtime::Node* i_KnotNode)
+{
+	AddToSubGraphStartNodeMap(i_KnotName, i_KnotNode);
 }
 
 Narrator::Runtime::Node* Narrator::Runtime::Story::GetLastDecisionNode() const
@@ -381,6 +498,7 @@ void Narrator::Runtime::Story::ClearLastDecisionNode()
 	m_LastDesicionNode = nullptr;
 }
 
+/*
 bool Narrator::Runtime::Story::HasAValidDecisionNode()
 {
 	if (m_LastDesicionNode != nullptr)
@@ -417,53 +535,4 @@ void Narrator::Runtime::Story::ClearLastChoiceNode()
 {
 	m_LastChoiceNode = nullptr;
 }
-
-void Narrator::Runtime::Story::Traverse()
-{
-	BreadthFirstSearch();
-}
-
-void Narrator::Runtime::Story::BreadthFirstSearch()
-{
-	std::queue<Narrator::Runtime::Node*> nodeQueue;
-
-	for (std::map<uint32_t, Narrator::Runtime::Node*>::iterator mapIterator = m_NodeMap.begin();
-		mapIterator != m_NodeMap.end();
-		mapIterator++)
-	{
-		Narrator::Runtime::Node* currentNode = mapIterator->second;
-		if (!currentNode->IsVisited())
-		{
-			nodeQueue.push(currentNode);
-		}
-
-		while (!nodeQueue.empty())
-		{
-			Narrator::Runtime::Node* frontNode = nodeQueue.front();
-			frontNode->MarkAsVisited();
-
-			//Print to standard output stream std::cout
-			std::cout << frontNode->ToString() << std::endl;
-
-			nodeQueue.pop();
-
-			//TODO: #NarratorToDo Check the Previous Valid Nodes and add error checks for invalid flow
-
-
-			std::vector<Narrator::Runtime::Node*> adjacentList = m_AdjacencyListMap[frontNode->GetID()];
-
-			for (std::vector<Narrator::Runtime::Node*>::iterator adjacentListIterator = adjacentList.begin();
-				adjacentListIterator != adjacentList.end();
-				adjacentListIterator++)
-			{
-				Narrator::Runtime::Node* adjacentNode = *adjacentListIterator;
-				if (!adjacentNode->IsVisited())
-				{
-					adjacentNode->MarkAsVisited();
-					nodeQueue.push(adjacentNode);
-				}
-			}
-		}
-	}
-}
-
+*/
