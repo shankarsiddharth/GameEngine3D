@@ -1,9 +1,11 @@
 #include "KnotNode.h"
 
 Narrator::Runtime::KnotNode::KnotNode()
-	:Narrator::Runtime::Node(TNodeType::kKnot)
+	:Narrator::Runtime::Node(TNodeType::kKnot),
+	Narrator::Runtime::UniInFlowNode(TNodeType::kKnot),
+	Narrator::Runtime::UniOutFlowNode(TNodeType::kKnot)
 {
-
+	m_Type = TNodeType::kKnot;
 }
 
 Narrator::Runtime::KnotNode::~KnotNode()

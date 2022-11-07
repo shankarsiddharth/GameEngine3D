@@ -12,7 +12,7 @@ namespace Narrator
 
 		public:
 
-			DecisionNode(); 
+			DecisionNode();
 			~DecisionNode();
 
 			std::string ToString() override;

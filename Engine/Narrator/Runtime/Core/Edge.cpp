@@ -39,7 +39,7 @@ std::string Narrator::Runtime::Edge::GetName() const
 	const std::string edgeIDString = std::to_string(m_ID);
 	std::string startNodeIDString("0");
 	std::string endNodeIDString("0");
-	
+
 	if (m_SourceNode)
 	{
 		startNodeIDString = m_SourceNode->GetName();

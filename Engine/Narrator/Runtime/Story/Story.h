@@ -11,7 +11,7 @@ namespace Narrator
 		{
 
 		public:
-			
+
 			Story();
 			virtual ~Story();
 
@@ -23,7 +23,7 @@ namespace Narrator
 			void SelectChoice(uint32_t i_ChoiceIndex);
 
 			static Narrator::Runtime::Story Parse(const std::string& i_Path);
-		
+
 		protected:
 
 			//Parser Methods
@@ -49,7 +49,7 @@ namespace Narrator
 			void SetLastChoiceNode(Narrator::Runtime::Node* i_ChoiceNode);
 			void ClearLastChoiceNode();
 
-		//private:
+			//private:
 
 			void BreadthFirstSearch();
 
@@ -62,7 +62,7 @@ namespace Narrator
 			Narrator::Runtime::Node* m_LastChoiceNode;
 			std::uint32_t m_CurrentChoiceIndex = 0;
 
-		
+
 
 		};
 	}

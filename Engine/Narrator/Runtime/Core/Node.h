@@ -15,7 +15,7 @@ namespace Narrator
 
 			static size_t GetTotalNodeCount();
 			static	size_t GetMaxNodeCount();
-			
+
 			Node(TNodeType i_Type = TNodeType::kNodeBase);
 			virtual ~Node();
 
@@ -29,7 +29,7 @@ namespace Narrator
 
 			bool IsVisited() const;
 			void MarkAsVisited();
-		
+
 		protected:
 
 			static std::uint32_t m_CurrentIndex;

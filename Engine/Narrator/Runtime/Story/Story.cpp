@@ -37,7 +37,7 @@ Narrator::Runtime::Story::Story()
 	AddToNodeMap(m_StartNode);
 	m_EndNode = new Narrator::Runtime::EndNode();
 	AddToNodeMap(m_EndNode);
-	
+
 	m_CurrentNode = m_StartNode;
 
 }
@@ -177,6 +177,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 					//Create Choice Node
 					Narrator::Runtime::ChoiceNode* choiceNode = new Narrator::Runtime::ChoiceNode(choiceIndex, choiceText);
 					story.AddNode(choiceNode);
+					story.AddNodeLink(decisionNode, choiceNode);
 					story.SetLastChoiceNode(choiceNode);
 				}
 			}
@@ -275,7 +276,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 		}
 		else
 		{
-			if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert 
+			if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert
 				|| story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kEnd)
 			{
 				//TODO: #NarratorToDoAssert Throw Parse Error
@@ -296,13 +297,13 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 
 void Narrator::Runtime::Story::AddNode(Narrator::Runtime::Node* i_NodeToAdd)
 {
-/*	
-	AddToNodeMap(i_NodeToAdd);
-	Narrator::Runtime::Edge* newEdge = new Narrator::Runtime::Edge(m_CurrentNode, i_NodeToAdd);
-	AddToEdgeMap(newEdge);
-	AddToAdjacencyListMap(m_CurrentNode, i_NodeToAdd);
-	AddNodeLink(m_CurrentNode, i_NodeToAdd);
-*/
+	/*
+		AddToNodeMap(i_NodeToAdd);
+		Narrator::Runtime::Edge* newEdge = new Narrator::Runtime::Edge(m_CurrentNode, i_NodeToAdd);
+		AddToEdgeMap(newEdge);
+		AddToAdjacencyListMap(m_CurrentNode, i_NodeToAdd);
+		AddNodeLink(m_CurrentNode, i_NodeToAdd);
+	*/
 
 	AddEdge(m_CurrentNode, i_NodeToAdd);
 	m_CurrentNode = i_NodeToAdd;
@@ -310,15 +311,15 @@ void Narrator::Runtime::Story::AddNode(Narrator::Runtime::Node* i_NodeToAdd)
 
 void Narrator::Runtime::Story::LinkEndNode()
 {
-/*
-	Narrator::Runtime::Edge* newEdge = new Narrator::Runtime::Edge(m_CurrentNode, m_EndNode);
-	AddToEdgeMap(newEdge);
-	AddToAdjacencyListMap(m_CurrentNode, m_EndNode);
-	AddNodeLink(m_CurrentNode, m_EndNode);
-*/
-	
+	/*
+		Narrator::Runtime::Edge* newEdge = new Narrator::Runtime::Edge(m_CurrentNode, m_EndNode);
+		AddToEdgeMap(newEdge);
+		AddToAdjacencyListMap(m_CurrentNode, m_EndNode);
+		AddNodeLink(m_CurrentNode, m_EndNode);
+	*/
+
 	AddEdge(m_CurrentNode, m_EndNode);
-	//TODO: #NarratorToDo #HighPriority
+	//TODO: #NarratorToDo #HighPriority If its an END Node is it necessary to make it as CurrentNode?
 	m_CurrentNode = m_EndNode;
 }
 
@@ -360,15 +361,18 @@ Narrator::Runtime::Node* Narrator::Runtime::Story::CreateDecisionNode()
 	if (m_LastDesicionNode == nullptr)
 	{
 		Narrator::Runtime::DecisionNode* newDecisionNode = new Narrator::Runtime::DecisionNode();
+		AddEdge(m_CurrentNode, newDecisionNode);
+	/*
 		AddToNodeMap(newDecisionNode);
 		Narrator::Runtime::Edge* newEdge = new Narrator::Runtime::Edge(m_CurrentNode, newDecisionNode);
 		AddToEdgeMap(newEdge);
 		AddToAdjacencyListMap(m_CurrentNode, newDecisionNode);
 		AddNodeLink(m_CurrentNode, newDecisionNode);
+	*/
 		m_CurrentNode = newDecisionNode;
 		m_LastDesicionNode = newDecisionNode;
 	}
-	
+
 	return m_LastDesicionNode;
 }
 
@@ -393,7 +397,7 @@ bool Narrator::Runtime::Story::HasAValidChoiceNode()
 	{
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -423,8 +427,8 @@ void Narrator::Runtime::Story::BreadthFirstSearch()
 {
 	std::queue<Narrator::Runtime::Node*> nodeQueue;
 
-	for (std::map<uint32_t, Narrator::Runtime::Node*>::iterator mapIterator = m_NodeMap.begin(); 
-		mapIterator != m_NodeMap.end(); 
+	for (std::map<uint32_t, Narrator::Runtime::Node*>::iterator mapIterator = m_NodeMap.begin();
+		mapIterator != m_NodeMap.end();
 		mapIterator++)
 	{
 		Narrator::Runtime::Node* currentNode = mapIterator->second;

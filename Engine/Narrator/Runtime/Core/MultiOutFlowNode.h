@@ -14,7 +14,7 @@ namespace Narrator
 		{
 
 		public:
-			
+
 			MultiOutFlowNode(TNodeType i_Type = TNodeType::kNodeBase, TOutFlowType i_OutFlowType = TOutFlowType::kMultiOutFlow);
 			virtual ~MultiOutFlowNode();
 

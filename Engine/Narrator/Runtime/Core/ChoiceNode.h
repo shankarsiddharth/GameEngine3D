@@ -23,7 +23,7 @@ namespace Narrator
 
 			std::uint32_t m_Index;
 			std::string m_Text;
-			
+
 		};
 	}
 }
