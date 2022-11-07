@@ -17,16 +17,18 @@ namespace Narrator
 
 			//Runtime Methods
 			bool canRead();
-			void Read();
+			std::string Read();
 
 			std::vector<Narrator::Runtime::ChoiceNode*> GetChoices();
 			void SelectChoice(uint32_t i_ChoiceIndex);
 
-			static Narrator::Runtime::Story* Parse(const std::string& i_Path);
+			static Narrator::Runtime::Story Parse(const std::string& i_Path);
 		
 		protected:
 
 			//Parser Methods
+			void Traverse() override;
+
 			void AddNode(Narrator::Runtime::Node* i_NodeToAdd);
 			void LinkEndNode();
 
@@ -47,9 +49,7 @@ namespace Narrator
 			void SetLastChoiceNode(Narrator::Runtime::Node* i_ChoiceNode);
 			void ClearLastChoiceNode();
 
-			void Traverse() override;
-
-		private:
+		//private:
 
 			void BreadthFirstSearch();
 
