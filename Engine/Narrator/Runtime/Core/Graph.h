@@ -37,8 +37,12 @@ namespace Narrator
 			void AddNodeLink(Narrator::Runtime::Node* i_SourceNode, Narrator::Runtime::Node* i_TargetNode);
 
 			bool HasRedirectionNode(const std::string& i_RedirectionName);
-			bool HasSubGraphStartNode(const std::string& i_SubGraphStartNodeName);
 			Narrator::Runtime::Node* GetRedirectionNode(const std::string& i_RedirectionName);
+			void AddToRedirectionNodeMap(const std::string& i_RedirectionName, Narrator::Runtime::Node* i_RedirectionNode);
+
+			bool HasSubGraphStartNode(const std::string& i_SubGraphStartNodeName);
+			Narrator::Runtime::Node* GetSubGraphStartNode(const std::string& i_SubGraphStartNodeName);
+			void AddToSubGraphStartNodeMap(const std::string& i_SubGraphStartNodeName, Narrator::Runtime::Node* i_SubGraphStartNode);
 
 			std::map<std::uint32_t, Narrator::Runtime::Node*> m_NodeMap;
 			std::map<std::uint64_t, Narrator::Runtime::Edge*> m_EdgeMap;

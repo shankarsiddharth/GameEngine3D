@@ -205,7 +205,42 @@ bool Narrator::Runtime::Graph::HasSubGraphStartNode(const std::string& i_SubGrap
 	}
 }
 
+Narrator::Runtime::Node* Narrator::Runtime::Graph::GetSubGraphStartNode(const std::string& i_SubGraphStartNodeName)
+{
+	return m_SubGraphStartNodeMap[i_SubGraphStartNodeName];
+}
+
 Narrator::Runtime::Node* Narrator::Runtime::Graph::GetRedirectionNode(const std::string& i_RedirectionName)
 {
 	return m_RedirectionNodeMap[i_RedirectionName];
+}
+
+void Narrator::Runtime::Graph::AddToRedirectionNodeMap(const std::string& i_RedirectionName, Narrator::Runtime::Node* i_RedirectionNode)
+{
+	std::map<std::string, Narrator::Runtime::Node*>::iterator mapIterator = m_RedirectionNodeMap.find(i_RedirectionName);
+	if (mapIterator != m_RedirectionNodeMap.end())
+	{
+		//Present
+		return;
+	}
+	else
+	{
+		//Add to Map
+		m_RedirectionNodeMap.insert(std::pair<std::string, Narrator::Runtime::Node*>(i_RedirectionName, i_RedirectionNode));
+	}
+}
+
+void Narrator::Runtime::Graph::AddToSubGraphStartNodeMap(const std::string& i_SubGraphStartNodeName, Narrator::Runtime::Node* i_SubGraphStartNode)
+{
+	std::map<std::string, Narrator::Runtime::Node*>::iterator mapIterator = m_SubGraphStartNodeMap.find(i_SubGraphStartNodeName);
+	if (mapIterator != m_SubGraphStartNodeMap.end())
+	{
+		//Present
+		return;
+	}
+	else
+	{
+		//Add To Map
+		m_SubGraphStartNodeMap.insert(std::pair<std::string, Narrator::Runtime::Node*>(i_SubGraphStartNodeName, i_SubGraphStartNode));
+	}
 }
