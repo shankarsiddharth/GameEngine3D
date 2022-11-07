@@ -120,6 +120,12 @@
     <ClInclude Include="Story\StorySyntax.h">
       <Filter>Story</Filter>
     </ClInclude>
+    <ClInclude Include="Story\ParseMetaData.h">
+      <Filter>Story</Filter>
+    </ClInclude>
+    <ClInclude Include="Story\ParseMessageType.h">
+      <Filter>Story</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="story.txt" />

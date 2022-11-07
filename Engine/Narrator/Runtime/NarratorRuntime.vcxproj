@@ -182,6 +182,8 @@
     <ClInclude Include="Core\StartNode.h" />
     <ClInclude Include="Core\UniInFlowNode.h" />
     <ClInclude Include="Core\UniOutFlowNode.h" />
+    <ClInclude Include="Story\ParseMessageType.h" />
+    <ClInclude Include="Story\ParseMetaData.h" />
     <ClInclude Include="Story\Story.h" />
     <ClInclude Include="Story\StorySyntax.h" />
     <ClInclude Include="Utils\StringUtils.h" />

@@ -41,22 +41,20 @@ namespace Narrator
 			//Always use HasDivertNode to check if it is present before accessing the Node
 			Narrator::Runtime::Node* GetDivertNode(const std::string& i_DivertName);
 			void AddToDivertNodeMap(const std::string& i_DivertName, Narrator::Runtime::Node* i_DivertNode);
+			std::map<std::string, Narrator::Runtime::Node*> GetDivertNodeMap();
 			
 			bool HasKnotNode(const std::string& i_KnotName);
 			//Always use HasKnotNode to check if it is present before accessing the Node
 			Narrator::Runtime::Node* GetKnotNode(const std::string& i_KnotName);
 			void AddToKnotNodeMap(const std::string& i_KnotName, Narrator::Runtime::Node* i_KnotNode);
+			std::map<std::string, Narrator::Runtime::Node*> GetKnotNodeMap();
 
 			Narrator::Runtime::Node* GetLastDecisionNode() const;
 			Narrator::Runtime::Node* CreateDecisionNode();
 			void ClearLastDecisionNode();
-/*
 
-			bool HasAValidDecisionNode();
-			bool HasAValidChoiceNode();
-			void SetLastChoiceNode(Narrator::Runtime::Node* i_ChoiceNode);
-			void ClearLastChoiceNode();
-*/
+			//Parser Meta Data
+
 
 			//Story State
 			Narrator::Runtime::Node* m_StartNode;
