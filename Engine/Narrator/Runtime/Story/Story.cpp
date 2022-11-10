@@ -21,6 +21,9 @@
 #include <regex>
 #include <map>
 #include <queue>
+#include <iomanip>
+
+#include "../JSON/Includes.h"
 
 Narrator::Runtime::Story::Story()
 	: Narrator::Runtime::Graph(),
@@ -114,6 +117,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			if (nameToCheck.empty())
 			{
 				//TODO: #NarratorToDoAssert Throw Parser Error 
+				//TODO: #NarratorToDo #NarratorMetaDataSample see:#NarratorMetaData
 				std::string message = "Error Knot name cannot be empty";
 				std::cout <<  message << std::endl;
 				Narrator::Parser::ParseMetaData newParseMetaData(Narrator::Parser::TParseMessageType::kError, fileLineNumber, message);
@@ -223,7 +227,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 						//End Node
 						story.LinkEndNode();
 					}
-					else if (Narrator::Runtime::StringUtils::StartsWith(possibleDivertName, Narrator::Runtime::StorySyntax::DONE_DECLARATION))
+					else if (Narrator::Runtime::StringUtils::StartsWithIgnoreCase(possibleDivertName, Narrator::Runtime::StorySyntax::DONE_DECLARATION))
 					{
 						//Done Node is a divert node that redirects to the end node by default
 						story.LinkEndNode();
@@ -299,12 +303,13 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			{
 				Narrator::Runtime::KnotNode* knotNode = dynamic_cast<Narrator::Runtime::KnotNode*>(story.GetKnotNode(divertTargetName));
 				story.AddNodeLink(divertNode, knotNode);
+				divertNode->SetTargetNode(knotNode);
 			}
 			else
 			{
 				//TODO: #NarratorToDoAssert Throw Parse Error.
 				//TODO: #NarratorToDo Add A DebugData Struct that has additional info for the node such as line number
-				std::cout << "Divert Target not Found" << std::endl;
+				std::cout << "Divert Target not Found : " << divertTargetName << std::endl;
 			}
 		}
 		else
@@ -316,6 +321,8 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 
 	//Traverse the Graph to validate the flow
 	story.Traverse();
+
+	story.ToJSONFile("./TestScripts/story_test.json");
 
 	return story;
 }
@@ -329,6 +336,68 @@ void Narrator::Runtime::Story::Play()
 
 	}
 	std::cout << "End of Story" << std::endl;
+}
+
+bool Narrator::Runtime::Story::ToJSONFile(const std::string& i_JSONFilePath)
+{
+	std::ofstream fout(i_JSONFilePath.c_str());
+	if (fout.is_open())
+	{
+		nlohmann::json storyJSON;
+
+		ToJSON(storyJSON);
+
+		//TODO: #NarratorToDo Save the File
+		fout << std::setw(4) << storyJSON << std::endl;
+
+		fout.close();
+
+		std::cout << "Write file complete" << std::endl;
+	}
+	else
+	{
+		std::cout << "Could not write to file" << std::endl;
+	}
+
+	return false;
+}
+
+void Narrator::Runtime::Story::ToJSON(nlohmann::json& jsonRoot)
+{
+	nlohmann::json nodeArray = nlohmann::json::array();
+
+	//Nodes
+	for (std::map<uint32_t, Narrator::Runtime::Node*>::iterator mapIterator = m_NodeMap.begin();
+		mapIterator != m_NodeMap.end();
+		mapIterator++)
+	{
+		nlohmann::json nodeObject = nlohmann::json::object();
+		mapIterator->second->ToJSON(nodeObject);
+		nodeArray.emplace_back(nodeObject);
+	}
+	jsonRoot["nodes"] = nodeArray;
+
+	nlohmann::json edgeArray = nlohmann::json::array();
+
+	//Edges
+	for (std::map<uint64_t, Narrator::Runtime::Edge*>::iterator mapIterator = m_EdgeMap.begin();
+		mapIterator != m_EdgeMap.end();
+		mapIterator++)
+	{
+		mapIterator;
+	}
+	jsonRoot["edges"] = edgeArray;
+
+	nlohmann::json adjacencyListObject = nlohmann::json::object();
+
+	//AdjacencyList
+	for (std::map<uint32_t, std::vector<Narrator::Runtime::Node*>>::iterator mapIterator = m_AdjacencyListMap.begin();
+		mapIterator != m_AdjacencyListMap.end();
+		mapIterator++)
+	{
+		mapIterator;
+	}
+	jsonRoot["adjacency_list"] = adjacencyListObject;
 }
 
 void Narrator::Runtime::Story::Traverse()

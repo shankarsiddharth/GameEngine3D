@@ -26,6 +26,11 @@ namespace Narrator
 			
 			void Play();
 
+			bool ToJSONFile(const std::string& i_JSONFilePath);
+
+
+			void ToJSON(nlohmann::json& jsonRoot) override;
+
 		protected:
 
 			//Parser Methods
@@ -54,7 +59,7 @@ namespace Narrator
 			void ClearLastDecisionNode();
 
 			//Parser Meta Data
-
+			//TODO: #NarratorToDo #NarratorMetaData see:#NarratorMetaDataSample Add a data structure to keep track of the line numbers for the nodes to diaplsy the error
 
 			//Story State
 			Narrator::Runtime::Node* m_StartNode;

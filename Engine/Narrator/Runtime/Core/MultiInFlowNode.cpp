@@ -64,4 +64,21 @@ std::map<std::uint32_t, Narrator::Runtime::Node*> Narrator::Runtime::MultiInFlow
 	return m_InFlowNodeMap;
 }
 
+void Narrator::Runtime::MultiInFlowNode::ToJSON(nlohmann::json& nodeObject)
+{
+	Narrator::Runtime::Node::ToJSON(nodeObject);
+	
+	nlohmann::json inFlowNodeArray = nlohmann::json::array();
+	for (std::map<std::uint32_t, Narrator::Runtime::Node*>::iterator mapIterator = m_InFlowNodeMap.begin();
+		mapIterator != m_InFlowNodeMap.end();
+		mapIterator++)
+	{
+		nlohmann::json inFlowNode = nlohmann::json::object();
+		inFlowNode["id"] = mapIterator->second->GetID();
+		inFlowNode["type"] = mapIterator->second->GetType();
+		
+		inFlowNodeArray.emplace_back(inFlowNode);
+	}
+	nodeObject["in_flow_nodes"] = inFlowNodeArray;
+}
 

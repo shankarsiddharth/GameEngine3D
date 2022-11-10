@@ -72,6 +72,15 @@ void Narrator::Runtime::Node::MarkAsVisited()
 	m_IsVisited = true;
 }
 
+void Narrator::Runtime::Node::ToJSON(nlohmann::json& nodeObject)
+{
+	nodeObject["id"] = m_ID;
+	nodeObject["name"] = m_Name;
+	nodeObject["type"] = m_Type;
+	nodeObject["in_flow_type"] = m_InFlowType;
+	nodeObject["out_flow_type"] = m_OutFlowType;
+}
+
 void Narrator::Runtime::Node::SetName(const std::string& i_Name)
 {
 	m_Name = i_Name;

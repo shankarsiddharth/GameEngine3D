@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 
+#include "../JSON/Includes.h"
+
 //Forward Declarations
 namespace Narrator {
 	namespace Runtime {
@@ -24,6 +26,8 @@ namespace Narrator
 
 			Graph();
 			virtual ~Graph();
+
+			virtual void ToJSON(nlohmann::json& jsonRoot) = 0;
 
 		protected:
 

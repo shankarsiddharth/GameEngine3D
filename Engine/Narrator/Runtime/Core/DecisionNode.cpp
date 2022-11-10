@@ -19,6 +19,13 @@ std::uint32_t Narrator::Runtime::DecisionNode::GetDecisionPathCount()
 	return pathCount;
 }
 
+void Narrator::Runtime::DecisionNode::ToJSON(nlohmann::json& nodeObject)
+{
+	Narrator::Runtime::Node::ToJSON(nodeObject);
+	Narrator::Runtime::UniInFlowNode::ToJSON(nodeObject);
+	Narrator::Runtime::MultiOutFlowNode::ToJSON(nodeObject);
+}
+
 std::string Narrator::Runtime::DecisionNode::ToString()
 {
 	return GetName() + "\t:DN:";

@@ -7,6 +7,6 @@
 int main()
 {
 
-	Narrator::Runtime::Story story = Narrator::Runtime::Story::Parse("story.txt");
+	Narrator::Runtime::Story story = Narrator::Runtime::Story::Parse("./TestScripts/story.txt");
 
 }

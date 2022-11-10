@@ -4,6 +4,8 @@
 
 #include <string>
 
+#include "../JSON/Includes.h"
+
 namespace Narrator
 {
 	namespace Runtime
@@ -29,6 +31,8 @@ namespace Narrator
 
 			bool IsVisited() const;
 			void MarkAsVisited();
+
+			virtual void ToJSON(nlohmann::json& nodeObject);
 
 		protected:
 

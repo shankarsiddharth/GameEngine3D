@@ -13,6 +13,9 @@ namespace Narrator
 
 			EndNode();
 			~EndNode();
+
+			void ToJSON(nlohmann::json& nodeObject) override;
+
 		};
 	}
 }

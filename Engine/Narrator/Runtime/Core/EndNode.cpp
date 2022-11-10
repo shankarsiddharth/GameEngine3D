@@ -11,3 +11,9 @@ Narrator::Runtime::EndNode::~EndNode()
 {
 
 }
+
+void Narrator::Runtime::EndNode::ToJSON(nlohmann::json& nodeObject)
+{
+	Narrator::Runtime::Node::ToJSON(nodeObject);
+	Narrator::Runtime::MultiInFlowNode::ToJSON(nodeObject);
+}

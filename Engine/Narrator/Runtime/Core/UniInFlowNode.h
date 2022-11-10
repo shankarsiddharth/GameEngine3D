@@ -4,6 +4,8 @@
 
 #include <string>
 
+#include "../JSON/Includes.h"
+
 namespace Narrator
 {
 	namespace Runtime
@@ -19,6 +21,8 @@ namespace Narrator
 			//Parser Methods
 			void SetPreviousNode(Narrator::Runtime::Node* i_NextNode);
 			Narrator::Runtime::Node* GetPreviousNode();
+
+			virtual void ToJSON(nlohmann::json& nodeObject) override;
 
 		protected:
 

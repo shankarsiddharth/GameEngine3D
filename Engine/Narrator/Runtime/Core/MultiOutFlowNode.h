@@ -6,6 +6,8 @@
 #include <map>
 #include <cstdint>
 
+#include "../JSON/Includes.h"
+
 namespace Narrator
 {
 	namespace Runtime
@@ -24,6 +26,7 @@ namespace Narrator
 			void RemoveOutFlowNode(std::uint32_t i_NextNodeID);
 			std::map<std::uint32_t, Narrator::Runtime::Node*> GetOutFlowNodeMap() const;
 
+			virtual void ToJSON(nlohmann::json& nodeObject) override;
 
 		protected:
 

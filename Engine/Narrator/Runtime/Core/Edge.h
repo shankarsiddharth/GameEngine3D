@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <string>
 
+#include "../JSON/Includes.h"
+
 //Forward Declarations
 namespace Narrator {
 	namespace Runtime {

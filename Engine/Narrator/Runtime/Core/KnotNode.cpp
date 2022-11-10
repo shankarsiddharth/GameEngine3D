@@ -18,6 +18,13 @@ void Narrator::Runtime::KnotNode::SetName(const std::string& i_Name)
 	Narrator::Runtime::Node::SetName(i_Name);
 }
 
+void Narrator::Runtime::KnotNode::ToJSON(nlohmann::json& nodeObject)
+{
+	Narrator::Runtime::Node::ToJSON(nodeObject);
+	Narrator::Runtime::UniInFlowNode::ToJSON(nodeObject);
+	Narrator::Runtime::UniOutFlowNode::ToJSON(nodeObject);
+}
+
 std::string Narrator::Runtime::KnotNode::ToString()
 {
 	return std::to_string(GetID()) + " : " + "=== " + GetName();

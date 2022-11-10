@@ -19,6 +19,9 @@ namespace Narrator
 
 			std::uint32_t GetChoiceIndex();
 
+
+			void ToJSON(nlohmann::json& nodeObject) override;
+
 		protected:
 
 			std::uint32_t m_Index;

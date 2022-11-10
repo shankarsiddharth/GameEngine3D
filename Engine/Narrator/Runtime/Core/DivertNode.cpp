@@ -34,6 +34,23 @@ void Narrator::Runtime::DivertNode::SetTargetNode(Narrator::Runtime::Node* i_Tar
 	m_TargetNode = i_TargetNode;
 }
 
+void Narrator::Runtime::DivertNode::ToJSON(nlohmann::json& nodeObject)
+{
+	Narrator::Runtime::Node::ToJSON(nodeObject);
+	Narrator::Runtime::MultiInFlowNode::ToJSON(nodeObject);
+	Narrator::Runtime::UniOutFlowNode::ToJSON(nodeObject);
+	
+	nlohmann::json target = nlohmann::json::object();
+	target["name"] = m_TargetNodeName;
+	
+	nlohmann::json targetNode = nlohmann::json::object();
+	targetNode["id"] = m_TargetNode->GetID();
+	targetNode["type"] = m_TargetNode->GetType();
+	target["node"] = targetNode;
+
+	nodeObject["target"] = target;
+}
+
 std::string Narrator::Runtime::DivertNode::ToString()
 {
 	return GetName() + " : ->" + m_TargetNodeName;

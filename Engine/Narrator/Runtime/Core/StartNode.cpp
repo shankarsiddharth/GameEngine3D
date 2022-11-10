@@ -11,3 +11,9 @@ Narrator::Runtime::StartNode::~StartNode()
 {
 
 }
+
+void Narrator::Runtime::StartNode::ToJSON(nlohmann::json& nodeObject)
+{
+	Narrator::Runtime::Node::ToJSON(nodeObject);
+	Narrator::Runtime::UniOutFlowNode::ToJSON(nodeObject);
+}
