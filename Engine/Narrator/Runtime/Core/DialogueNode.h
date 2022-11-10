@@ -19,6 +19,9 @@ namespace Narrator
 
 			std::string GetText();
 
+
+			void ToJSON(nlohmann::json& nodeObject) override;
+
 		protected:
 
 			std::string m_Text;

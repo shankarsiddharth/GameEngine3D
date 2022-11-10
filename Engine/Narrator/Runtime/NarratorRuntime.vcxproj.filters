@@ -64,6 +64,12 @@
     <Filter Include="Story">
       <UniqueIdentifier>{c9eba3b0-ee6f-4fd0-8684-441877e4d34f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="JSON">
+      <UniqueIdentifier>{f0ecd95d-bd0d-4ffb-92ce-9cd52c69ace7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestScripts">
+      <UniqueIdentifier>{af9ddfea-6c64-4391-a757-406b6a0a1282}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Node.h">
@@ -126,8 +132,16 @@
     <ClInclude Include="Story\ParseMessageType.h">
       <Filter>Story</Filter>
     </ClInclude>
+    <ClInclude Include="JSON\json.hpp">
+      <Filter>JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="JSON\Includes.h">
+      <Filter>JSON</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="story.txt" />
+    <Text Include="story.txt">
+      <Filter>TestScripts</Filter>
+    </Text>
   </ItemGroup>
 </Project>

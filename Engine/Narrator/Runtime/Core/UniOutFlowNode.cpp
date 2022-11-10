@@ -22,3 +22,17 @@ Narrator::Runtime::Node* Narrator::Runtime::UniOutFlowNode::GetNextNode()
 {
 	return m_NextNode;
 }
+
+void Narrator::Runtime::UniOutFlowNode::ToJSON(nlohmann::json& nodeObject)
+{
+	Narrator::Runtime::Node::ToJSON(nodeObject);
+	
+	nlohmann::json nextNode = nlohmann::json::object();
+	nextNode = nullptr;
+	if (m_NextNode)
+	{
+		nextNode["id"] = m_NextNode->GetID();
+		nextNode["type"] = m_NextNode->GetType();
+	}
+	nodeObject["next_node"] = nextNode;
+}

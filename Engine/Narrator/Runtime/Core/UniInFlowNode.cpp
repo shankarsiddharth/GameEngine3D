@@ -22,3 +22,17 @@ Narrator::Runtime::Node* Narrator::Runtime::UniInFlowNode::GetPreviousNode()
 {
 	return m_PreviousNode;
 }
+
+void Narrator::Runtime::UniInFlowNode::ToJSON(nlohmann::json& nodeObject)
+{
+	Narrator::Runtime::Node::ToJSON(nodeObject);
+	
+	nlohmann::json previousNode = nlohmann::json::object();
+	previousNode = nullptr;
+	if (m_PreviousNode)
+	{
+		previousNode["id"] = m_PreviousNode->GetID();
+		previousNode["type"] = m_PreviousNode->GetType();
+	}
+	nodeObject["previous_node"] = previousNode;
+}

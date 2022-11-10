@@ -15,7 +15,7 @@ Make a choice:
 
 * Your Choice 2
 	Choice Dialogue 2
-	-> E N D
+	->enD
 
 * Your Choice 3
 	Choice Dialogue 3
@@ -23,8 +23,16 @@ Make a choice:
 
 * Your Choice 4
 	Choice Dialogue 4
-	-> D                    O	NE
+	->DONE
+	
+* Your Choice 5
+	Choice Dialogue 5
+	->END
 
+* Your Choice 6
+	Choice Dialogue 6
+	->doNE
+	
 They are falling.
 
 === Scene2 ===

@@ -19,6 +19,8 @@ namespace Narrator
 
 			void SetName(const std::string& i_Name);
 
+			void ToJSON(nlohmann::json& nodeObject) override;
+
 		};
 	}
 }
