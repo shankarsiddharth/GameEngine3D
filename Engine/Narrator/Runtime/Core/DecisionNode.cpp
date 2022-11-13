@@ -13,6 +13,11 @@ Narrator::Runtime::DecisionNode::~DecisionNode()
 
 }
 
+std::string Narrator::Runtime::DecisionNode::ToString()
+{
+	return GetName() + "\t:DN:";
+}
+
 std::uint32_t Narrator::Runtime::DecisionNode::GetDecisionPathCount()
 {
 	std::uint32_t pathCount = static_cast<uint32_t>(m_OutFlowNodeMap.size());
@@ -26,7 +31,9 @@ void Narrator::Runtime::DecisionNode::ToJSON(nlohmann::json& nodeObject)
 	Narrator::Runtime::MultiOutFlowNode::ToJSON(nodeObject);
 }
 
-std::string Narrator::Runtime::DecisionNode::ToString()
+void Narrator::Runtime::DecisionNode::FromJSON(const nlohmann::json& nodeObject, const Narrator::Runtime::Graph* i_Graph)
 {
-	return GetName() + "\t:DN:";
+	Narrator::Runtime::Node::FromJSON(nodeObject, i_Graph);
+	Narrator::Runtime::UniInFlowNode::FromJSON(nodeObject, i_Graph);
+	Narrator::Runtime::MultiOutFlowNode::FromJSON(nodeObject, i_Graph);
 }

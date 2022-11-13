@@ -25,6 +25,13 @@ void Narrator::Runtime::KnotNode::ToJSON(nlohmann::json& nodeObject)
 	Narrator::Runtime::UniOutFlowNode::ToJSON(nodeObject);
 }
 
+void Narrator::Runtime::KnotNode::FromJSON(const nlohmann::json& nodeObject, const Narrator::Runtime::Graph* i_Graph)
+{
+	Narrator::Runtime::Node::FromJSON(nodeObject, i_Graph);
+	Narrator::Runtime::UniInFlowNode::FromJSON(nodeObject, i_Graph);
+	Narrator::Runtime::UniOutFlowNode::FromJSON(nodeObject, i_Graph);
+}
+
 std::string Narrator::Runtime::KnotNode::ToString()
 {
 	return std::to_string(GetID()) + " : " + "=== " + GetName();

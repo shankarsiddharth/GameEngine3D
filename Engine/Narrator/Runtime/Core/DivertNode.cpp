@@ -1,4 +1,5 @@
 #include "DivertNode.h"
+#include "GraphHelper.h"
 
 Narrator::Runtime::DivertNode::DivertNode()
 	:Narrator::Runtime::Node(TNodeType::kDivert),
@@ -51,6 +52,33 @@ void Narrator::Runtime::DivertNode::ToJSON(nlohmann::json& nodeObject)
 	nodeObject["target"] = target;
 }
 
+void Narrator::Runtime::DivertNode::FromJSON(const nlohmann::json& nodeObject, const Narrator::Runtime::Graph* i_Graph)
+{
+	Narrator::Runtime::Node::FromJSON(nodeObject, i_Graph);
+	Narrator::Runtime::MultiInFlowNode::FromJSON(nodeObject, i_Graph);
+	Narrator::Runtime::UniOutFlowNode::FromJSON(nodeObject, i_Graph);
+
+	if(nodeObject.contains("target"))
+	{
+		const nlohmann::json targetObject = nodeObject["target"];
+		m_TargetNodeName = targetObject["name"];
+
+		const nlohmann::json targetNodeObject = targetObject["node"];
+		const std::uint32_t nodeID = targetNodeObject["id"];
+		m_TargetNode = Narrator::Runtime::GraphHelper::GetNode(i_Graph, nodeID);
+	}
+	else
+	{
+		//TODO: #NarratorToDoAssert #RuntimeError
+	}
+}
+
+/*
+void Narrator::Runtime::DivertNode::FromJSON(const nlohmann::json& nodeObject)
+{
+
+}
+*/
 std::string Narrator::Runtime::DivertNode::ToString()
 {
 	return GetName() + " : ->" + m_TargetNodeName;

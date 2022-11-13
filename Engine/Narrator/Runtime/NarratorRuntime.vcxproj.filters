@@ -53,6 +53,12 @@
     <ClCompile Include="Story\StorySyntax.cpp">
       <Filter>Story</Filter>
     </ClCompile>
+    <ClCompile Include="Core\NodeFactory.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GraphHelper.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -137,6 +143,12 @@
     </ClInclude>
     <ClInclude Include="JSON\Includes.h">
       <Filter>JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\NodeFactory.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GraphHelper.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -22,14 +22,18 @@ namespace Narrator
 		class Graph
 		{
 
+			friend class GraphHelper;
+
 		public:
 
 			Graph();
 			virtual ~Graph();
 
+		protected:
+
 			virtual void ToJSON(nlohmann::json& jsonRoot) = 0;
 
-		protected:
+			virtual void FromJSON(const nlohmann::json& jsonRoot) = 0;
 
 			virtual void Traverse() = 0;
 
@@ -47,6 +51,7 @@ namespace Narrator
 			bool HasSubGraphStartNode(const std::string& i_SubGraphStartNodeName);
 			Narrator::Runtime::Node* GetSubGraphStartNode(const std::string& i_SubGraphStartNodeName);
 			void AddToSubGraphStartNodeMap(const std::string& i_SubGraphStartNodeName, Narrator::Runtime::Node* i_SubGraphStartNode);
+
 
 			std::map<std::uint32_t, Narrator::Runtime::Node*> m_NodeMap;
 			std::map<std::uint64_t, Narrator::Runtime::Edge*> m_EdgeMap;

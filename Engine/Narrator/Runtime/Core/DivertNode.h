@@ -25,8 +25,9 @@ namespace Narrator
 			Narrator::Runtime::Node* GetTargetNode() const;
 			void SetTargetNode(Narrator::Runtime::Node* i_TargetNode);
 
-
 			void ToJSON(nlohmann::json& nodeObject) override;
+
+			void FromJSON(const nlohmann::json& nodeObject, const Narrator::Runtime::Graph* i_Graph) override;
 
 		protected:
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Node.h"
+#include "GraphHelper.h"
 
 #include <string>
 
@@ -23,6 +24,8 @@ namespace Narrator
 			Narrator::Runtime::Node* GetNextNode();
 
 			virtual void ToJSON(nlohmann::json& nodeObject) override;
+			
+			void FromJSON(const nlohmann::json& nodeObject, const Narrator::Runtime::Graph* i_Graph) override;
 
 		protected:
 

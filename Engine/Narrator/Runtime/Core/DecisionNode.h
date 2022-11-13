@@ -19,8 +19,9 @@ namespace Narrator
 
 			std::uint32_t GetDecisionPathCount();
 
-
 			void ToJSON(nlohmann::json& nodeObject) override;
+
+			void FromJSON(const nlohmann::json& nodeObject, const Narrator::Runtime::Graph* i_Graph) override;
 
 		};
 	}

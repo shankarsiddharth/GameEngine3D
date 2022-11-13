@@ -1,7 +1,12 @@
 #pragma once
 
 #include "../Core/Graph.h"
-#include "../Core/ChoiceNode.h"
+
+namespace Narrator {
+	namespace Runtime {
+		class ChoiceNode;
+	}
+}
 
 namespace Narrator
 {
@@ -28,10 +33,12 @@ namespace Narrator
 
 			bool ToJSONFile(const std::string& i_JSONFilePath);
 
-
-			void ToJSON(nlohmann::json& jsonRoot) override;
+			bool FromJSONFile(const std::string& i_JSONFilePath);
 
 		protected:
+
+			void ToJSON(nlohmann::json& jsonRoot) override;
+			void FromJSON(const nlohmann::json& jsonRoot) override;
 
 			//Parser Methods
 			void Traverse() override;
