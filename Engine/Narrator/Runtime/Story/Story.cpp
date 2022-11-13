@@ -13,6 +13,9 @@
 #include "../Core/Graph.h"
 #include "../Utils/StringUtils.h"
 
+#include "../JSON/Includes.h"
+#include "../Core/NodeFactory.h"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -22,8 +25,6 @@
 #include <map>
 #include <queue>
 #include <iomanip>
-
-#include "../JSON/Includes.h"
 
 Narrator::Runtime::Story::Story()
 	: Narrator::Runtime::Graph(),
@@ -73,6 +74,8 @@ void Narrator::Runtime::Story::SelectChoice(uint32_t i_ChoiceIndex)
 
 Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Path)
 {
+	//TODO: #NarratorToDo #Important Check if the End is missing it throws error
+
 	std::map<std::size_t, std::string> FileLineMap;
 	//Line Number and Corresponding ParseMetaData Map
 	std::map<std::size_t, Narrator::Parser::ParseMetaData> ParseMetaDataMap;
@@ -119,7 +122,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 				//TODO: #NarratorToDoAssert Throw Parser Error 
 				//TODO: #NarratorToDo #NarratorMetaDataSample see:#NarratorMetaData
 				std::string message = "Error Knot name cannot be empty";
-				std::cout <<  message << std::endl;
+				std::cout << message << std::endl;
 				Narrator::Parser::ParseMetaData newParseMetaData(Narrator::Parser::TParseMessageType::kError, fileLineNumber, message);
 				ParseMetaDataMap.insert(std::pair<std::size_t, Narrator::Parser::ParseMetaData>(fileLineNumber, newParseMetaData));
 			}
@@ -207,7 +210,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 
 			std::string tLine = fileLineString;
 			//tLine = Narrator::Runtime::StringUtils::RemoveAllSpaces(tLine);
-			
+
 			tLine = Narrator::Runtime::StringUtils::TrimCopy(tLine);
 			std::string possibleDivertName = tLine;
 			Narrator::Runtime::StringUtils::RemoveAll(possibleDivertName, Narrator::Runtime::StorySyntax::DIVERT_DECLARATION);
@@ -271,7 +274,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 					//TODO: #NarratorToDoAssert Throw Parse Error
 					std::cout << "Error - Not a Valid Divert Name" << std::endl;
 				}
-			}			
+			}
 		}
 		else
 		{
@@ -322,6 +325,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 	//Traverse the Graph to validate the flow
 	story.Traverse();
 
+	//TODO: #NarratorToDo Only Export the JSON file if there are no parsing errors
 	story.ToJSONFile("./TestScripts/story_test.json");
 
 	return story;
@@ -357,6 +361,30 @@ bool Narrator::Runtime::Story::ToJSONFile(const std::string& i_JSONFilePath)
 	else
 	{
 		std::cout << "Could not write to file" << std::endl;
+	}
+
+	return false;
+}
+
+bool Narrator::Runtime::Story::FromJSONFile(const std::string& i_JSONFilePath)
+{
+	//TODO: #NarratorToDo 
+
+	std::ifstream fin(i_JSONFilePath.c_str());
+
+	if (fin.is_open())
+	{
+		const nlohmann::json storyJSON = nlohmann::json::parse(fin);
+
+		FromJSON(storyJSON);
+
+		fin.close();
+
+		std::cout << "Read file complete" << std::endl;
+	}
+	else
+	{
+		std::cout << "Could not read to file" << std::endl;
 	}
 
 	return false;
@@ -398,6 +426,122 @@ void Narrator::Runtime::Story::ToJSON(nlohmann::json& jsonRoot)
 		mapIterator;
 	}
 	jsonRoot["adjacency_list"] = adjacencyListObject;
+}
+
+void Narrator::Runtime::Story::FromJSON(const nlohmann::json& jsonRoot)
+{
+	if (jsonRoot.is_object())
+	{
+		const nlohmann::json nodeArray = jsonRoot["nodes"];
+		if (nodeArray.is_array())
+		{
+			for (const nlohmann::json& nodeElement : nodeArray)
+			{
+				if (nodeElement.is_object())
+				{
+					if (nodeElement.contains("type"))
+					{
+						Narrator::Runtime::TNodeType nodeType = nodeElement["type"];
+						//Start Node and End Node are created by default constructor
+						if ((nodeType != TNodeType::kStart) && (nodeType != TNodeType::kEnd))
+						{
+							Narrator::Runtime::Node* newNode = NodeFactory::Create(nodeType);
+							AddToNodeMap(newNode);
+						}
+					}
+					else
+					{
+						//TODO: #NarratorToDoAssert #RuntimeError
+					}
+				}
+				else
+				{
+					//TODO: #NarratorToDoAssert #RuntimeError
+				}
+			}
+
+
+		}
+		else
+		{
+			//TODO: #NarratorToDoAssert #RuntimeError
+		}
+	}
+	else
+	{
+		//TODO: #NarratorToDoAssert #RuntimeError
+	}
+
+	if (jsonRoot.is_object())
+	{
+		const nlohmann::json nodeArray = jsonRoot["nodes"];
+		if (nodeArray.is_array())
+		{
+			for (const nlohmann::json& nodeElement : nodeArray)
+			{
+				if (nodeElement.is_object())
+				{
+					if (nodeElement.contains("type"))
+					{
+						Narrator::Runtime::TNodeType nodeType = nodeElement["type"];
+						switch (nodeType)
+						{
+						default:
+						case Narrator::Runtime::TNodeType::kNodeBase:
+						{
+							//TODO: #NarratorToDoAssert #RuntimeError
+						}
+						break;
+						case Narrator::Runtime::TNodeType::kStart:
+						{
+							m_StartNode->FromJSON(nodeElement, this);
+							//TODO: #NarratorToDo Links for the Start Node is Missing
+							//Create the node and fill up the link values
+						}
+						break;
+						case Narrator::Runtime::TNodeType::kEnd:
+						{
+							m_EndNode->FromJSON(nodeElement, this);
+							//TODO: #NarratorToDo Links for the Start Node is Missing
+							//Create the node and fill up the link values
+						}
+						break;
+						case Narrator::Runtime::TNodeType::kDialogue:
+						case Narrator::Runtime::TNodeType::kDivert:
+						case Narrator::Runtime::TNodeType::kKnot:
+						case Narrator::Runtime::TNodeType::kChoice:
+						case Narrator::Runtime::TNodeType::kDesicion:
+						{
+							Narrator::Runtime::Node* currentNode = m_NodeMap[nodeElement["id"]];
+							currentNode->FromJSON(nodeElement, this);
+						}
+						break;
+						}
+					}
+					else
+					{
+						//TODO: #NarratorToDoAssert #RuntimeError
+					}
+				}
+				else
+				{
+					//TODO: #NarratorToDoAssert #RuntimeError
+				}
+			}
+		}
+		else
+		{
+			//TODO: #NarratorToDoAssert #RuntimeError
+		}
+	}
+	else
+	{
+		//TODO: #NarratorToDoAssert #RuntimeError
+	}
+
+	Traverse();
+	
+	std::cout << "Read Complete" << std::endl;
 }
 
 void Narrator::Runtime::Story::Traverse()

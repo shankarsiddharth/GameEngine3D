@@ -1,4 +1,5 @@
 #include "Node.h"
+// #include "Graph.h"
 #include <iostream>
 
 std::uint32_t Narrator::Runtime::Node::m_CurrentIndex = 0;
@@ -79,6 +80,25 @@ void Narrator::Runtime::Node::ToJSON(nlohmann::json& nodeObject)
 	nodeObject["type"] = m_Type;
 	nodeObject["in_flow_type"] = m_InFlowType;
 	nodeObject["out_flow_type"] = m_OutFlowType;
+}
+
+void Narrator::Runtime::Node::FromJSON(const nlohmann::json& nodeObject, const Narrator::Runtime::Graph* i_Graph)
+{
+	//TODO: #NarratorToDoAssert already existing ID should match the node
+	const std::uint32_t nodeID = nodeObject["id"];
+	if (m_ID == nodeID)
+	{
+		m_ID = nodeObject["id"];
+		m_Name = nodeObject["name"];
+		m_Type = nodeObject["type"];
+		m_InFlowType = nodeObject["in_flow_type"];
+		m_OutFlowType = nodeObject["out_flow_type"];
+
+	}
+	else
+	{
+		//TODO: #NarratorToDoAssert #RuntimeError
+	}
 }
 
 void Narrator::Runtime::Node::SetName(const std::string& i_Name)

@@ -6,6 +6,15 @@
 
 #include "../JSON/Includes.h"
 
+//Forward Declaration
+namespace Narrator
+{
+	namespace Runtime
+	{
+		class Graph;
+	}
+}
+
 namespace Narrator
 {
 	namespace Runtime
@@ -33,6 +42,8 @@ namespace Narrator
 			void MarkAsVisited();
 
 			virtual void ToJSON(nlohmann::json& nodeObject);
+
+			virtual void FromJSON(const nlohmann::json& nodeObject, const Narrator::Runtime::Graph* i_Graph);
 
 		protected:
 

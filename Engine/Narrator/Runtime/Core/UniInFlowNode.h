@@ -24,6 +24,8 @@ namespace Narrator
 
 			virtual void ToJSON(nlohmann::json& nodeObject) override;
 
+			void FromJSON(const nlohmann::json& nodeObject, const Narrator::Runtime::Graph* i_Graph) override;
+
 		protected:
 
 			Narrator::Runtime::Node* m_PreviousNode;

@@ -1,4 +1,5 @@
 #include "MultiOutFlowNode.h"
+#include "GraphHelper.h"
 
 Narrator::Runtime::MultiOutFlowNode::MultiOutFlowNode(TNodeType i_Type /*= TNodeType::kMultiFlow*/,
 	TOutFlowType i_OutFlowType /*= TOutFlowType::kMultiOutFlow*/)
@@ -81,4 +82,35 @@ void Narrator::Runtime::MultiOutFlowNode::ToJSON(nlohmann::json& nodeObject)
 	}
 	nodeObject["out_flow_nodes"] = outFlowNodeArray;
 }
+
+void Narrator::Runtime::MultiOutFlowNode::FromJSON(const nlohmann::json& nodeObject, const Narrator::Runtime::Graph* i_Graph)
+{
+	Narrator::Runtime::Node::FromJSON(nodeObject, i_Graph);
+	if (nodeObject.contains("out_flow_nodes"))
+	{
+		const nlohmann::json outFlowNodeArray = nodeObject["out_flow_nodes"];
+		for (const nlohmann::json& outFlowNodeObject : outFlowNodeArray)
+		{
+			const std::uint32_t nodeID = outFlowNodeObject["id"];
+			Narrator::Runtime::Node* outFlowNode = Narrator::Runtime::GraphHelper::GetNode(i_Graph, nodeID);
+			m_OutFlowNodeMap.insert(std::pair<std::uint32_t, Narrator::Runtime::Node*>(nodeID, outFlowNode));
+		}
+	}
+	else
+	{
+		//TODO: #NarratorToDo 
+	}
+}
+
+/*
+void Narrator::Runtime::MultiOutFlowNode::FromJSON(const nlohmann::json& nodeObject, const std::vector<Narrator::Runtime::Node*> i_OutFlowNodeList)
+{
+	Narrator::Runtime::Node::FromJSON(nodeObject);
+	for (const Narrator::Runtime::Node* outFlowNode : i_OutFlowNodeList)
+	{
+		const std::uint32_t nodeID = outFlowNode->GetID();
+		m_OutFlowNodeMap.insert(std::pair<>(nodeID, outFlowNode))
+	}
+}
+*/
 

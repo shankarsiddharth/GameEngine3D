@@ -1,4 +1,5 @@
 #include "UniInFlowNode.h"
+#include "GraphHelper.h"
 
 Narrator::Runtime::UniInFlowNode::UniInFlowNode(TNodeType i_Type /*= TNodeType::kUniFlow*/,
 	TInFlowType i_InFlowType /*= TInFlowType::kUniInFlow*/)
@@ -35,4 +36,19 @@ void Narrator::Runtime::UniInFlowNode::ToJSON(nlohmann::json& nodeObject)
 		previousNode["type"] = m_PreviousNode->GetType();
 	}
 	nodeObject["previous_node"] = previousNode;
+}
+
+void Narrator::Runtime::UniInFlowNode::FromJSON(const nlohmann::json& nodeObject, const Narrator::Runtime::Graph* i_Graph)
+{
+	Narrator::Runtime::Node::FromJSON(nodeObject, i_Graph);
+	if (nodeObject.contains("previous_node"))
+	{
+		nlohmann::json previousNodeJSON = nodeObject["previous_node"];
+		std::uint32_t nodeID = previousNodeJSON["id"];
+		m_PreviousNode = Narrator::Runtime::GraphHelper::GetNode(i_Graph, nodeID);
+	}
+	else
+	{
+		m_PreviousNode = nullptr;
+	}
 }

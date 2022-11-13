@@ -154,10 +154,12 @@
     <ClCompile Include="Core\Edge.cpp" />
     <ClCompile Include="Core\EndNode.cpp" />
     <ClCompile Include="Core\Graph.cpp" />
+    <ClCompile Include="Core\GraphHelper.cpp" />
     <ClCompile Include="Core\KnotNode.cpp" />
     <ClCompile Include="Core\MultiInFlowNode.cpp" />
     <ClCompile Include="Core\MultiOutFlowNode.cpp" />
     <ClCompile Include="Core\Node.cpp" />
+    <ClCompile Include="Core\NodeFactory.cpp" />
     <ClCompile Include="Core\StartNode.cpp" />
     <ClCompile Include="Core\UniInFlowNode.cpp" />
     <ClCompile Include="Core\UniOutFlowNode.cpp" />
@@ -174,10 +176,12 @@
     <ClInclude Include="Core\Edge.h" />
     <ClInclude Include="Core\EndNode.h" />
     <ClInclude Include="Core\Graph.h" />
+    <ClInclude Include="Core\GraphHelper.h" />
     <ClInclude Include="Core\KnotNode.h" />
     <ClInclude Include="Core\MultiInFlowNode.h" />
     <ClInclude Include="Core\MultiOutFlowNode.h" />
     <ClInclude Include="Core\Node.h" />
+    <ClInclude Include="Core\NodeFactory.h" />
     <ClInclude Include="Core\NodeType.h" />
     <ClInclude Include="Core\StartNode.h" />
     <ClInclude Include="Core\UniInFlowNode.h" />

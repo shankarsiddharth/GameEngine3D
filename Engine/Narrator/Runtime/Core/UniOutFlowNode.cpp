@@ -36,3 +36,18 @@ void Narrator::Runtime::UniOutFlowNode::ToJSON(nlohmann::json& nodeObject)
 	}
 	nodeObject["next_node"] = nextNode;
 }
+
+void Narrator::Runtime::UniOutFlowNode::FromJSON(const nlohmann::json& nodeObject, const Narrator::Runtime::Graph* i_Graph)
+{
+	Narrator::Runtime::Node::FromJSON(nodeObject, i_Graph);
+	if (nodeObject.contains("next_node"))
+	{
+		nlohmann::json nextNodeObject = nodeObject["next_node"];
+		std::uint32_t nodeID = nextNodeObject["id"];
+		m_NextNode = Narrator::Runtime::GraphHelper::GetNode(i_Graph, nodeID);
+	}
+	else
+	{
+		m_NextNode = nullptr;
+	}
+}
