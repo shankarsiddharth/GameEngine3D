@@ -28,6 +28,7 @@
 
 Narrator::Runtime::Story::Story()
 	: Narrator::Runtime::Graph(),
+	m_IsParseErrorsPresent(false),
 	m_StartNode(nullptr),
 	m_EndNode(nullptr),
 	m_CurrentNode(nullptr),
@@ -222,18 +223,21 @@ void Narrator::Runtime::Story::SelectChoice(uint32_t i_ChoiceIndex)
 	}
 }
 
+bool Narrator::Runtime::Story::IsValid() const
+{
+	return !GetIsParseErrorsPresent();
+}
+
 Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Path)
 {
 	//TODO: #NarratorToDo #Important Check if the End is missing it throws error
 
-	std::map<std::size_t, std::string> FileLineMap;
-	//Line Number and Corresponding ParseMetaData Map
-	std::map<std::size_t, Narrator::Parser::ParseMetaData> ParseMetaDataMap;
+	std::map<std::uint64_t, std::string> FileLineMap;
 
 	//Read a text file
 	std::ifstream inFile(i_Path);
 	std::string line;
-	std::size_t lineNumber = 0;
+	std::uint64_t lineNumber = 0;
 	while (std::getline(inFile, line))
 	{
 		lineNumber++;
@@ -245,20 +249,22 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			FileLineMap.insert(std::pair<std::size_t, std::string>(lineNumber, lineTrim));
 		}
 	}
+	inFile.close();
 
 	//Create A Story Graph
 	//Narrator::Runtime::Story* story = new Narrator::Runtime::Story();
 	Narrator::Runtime::Story story;
 
 	//Parse the Content
-	for (std::map<std::size_t, std::string>::iterator fileLineMapIterator = FileLineMap.begin();
+	std::uint64_t previousFileLineNumber = 0;
+	for (std::map<std::uint64_t, std::string>::iterator fileLineMapIterator = FileLineMap.begin();
 		fileLineMapIterator != FileLineMap.end();
 		fileLineMapIterator++)
 	{
-		const std::size_t& fileLineNumber = fileLineMapIterator->first;
+		const std::uint64_t& fileLineNumber = fileLineMapIterator->first;
 		const std::string& fileLineString = fileLineMapIterator->second;
 
-		std::cout << fileLineMapIterator->first << " : " << fileLineString << std::endl;
+		//std::cout << fileLineMapIterator->first << " : " << fileLineString << std::endl;
 
 		if (Narrator::Runtime::StringUtils::StartsWith(fileLineString, Narrator::Runtime::StorySyntax::KNOT_DECLARATION))
 		{
@@ -271,39 +277,42 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			{
 				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error 
 				//TODO: #NarratorToDo #NarratorMetaDataSample see:#NarratorMetaData
-				std::string message = "Error Knot name cannot be empty";
-				std::cout << message << std::endl;
-				Narrator::Parser::ParseMetaData newParseMetaData(Narrator::Parser::TParseMessageType::kError, fileLineNumber, message);
-				ParseMetaDataMap.insert(std::pair<std::size_t, Narrator::Parser::ParseMetaData>(fileLineNumber, newParseMetaData));
+				std::string message = "Knot name cannot be empty";
+				story.AddParseMetaData(Narrator::Parser::TParseMessageType::kError, fileLineNumber, message);
 			}
 			else
 			{
 				if (Narrator::Runtime::StringUtils::IsValidKnotName(nameToCheck))
 				{
 					knotName = nameToCheck;
-					//TODO: #NarratorToDo If KnotName already Present Throw Parsing Error
+					//TODO: #NarratorToDo If KnotName already Present Throw Parser Error
 					if (story.HasKnotNode(knotName))
 					{
 						//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error 
-						std::cout << "Error Redefinition of knot name" << std::endl;
+						std::string message = "Redefinition of knot name : " + knotName;
+						story.AddParseMetaData(Narrator::Parser::TParseMessageType::kError, fileLineNumber, message);
 					}
 					else
 					{
 						if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kKnot)
 						{
-							//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parsing Error
-							std::cout << "At least One Line expected within knot" << std::endl;
+							std::string currentKnotName = story.GetCurrentNode()->GetName();
+							//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
+							std::string message = "At least One Line expected within knot : " + currentKnotName;
+							story.AddParseMetaData(Narrator::Parser::TParseMessageType::kError, previousFileLineNumber, message);
 						}
 
 						if (!story.m_IsAValidKnotSection)
 						{
-							//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parsing Error
-							std::cout << "Invalid Knot Flow. Missing DONE / END / Divert." << std::endl;
+							//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
+							std::string message = "Invalid Knot Flow. Missing DONE / END / Divert.";
+							story.AddParseMetaData(Narrator::Parser::TParseMessageType::kError, previousFileLineNumber, message);
 						}
 
 						//Create Knot Node
 						Narrator::Runtime::KnotNode* knotNode = new Narrator::Runtime::KnotNode();
 						knotNode->SetName(knotName);
+						knotNode->AddParseLineNumber(fileLineNumber);
 						story.AddNode(knotNode);
 						story.AddToKnotNodeMap(knotName, knotNode);
 
@@ -314,8 +323,9 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 				}
 				else
 				{
-					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parsing Error
-					std::cout << "Error in knot name" << std::endl;
+					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
+					std::string message = "Not a valid knot name : " + nameToCheck;
+					story.AddParseMetaData(Narrator::Parser::TParseMessageType::kError, fileLineNumber, message);
 				}
 			}
 			story.ClearLastDecisionNode();
@@ -326,8 +336,9 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			{
 				if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert)
 				{
-					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error
-					std::cout << "Unreachable Choice after a divert" << std::endl;
+					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Warning
+					std::string message = "Unreachable Choice after a divert.";
+					story.AddParseMetaData(Narrator::Parser::TParseMessageType::kWarning, fileLineNumber, message);
 				}
 			}
 			//Decision Point
@@ -344,7 +355,8 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 				if (choiceText.empty())
 				{
 					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
-					std::cout << "Choice Text cannot be empty" << std::endl;
+					std::string message = "Choice Text cannot be empty.";
+					story.AddParseMetaData(Narrator::Parser::TParseMessageType::kError, fileLineNumber, message);
 				}
 				else
 				{
@@ -357,8 +369,10 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			}
 			else
 			{
-				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Parse Error
+				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
 				std::cout << "Error while Creating Decision Node" << std::endl;
+				std::string message = "Error while Creating Decision Node.";
+				story.AddParseMetaData(Narrator::Parser::TParseMessageType::kError, fileLineNumber, message);
 			}
 
 		}
@@ -368,8 +382,9 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert
 				|| story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kEnd)
 			{
-				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error
-				std::cout << "Unreachable Divert after a divert/END/DONE." << std::endl;
+				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
+				std::string message = "Unreachable Divert after a Divert / END / DONE.";
+				story.AddParseMetaData(Narrator::Parser::TParseMessageType::kError, fileLineNumber, message);
 			}
 
 			std::string tLine = fileLineString;
@@ -383,7 +398,8 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			if (possibleDivertName.empty())
 			{
 				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
-				std::cout << "The Divert Name should not be empty" << std::endl;
+				std::string message = "The Divert Name should not be empty.";
+				story.AddParseMetaData(Narrator::Parser::TParseMessageType::kError, fileLineNumber, message);
 			}
 			else
 			{
@@ -429,6 +445,8 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 						//Add the Node to the story
 						if (divertNode)
 						{
+							divertNode->AddParseLineNumber(fileLineNumber);
+
 							//Cache Decision Node for Knot Validity
 							story.m_IsAValidKnotSection = true;
 
@@ -437,15 +455,18 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 						}
 						else
 						{
-							//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error : The Divert Node should not be nullptr
+							//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
 							std::cout << "The Divert Node should not be nullptr" << std::endl;
+							std::string message = "The Divert Node should not be nullptr.";
+							story.AddParseMetaData(Narrator::Parser::TParseMessageType::kError, fileLineNumber, message);
 						}
 					}
 				}
 				else
 				{
-					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error
-					std::cout << "Error - Not a Valid Divert Name" << std::endl;
+					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
+					std::string message = "Not a Valid Divert Name : " + possibleDivertName;
+					story.AddParseMetaData(Narrator::Parser::TParseMessageType::kError, fileLineNumber, message);
 				}
 			}
 		}
@@ -454,14 +475,17 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert
 				|| story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kEnd)
 			{
-				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error
-				std::cout << "Unreachable Dialogue after a divert / END / DONE" << std::endl;
+				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Warning 
+				std::string message = "Unreachable Dialogue after a divert / END / DONE.";
+				story.AddParseMetaData(Narrator::Parser::TParseMessageType::kWarning, fileLineNumber, message);
 			}
 
 			//Create Dialogue Node
 			Narrator::Runtime::DialogueNode* dialogueNode = new Narrator::Runtime::DialogueNode(fileLineString);
 			story.AddNode(dialogueNode);
 		}
+
+		previousFileLineNumber = fileLineNumber;
 	}
 
 
@@ -484,15 +508,21 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 				}
 				else
 				{
-					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error.
-					//TODO: #NarratorToDo Add A DebugData Struct that has additional info for the node such as line number
-					std::cout << "Divert Target not Found : " << divertTargetName << std::endl;
+					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
+					std::vector<std::uint64_t> lineNumbers = divertNode->GetParseLineNumberList();
+					for (const std::uint64_t& lineNumber : lineNumbers)
+					{
+						std::string message = "Divert Target not Found : " + divertTargetName;
+						story.AddParseMetaData(Narrator::Parser::TParseMessageType::kError, lineNumber, message);
+					}
 				}
 			}
 			else
 			{
-				//TODO: #NarratorToDoAssert Throw Parse Error. This should not be null.
-				std::cout << "DivertNode should not be null" << std::endl;
+				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
+				std::cout << "DivertNode should not be nullptr" << std::endl;
+				std::string message = "DivertNode should not be nullptr";
+				story.AddParseMetaData(Narrator::Parser::TParseMessageType::kCritical, 0, message);
 			}
 		}
 	}
@@ -510,14 +540,21 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 				const std::string& knotNodeName = knotNode->GetName();
 				if (!story.HasDivertNode(knotNodeName))
 				{
-					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error. / Warning
-					std::cout << "Unreachable Knot Section Found : " << knotNodeName << std::endl;
+					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Warning
+					std::vector<std::uint64_t> lineNumbers = knotNode->GetParseLineNumberList();
+					for (const std::uint64_t& lineNumber : lineNumbers)
+					{
+						std::string message = "Unreachable Knot Section Found : " + knotNodeName;
+						story.AddParseMetaData(Narrator::Parser::TParseMessageType::kWarning, lineNumber, message);
+					}
 				}
 			}
 			else
 			{
-				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error. This should not be null.
-				std::cout << "KnotNode should not be null" << std::endl;
+				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
+				std::cout << "KnotNode should not be nullptr" << std::endl;
+				std::string message = "KnotNode should not be nullptr";
+				story.AddParseMetaData(Narrator::Parser::TParseMessageType::kCritical, 0, message);
 			}
 		}
 	}
@@ -530,16 +567,18 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 		Narrator::Runtime::Node* nextNode = startNode->GetNextNode();
 		if (!nextNode)
 		{
-			//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Parse Error
-			std::cout << "Empty Document is invalid." << std::endl;
+			//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
+			std::string message = "Empty Document is invalid.";
+			story.AddParseMetaData(Narrator::Parser::TParseMessageType::kCritical, 0, message);
 		}
 		else
 		{
 			//Check For loose knots
 			if (!story.m_IsAValidKnotSection)
 			{
-				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parsing Error
-				std::cout << "Invalid Knot Flow. Missing DONE / END / Divert." << std::endl;
+				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
+				std::string message = "Invalid Knot Flow. Missing DONE / END / Divert.";
+				story.AddParseMetaData(Narrator::Parser::TParseMessageType::kError, previousFileLineNumber, message);
 			}
 		}
 	}
@@ -548,8 +587,73 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 	//Traverse the Graph to validate the flow
 	story.Traverse();
 
+	std::multimap<std::uint64_t, Narrator::Parser::ParseMetaData> parseMetaDataMap = story.GetParseMetaDataMap();
+	for (std::multimap<std::uint64_t, Narrator::Parser::ParseMetaData>::iterator multiMapIterator = parseMetaDataMap.begin();
+		multiMapIterator != parseMetaDataMap.end();
+		multiMapIterator++)
+	{
+		const std::uint64_t lineNumber = multiMapIterator->first;
+		const Narrator::Parser::ParseMetaData parseMetaData = multiMapIterator->second;
+		const Narrator::Parser::TParseMessageType parseMetaDataType = parseMetaData.GetParseMessageType();
+		std::string typeString = "";
+
+		switch (parseMetaDataType)
+		{
+		default:
+			break;
+		case Narrator::Parser::TParseMessageType::kTrace:
+		{
+			typeString = "Trace";
+		}
+		break;
+		case Narrator::Parser::TParseMessageType::kDebug:
+		{
+			typeString = "Debug";
+		}
+		break;
+		case Narrator::Parser::TParseMessageType::kInfo:
+		{
+			typeString = "Info";
+		}
+		break;
+		case Narrator::Parser::TParseMessageType::kWarning:
+		{
+			typeString = "Warning";
+		}
+		break;
+		case Narrator::Parser::TParseMessageType::kError:
+		{
+			story.SetIsParseErrorsPresent(true);
+			typeString = "Error";
+		}
+		break;
+		case Narrator::Parser::TParseMessageType::kCritical:
+		{
+			story.SetIsParseErrorsPresent(true);
+			typeString = "Critical";
+		}
+		break;
+		}
+
+		if (lineNumber != 0)
+		{
+			std::cout << lineNumber << " : " + typeString + " : " + parseMetaData.GetMessage() << std::endl;
+		}
+		else
+		{
+			std::cout << typeString + " : " + parseMetaData.GetMessage() << std::endl;
+		}
+	}
+
 	//TODO: #NarratorToDo Only Export the JSON file if there are no parsing errors
-// 	story.ToJSONFile("./TestScripts/story_test.json");
+	if (story.GetIsParseErrorsPresent())
+	{
+		std::cout << "Resolve the errors in the document." << std::endl;
+	}
+	else
+	{
+		story.ToJSONFile("./TestScripts/story_test.json");
+	}
 
 	return story;
 }
@@ -616,6 +720,16 @@ bool Narrator::Runtime::Story::FromJSONFile(const std::string& i_JSONFilePath)
 	Read();
 
 	return false;
+}
+
+bool Narrator::Runtime::Story::GetIsParseErrorsPresent() const
+{
+	return m_IsParseErrorsPresent;
+}
+
+void Narrator::Runtime::Story::SetIsParseErrorsPresent(bool i_IsParseErrorsPresent)
+{
+	m_IsParseErrorsPresent = i_IsParseErrorsPresent;
 }
 
 void Narrator::Runtime::Story::ToJSON(nlohmann::json& jsonRoot)
@@ -797,7 +911,7 @@ void Narrator::Runtime::Story::BreadthFirstSearch()
 			frontNode->MarkAsVisited();
 
 			//Print to standard output stream std::cout
-			std::cout << frontNode->ToString() << std::endl;
+			//std::cout << frontNode->ToString() << std::endl;
 
 			nodeQueue.pop();
 
@@ -965,4 +1079,14 @@ void Narrator::Runtime::Story::ReadChoices(Narrator::Runtime::Node* i_CurrentDec
 	{
 		//TODO: #NarratorToDoAssert #RuntimeError
 	}
+}
+
+void Narrator::Runtime::Story::AddParseMetaData(Narrator::Parser::TParseMessageType i_MessageType, std::uint64_t i_LineNumber, std::string i_Message)
+{
+	m_ParseMetaDataMap.insert(std::make_pair(i_LineNumber, Narrator::Parser::ParseMetaData(i_MessageType, i_LineNumber, i_Message)));
+}
+
+std::multimap<std::uint64_t, Narrator::Parser::ParseMetaData> Narrator::Runtime::Story::GetParseMetaDataMap() const
+{
+	return m_ParseMetaDataMap;
 }

@@ -7,7 +7,7 @@
 #include "DecisionNode.h"
 #include "DialogueNode.h"
 
-Narrator::Runtime::Node* Narrator::Runtime::NodeFactory::Create(Narrator::Runtime::TNodeType i_NodeType)
+Narrator::Runtime::Node* Narrator::Runtime::NodeFactory::Create(const Narrator::Runtime::TNodeType i_NodeType)
 {
 	switch (i_NodeType)
 	{
@@ -59,4 +59,59 @@ Narrator::Runtime::Node* Narrator::Runtime::NodeFactory::Create(Narrator::Runtim
 
 	return nullptr;
 }
+
+/*
+Narrator::Runtime::Node* Narrator::Runtime::NodeFactory::Create(const Narrator::Runtime::TNodeType i_NodeType, const std::uint32_t i_NodeID)
+{
+	switch (i_NodeType)
+	{
+	default:
+	case Narrator::Runtime::TNodeType::kNodeBase:
+	{
+		//TODO: #NarratorToDoAssert #RuntimeError
+	}
+	break;
+	case Narrator::Runtime::TNodeType::kStart:
+	{
+		return new Narrator::Runtime::StartNode();
+	}
+	break;
+	case Narrator::Runtime::TNodeType::kEnd:
+	{
+		return new Narrator::Runtime::EndNode();
+	}
+	break;
+	case Narrator::Runtime::TNodeType::kDialogue:
+	{
+		return new Narrator::Runtime::DialogueNode();
+	}
+	break;
+	case Narrator::Runtime::TNodeType::kDivert:
+	{
+		return new Narrator::Runtime::DivertNode();
+	}
+	break;
+	case Narrator::Runtime::TNodeType::kKnot:
+	{
+
+		return new Narrator::Runtime::KnotNode();
+	}
+	break;
+	case Narrator::Runtime::TNodeType::kChoice:
+	{
+
+		return new Narrator::Runtime::ChoiceNode();
+	}
+	break;
+	case Narrator::Runtime::TNodeType::kDecision:
+	{
+
+		return new Narrator::Runtime::DecisionNode();
+	}
+	break;
+	}
+
+	return nullptr;
+}
+*/
 

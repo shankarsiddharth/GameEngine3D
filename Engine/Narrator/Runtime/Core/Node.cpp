@@ -105,3 +105,13 @@ void Narrator::Runtime::Node::SetName(const std::string& i_Name)
 {
 	m_Name = i_Name;
 }
+
+std::vector<std::uint64_t> Narrator::Runtime::Node::GetParseLineNumberList() const
+{
+	return m_ParseLineNumberList;
+}
+
+void Narrator::Runtime::Node::AddParseLineNumber(std::uint64_t i_ParseLineNumber)
+{
+	m_ParseLineNumberList.emplace_back(i_ParseLineNumber);
+}

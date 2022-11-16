@@ -20,7 +20,6 @@ Make a choice:
 * Your Choice 3
 	Choice Dialogue 3 
 	-> END
-	-> Scene2
 *
 * Your Choice 4
 	Choice Dialogue 4
@@ -28,6 +27,23 @@ Make a choice:
 	->Scene3
 
 They are falling.
+
+=== Scene_1 ===
+Dummy Text for redefinition Scene1
+->DONE
+
+=== Scene10 ===
+
+=== Scene11 ===
+Dialogue for Scene11
+
+=== Scene12 ===
+Dialogue for Scene11
+->Scene15!
+
+=== Scene120 ===
+Dialogue for Scene11
+->Scene150
 
 === Scene2 ===
 Starting Dialogue of the Scene2
@@ -37,8 +53,11 @@ Starting Dialogue of the Scene2
 === Scene3 ===
 More dialogue for Scene3
 ->END
-->Scene2
 * wtewter
 === section ===
 === end_scene ===
+->END
+
+=== Scene! ===
+Not a Valid Knot Name
 ->END
