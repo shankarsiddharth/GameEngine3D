@@ -22,4 +22,8 @@ return
 		"Meshes/secondMesh.json",
 		"Meshes/thirdMesh.json",
 	},
+	stories =
+	{
+		"Stories/test_story.txt",
+	},
 }
