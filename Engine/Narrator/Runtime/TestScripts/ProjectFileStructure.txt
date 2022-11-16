@@ -1,0 +1,14 @@
+Graph/
+    - Node/
+        - NodeFiles
+    - Edge/
+        - EdgeFiles
+    - GraphFiles
+Story
+    - Node/
+        - StoryNodeFiles
+    - StoryFiles
+JSON
+    - json.hpp
+Utils
+    - StringUtils
