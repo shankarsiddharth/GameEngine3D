@@ -19,6 +19,11 @@ size_t Narrator::Runtime::Node::GetMaxNodeCount()
 	return std::numeric_limits<uint32_t>::max();
 }
 
+void Narrator::Runtime::Node::ResetNodeCount()
+{
+	m_CurrentIndex = 0;
+}
+
 Narrator::Runtime::Node::Node(TNodeType i_Type /*= TNodeType::kNone*/)
 	: m_ID(m_CurrentIndex++),
 	m_Type(i_Type),

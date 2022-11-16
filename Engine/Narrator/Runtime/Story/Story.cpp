@@ -37,6 +37,8 @@ Narrator::Runtime::Story::Story()
 	m_IsAValidKnotSection(false),
 	m_canRead(false)
 {
+	Narrator::Runtime::Node::ResetNodeCount();
+
 	m_StartNode = new Narrator::Runtime::StartNode();
 	AddToNodeMap(m_StartNode);
 	m_EndNode = new Narrator::Runtime::EndNode();
