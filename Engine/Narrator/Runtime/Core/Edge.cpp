@@ -3,14 +3,19 @@
 
 std::uint64_t Narrator::Runtime::Edge::m_CurrentIndex = 0;
 
-size_t Narrator::Runtime::Edge::GetTotalEdgeCount()
+std::uint64_t Narrator::Runtime::Edge::GetTotalEdgeCount()
 {
 	return m_CurrentIndex;
 }
 
-size_t Narrator::Runtime::Edge::GetMaxEdgeCount()
+std::uint64_t Narrator::Runtime::Edge::GetMaxEdgeCount()
 {
 	return std::numeric_limits<uint64_t>::max();
+}
+
+void Narrator::Runtime::Edge::ResetEdgeCount()
+{
+	m_CurrentIndex = 0;
 }
 
 Narrator::Runtime::Edge::Edge()

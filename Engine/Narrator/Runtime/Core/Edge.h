@@ -22,8 +22,9 @@ namespace Narrator
 
 		public:
 
-			static size_t GetTotalEdgeCount();
-			static size_t GetMaxEdgeCount();
+			static std::uint64_t GetTotalEdgeCount();
+			static std::uint64_t GetMaxEdgeCount();
+			static void ResetEdgeCount();
 
 			Edge();
 			Edge(Narrator::Runtime::Node* i_SourceNode, Narrator::Runtime::Node* i_DestinationNode);
