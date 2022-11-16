@@ -38,6 +38,7 @@ Narrator::Runtime::Story::Story()
 	m_canRead(false)
 {
 	Narrator::Runtime::Node::ResetNodeCount();
+	Narrator::Runtime::Edge::ResetEdgeCount();
 
 	m_StartNode = new Narrator::Runtime::StartNode();
 	AddToNodeMap(m_StartNode);
