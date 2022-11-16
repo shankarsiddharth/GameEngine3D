@@ -56,13 +56,11 @@ Narrator::Runtime::Story::~Story()
 
 bool Narrator::Runtime::Story::canRead()
 {
-	//TODO: #NarratorToDo Implementation
 	return m_canRead;
 }
 
 std::string Narrator::Runtime::Story::Read()
 {
-	//TODO: #NarratorToDo Implementation
 	std::string storyText;
 
 	if (m_CurrentNode)
@@ -174,13 +172,11 @@ std::string Narrator::Runtime::Story::Read()
 
 std::vector<std::string> Narrator::Runtime::Story::GetChoices()
 {
-	//TODO: #NarratorToDo Implementation
 	return m_CurrentChoices;
 }
 
 void Narrator::Runtime::Story::SelectChoice(uint32_t i_ChoiceIndex)
 {
-	//TODO: #NarratorToDo Implementation
 	if (m_CurrentChoices.size() > 0)
 	{
 		if (i_ChoiceIndex >= 0 && i_ChoiceIndex < m_CurrentChoices.size())
@@ -233,8 +229,6 @@ bool Narrator::Runtime::Story::IsValid() const
 
 Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_PathToRead, const std::string& i_PathToWrite)
 {
-	//TODO: #NarratorToDo #Important Check if the End is missing it throws error
-
 	std::map<std::uint64_t, std::string> FileLineMap;
 
 	//Read a text file
@@ -286,6 +280,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 				if (Narrator::Runtime::StringUtils::IsValidKnotName(nameToCheck))
 				{
 					knotName = nameToCheck;
+					//Check the Knot Node is already present
 					if (story.HasKnotNode(knotName))
 					{
 						std::string message = "Redefinition of knot name : " + knotName;
@@ -419,7 +414,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 						//Get the Divert Name
 						std::string divertName = possibleDivertName;
 
-						//TODO: #NarratorToDo Check the Divert Node is already present
+						//Check the Divert Node is already present
 						if (story.HasDivertNode(divertName))
 						{
 							//Get the existing Divert Node
@@ -628,7 +623,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 		}
 	}
 
-	//TODO: #NarratorToDo Only Export the JSON file if there are no parsing errors
+	//Only Export the JSON file if there are no parsing errors
 	if (story.GetIsParseErrorsPresent())
 	{
 		std::cout << "Resolve the errors in the document." << std::endl;
@@ -661,7 +656,7 @@ bool Narrator::Runtime::Story::ToJSONFile(const std::string& i_JSONFilePath)
 
 		ToJSON(storyJSON);
 
-		//TODO: #NarratorToDo Save the File
+		//Save the File
 		fout << std::setw(4) << storyJSON << std::endl;
 
 		fout.close();
@@ -678,8 +673,6 @@ bool Narrator::Runtime::Story::ToJSONFile(const std::string& i_JSONFilePath)
 
 bool Narrator::Runtime::Story::FromJSONFile(const std::string& i_JSONFilePath)
 {
-	//TODO: #NarratorToDo 
-
 	std::ifstream fin(i_JSONFilePath.c_str());
 
 	if (fin.is_open())
@@ -820,15 +813,11 @@ void Narrator::Runtime::Story::FromJSON(const nlohmann::json& jsonRoot)
 						case Narrator::Runtime::TNodeType::kStart:
 						{
 							m_StartNode->FromJSON(nodeElement, this);
-							//TODO: #NarratorToDo Links for the Start Node is Missing
-							//Create the node and fill up the link values
 						}
 						break;
 						case Narrator::Runtime::TNodeType::kEnd:
 						{
 							m_EndNode->FromJSON(nodeElement, this);
-							//TODO: #NarratorToDo Links for the Start Node is Missing
-							//Create the node and fill up the link values
 						}
 						break;
 						case Narrator::Runtime::TNodeType::kDialogue:
@@ -893,7 +882,7 @@ void Narrator::Runtime::Story::BreadthFirstSearch()
 			Narrator::Runtime::Node* frontNode = nodeQueue.front();
 			frontNode->MarkAsVisited();
 
-			//Print to standard output stream std::cout
+			//Print to standard output stream using std::cout
 			//std::cout << frontNode->ToString() << std::endl;
 
 			nodeQueue.pop();

@@ -58,7 +58,6 @@ namespace Narrator
 
 			std::map<std::uint32_t, std::vector<Narrator::Runtime::Node*>> m_AdjacencyListMap;
 
-			//TODO: #NarratorToDo Add to RedirectionNode Map and SubGraphStartNode Map
 			//Map of All Redirection Nodes
 			std::map<std::string, Narrator::Runtime::Node*> m_RedirectionNodeMap;
 			//Map of All SubGraphs' Start Nodes(Section/Knots)
