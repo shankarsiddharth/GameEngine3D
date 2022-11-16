@@ -131,6 +131,7 @@ namespace eae6320
 		eae6320::cResult InitializeShadingData();
 		eae6320::cResult InitializePairs();
 		eae6320::cResult InitializeGameObjects();
+		eae6320::cResult InitializeStory();
 				
 	};
 }

@@ -13,7 +13,8 @@
 #include <Engine/Graphics/MeshEffectPair.h>
 #include <Engine/Math/cMatrix_transformation.h>
 #include <Engine/Math/Functions.h>
-
+#include <Engine/StoryNarrator/Includes.h>
+#include <random>
 
 namespace
 {
@@ -36,11 +37,11 @@ const char* eae6320::cMyGame::GetPlatformName() const
 #elif defined( EAE6320_PLATFORM_GL )
 		"OpenGL"
 #endif
-//#ifdef _DEBUG
-//		" -- Debug"
-//#else
-//		" -- Release"
-//#endif
+		//#ifdef _DEBUG
+		//		" -- Debug"
+		//#else
+		//		" -- Release"
+		//#endif
 		;
 }
 
@@ -62,7 +63,7 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 		m_meshEffectPair[0].effect = m_animColorEffect;
 		m_meshEffectPair[1].effect = m_defaultEffect;
 	}
-	
+
 	//eae6320::Graphics::SubmitMeshEffectPairs(m_meshEffectPair, s_GameState.numberOfPairsToDraw);
 
 	m_sphereGameObject->Render();
@@ -163,7 +164,7 @@ void eae6320::cMyGame::UpdateSimulationBasedOnInput()
 
 void eae6320::cMyGame::UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
 {
-	
+
 }
 
 
@@ -196,7 +197,7 @@ void eae6320::cMyGame::UpdateBasedOnInput()
 eae6320::cResult eae6320::cMyGame::Initialize()
 {
 	auto result = eae6320::Results::Success;
-		
+
 	// Initialize the shading data
 	{
 		if (!(result = InitializeShadingData()))
@@ -220,6 +221,8 @@ eae6320::cResult eae6320::cMyGame::Initialize()
 
 	InitializeGameObjects();
 
+	InitializeStory();
+
 	s_GameState.numberOfPairsToDraw = s_numberOfPairsToRender;
 
 	m_camera = new eae6320::Camera::cCamera(eae6320::Math::sVector(0.0f, 0.0f, 10.0f));
@@ -239,7 +242,7 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 {
 
 	auto result = eae6320::Results::Success;
-	
+
 	if (m_planeMesh)
 	{
 		m_planeMesh->DecrementReferenceCount();
@@ -281,8 +284,8 @@ eae6320::cResult eae6320::cMyGame::CleanUp()
 			m_meshEffectPair[index].mesh->DecrementReferenceCount();
 			m_meshEffectPair[index].mesh = nullptr;
 		}
-		if(m_meshEffectPair[index].effect != nullptr)
-		{			
+		if (m_meshEffectPair[index].effect != nullptr)
+		{
 			m_meshEffectPair[index].effect->DecrementReferenceCount();
 			m_meshEffectPair[index].effect = nullptr;
 		}
@@ -328,14 +331,14 @@ eae6320::cResult eae6320::cMyGame::InitializeGeometry()
 
 	// Initialize Meshes
 	// Direct3D is left-handed	
-	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/plane.bmasset", m_planeMesh);	
-	
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/plane.bmasset", m_planeMesh);
+
 	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sonic.bmasset", m_sphereMesh);
-	
+
 	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sphere.bmasset", m_sphereLargeMesh);
 
 	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/helix.bmasset", m_helixMesh);
-	
+
 	return result;
 }
 
@@ -387,6 +390,58 @@ eae6320::cResult eae6320::cMyGame::InitializeGameObjects()
 
 	m_helixGameObject = new eae6320::GameFramework::cGameObject();
 	m_helixGameObject->AddMeshEffectPair(m_helixMesh, m_defaultEffect);
+
+	return result;
+}
+
+eae6320::cResult eae6320::cMyGame::InitializeStory()
+{
+	auto result = eae6320::Results::Success;
+
+	Narrator::Runtime::Story story;
+	story.FromJSONFile("data/stories/test_story.storyasset");
+
+	while (story.canRead())
+	{
+		while (story.canRead())
+		{
+			std::string dialogue = story.Read();
+			if (!dialogue.empty())
+			{
+				eae6320::Logging::OutputMessage(dialogue.c_str());
+				// 				std::cout << dialogue << std::endl;
+			}
+		}
+
+		std::vector<std::string> choices = story.GetChoices();
+		size_t choiceCount = choices.size();
+		if (choiceCount > 0)
+		{
+			size_t choiceIndex = 0;
+			for (const std::string& choiceText : choices)
+			{
+				const std::string message = "Choice Index: " + std::to_string(choiceIndex) + std::string("\t") + choiceText;
+// 				std::cout << message << std::endl;
+				eae6320::Logging::OutputMessage(message.c_str());
+				choiceIndex++;
+			}
+
+			std::random_device rd;  //Will be used to obtain a seed for the random number engine
+			std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+			std::uniform_int_distribution<size_t> distrib(0, (choiceCount - 1));
+
+			auto selectChoiceIndex = distrib(gen);
+			const std::string message = "Selecting Choice Index: " + std::to_string(selectChoiceIndex);
+// 			std::cout << message << std::endl;
+			eae6320::Logging::OutputMessage(message.c_str());
+			story.SelectChoice((std::uint32_t)(selectChoiceIndex));
+		}
+		else
+		{
+			//End of Story
+			break;
+		}
+	}
 
 	return result;
 }
