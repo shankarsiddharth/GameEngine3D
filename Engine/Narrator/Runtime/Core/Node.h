@@ -3,6 +3,8 @@
 #include "NodeType.h"
 
 #include <string>
+#include <cstdint>
+#include <vector>
 
 #include "../JSON/Includes.h"
 
@@ -41,6 +43,10 @@ namespace Narrator
 			bool IsVisited() const;
 			void MarkAsVisited();
 
+			//ParseMetaData - LineNumber
+			std::vector<std::uint64_t> GetParseLineNumberList() const;
+			void AddParseLineNumber(const std::uint64_t i_ParseLineNumber);
+
 			virtual void ToJSON(nlohmann::json& nodeObject);
 
 			virtual void FromJSON(const nlohmann::json& nodeObject, const Narrator::Runtime::Graph* i_Graph);
@@ -59,6 +65,11 @@ namespace Narrator
 
 			//Traversal Data
 			bool m_IsVisited;
+
+			//TODO: #NarratorToDo Save this information elsewhere 
+			//possibly in story parse meta data(Node pointer & LineNumber)
+			//ParseMetaData - LineNumber
+			std::vector<std::uint64_t> m_ParseLineNumberList;
 
 		private:
 
