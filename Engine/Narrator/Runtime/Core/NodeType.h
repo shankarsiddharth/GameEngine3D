@@ -24,7 +24,7 @@ namespace Narrator
 			//Choice Node
 			kChoice,
 			//Decision Node
-			kDesicion
+			kDecision
 		};
 
 		enum class TInFlowType : std::uint16_t
@@ -54,7 +54,7 @@ namespace Narrator
 			{Narrator::Runtime::TNodeType::kDivert, "kDivert"},
 			{Narrator::Runtime::TNodeType::kKnot, "kKnot"},
 			{Narrator::Runtime::TNodeType::kChoice, "kChoice"},
-			{Narrator::Runtime::TNodeType::kDesicion, "kDesicion"}
+			{Narrator::Runtime::TNodeType::kDecision, "kDecision"}
 			})
 
 		// map TInFlowType values to JSON as strings

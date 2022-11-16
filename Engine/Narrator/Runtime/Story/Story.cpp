@@ -31,8 +31,10 @@ Narrator::Runtime::Story::Story()
 	m_StartNode(nullptr),
 	m_EndNode(nullptr),
 	m_CurrentNode(nullptr),
-	m_LastDesicionNode(nullptr),
-	m_LastChoiceNode(nullptr)
+	m_LastDecisionNode(nullptr),
+	m_LastChoiceNode(nullptr),
+	m_IsAValidKnotSection(false),
+	m_canRead(false)
 {
 	m_StartNode = new Narrator::Runtime::StartNode();
 	AddToNodeMap(m_StartNode);
@@ -51,25 +53,173 @@ Narrator::Runtime::Story::~Story()
 bool Narrator::Runtime::Story::canRead()
 {
 	//TODO: #NarratorToDo Implementation
-	return false;
+	return m_canRead;
 }
 
 std::string Narrator::Runtime::Story::Read()
 {
 	//TODO: #NarratorToDo Implementation
-	return std::string("");
+	std::string storyText;
+
+	if (m_CurrentNode)
+	{
+		Narrator::Runtime::TNodeType currentNodeType = m_CurrentNode->GetType();
+		Narrator::Runtime::TOutFlowType outFlowType = m_CurrentNode->GetOutFlowType();
+
+		Narrator::Runtime::Node* nextNode = nullptr;
+
+		switch (outFlowType)
+		{
+		default:
+		case Narrator::Runtime::TOutFlowType::kNone:
+		{
+			//TODO: #NarratorToDoAssert #RuntimeError
+		}
+		break;
+		case Narrator::Runtime::TOutFlowType::kUniOutFlow:
+		{
+			Narrator::Runtime::UniOutFlowNode* outFlowNode = dynamic_cast<Narrator::Runtime::UniOutFlowNode*>(m_CurrentNode);
+			if (outFlowNode)
+			{
+				nextNode = outFlowNode->GetNextNode();
+			}
+			else
+			{
+				//TODO: #NarratorToDoAssert #RuntimeError
+			}
+		}
+		break;
+		case Narrator::Runtime::TOutFlowType::kMultiOutFlow:
+		{
+			SetCanRead(false);
+		}
+		break;
+		}
+
+		switch (currentNodeType)
+		{
+		default:
+		case Narrator::Runtime::TNodeType::kNodeBase:
+		{
+			//TODO: #NarratorToDoAssert #RuntimeError
+		}
+		break;
+		case Narrator::Runtime::TNodeType::kStart:
+		{
+			SetCanRead(true);
+			m_CurrentNode = nextNode;
+		}
+		break;
+		case Narrator::Runtime::TNodeType::kEnd:
+		{
+			SetCanRead(false);
+			m_CurrentNode = nextNode;
+			storyText = "\n" + std::string("End of Story");
+		}
+		break;
+		case Narrator::Runtime::TNodeType::kDialogue:
+		{
+			Narrator::Runtime::DialogueNode* dialogueNode = dynamic_cast<Narrator::Runtime::DialogueNode*>(m_CurrentNode);
+			if (dialogueNode)
+			{
+				storyText = dialogueNode->GetText();
+				m_CurrentNode = nextNode;
+			}
+			else
+			{
+				//TODO: #NarratorToDoAssert #RuntimeError
+			}
+		}
+		break;
+		case Narrator::Runtime::TNodeType::kDivert:
+		{
+			SetCanRead(true);
+			m_CurrentNode = nextNode;
+			return "" + Read();
+		}
+		break;
+		case Narrator::Runtime::TNodeType::kKnot:
+		{
+			SetCanRead(true);
+			m_CurrentNode = nextNode;
+			return "" + Read();
+		}
+		break;
+		case Narrator::Runtime::TNodeType::kChoice:
+		{
+			SetCanRead(true);
+			m_CurrentNode = nextNode;
+			return "" + Read();
+		}
+		break;
+		case Narrator::Runtime::TNodeType::kDecision:
+		{
+			ReadChoices(m_CurrentNode);
+			SetCanRead(false);
+		}
+		break;
+		}
+	}
+	else
+	{
+		//TODO: #NarratorToDoAssert #RuntimeError
+	}
+
+	return storyText;
 }
 
-std::vector<Narrator::Runtime::ChoiceNode*> Narrator::Runtime::Story::GetChoices()
+std::vector<std::string> Narrator::Runtime::Story::GetChoices()
 {
 	//TODO: #NarratorToDo Implementation
-	return {};
+	return m_CurrentChoices;
 }
 
 void Narrator::Runtime::Story::SelectChoice(uint32_t i_ChoiceIndex)
 {
-
 	//TODO: #NarratorToDo Implementation
+	if (m_CurrentChoices.size() > 0)
+	{
+		if (i_ChoiceIndex >= 0 && i_ChoiceIndex < m_CurrentChoices.size())
+		{
+			Narrator::Runtime::DecisionNode* decisionNode = dynamic_cast<Narrator::Runtime::DecisionNode*>(m_CurrentNode);
+			if (decisionNode)
+			{
+				std::map<std::uint32_t, Narrator::Runtime::Node*> outFlowNodeMap = decisionNode->GetOutFlowNodeMap();
+				std::uint32_t mapIndex = 0;
+				for (std::map<std::uint32_t, Narrator::Runtime::Node*>::iterator mapIterator = outFlowNodeMap.begin();
+					mapIterator != outFlowNodeMap.end();
+					mapIterator++, mapIndex++)
+				{
+					if (mapIndex == i_ChoiceIndex)
+					{
+						m_CurrentNode = mapIterator->second;
+						if (m_CurrentNode)
+						{
+							m_CurrentChoices.clear();
+							SetCanRead(true);
+							return;
+						}
+						else
+						{
+							//TODO: #NarratorToDoAssert #RuntimeError
+						}
+					}
+				}
+			}
+			else
+			{
+				//TODO: #NarratorToDoAssert #RuntimeError
+			}
+		}
+		else
+		{
+			//TODO: #NarratorToDoAssert #RuntimeError
+		}
+	}
+	else
+	{
+		//TODO: #NarratorToDoAssert #RuntimeError		
+	}
 }
 
 Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Path)
@@ -119,7 +269,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			std::string nameToCheck = Narrator::Runtime::StringUtils::TrimCopy(tLine);
 			if (nameToCheck.empty())
 			{
-				//TODO: #NarratorToDoAssert Throw Parser Error 
+				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error 
 				//TODO: #NarratorToDo #NarratorMetaDataSample see:#NarratorMetaData
 				std::string message = "Error Knot name cannot be empty";
 				std::cout << message << std::endl;
@@ -131,29 +281,40 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 				if (Narrator::Runtime::StringUtils::IsValidKnotName(nameToCheck))
 				{
 					knotName = nameToCheck;
-					//TODO: #NarratorToDo If KnotName already Preset Throw Parsing Error
+					//TODO: #NarratorToDo If KnotName already Present Throw Parsing Error
 					if (story.HasKnotNode(knotName))
 					{
-						//TODO: #NarratorToDoAssert Throw Parser Error 
+						//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error 
 						std::cout << "Error Redefinition of knot name" << std::endl;
 					}
 					else
 					{
 						if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kKnot)
 						{
-							//TODO: #NarratorToDoAssert Throw Parsing Error
+							//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parsing Error
 							std::cout << "At least One Line expected within knot" << std::endl;
 						}
+
+						if (!story.m_IsAValidKnotSection)
+						{
+							//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parsing Error
+							std::cout << "Invalid Knot Flow. Missing DONE / END / Divert." << std::endl;
+						}
+
 						//Create Knot Node
 						Narrator::Runtime::KnotNode* knotNode = new Narrator::Runtime::KnotNode();
 						knotNode->SetName(knotName);
 						story.AddNode(knotNode);
 						story.AddToKnotNodeMap(knotName, knotNode);
+
+
+						//Clear Knot Validity when creating a new Knot
+						story.m_IsAValidKnotSection = false;
 					}
 				}
 				else
 				{
-					//TODO: #NarratorToDoAssert Throw Parsing Error
+					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parsing Error
 					std::cout << "Error in knot name" << std::endl;
 				}
 			}
@@ -165,7 +326,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			{
 				if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert)
 				{
-					//TODO: #NarratorToDoAssert Throw Parse Error
+					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error
 					std::cout << "Unreachable Choice after a divert" << std::endl;
 				}
 			}
@@ -174,12 +335,15 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 
 			if (decisionNode)
 			{
+				//Cache Decision Node for Knot Validity
+				story.m_IsAValidKnotSection = true;
+
 				std::string tLine = fileLineString;
 				Narrator::Runtime::StringUtils::RemoveAll(tLine, Narrator::Runtime::StorySyntax::CHOICE_DECLARATION);
 				std::string choiceText = Narrator::Runtime::StringUtils::TrimCopy(tLine);
 				if (choiceText.empty())
 				{
-					//TODO: #NarratorToDoAssert Throw Parser Error
+					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
 					std::cout << "Choice Text cannot be empty" << std::endl;
 				}
 				else
@@ -193,7 +357,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			}
 			else
 			{
-				//TODO: #NarratorToDoAssert Parse Error
+				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Parse Error
 				std::cout << "Error while Creating Decision Node" << std::endl;
 			}
 
@@ -204,7 +368,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert
 				|| story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kEnd)
 			{
-				//TODO: #NarratorToDoAssert Throw Parse Error
+				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error
 				std::cout << "Unreachable Divert after a divert/END/DONE." << std::endl;
 			}
 
@@ -218,7 +382,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 
 			if (possibleDivertName.empty())
 			{
-				//TODO: #NarratorToDoAssert Throw Parser Error
+				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parser Error
 				std::cout << "The Divert Name should not be empty" << std::endl;
 			}
 			else
@@ -227,11 +391,17 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 				{
 					if (Narrator::Runtime::StringUtils::StartsWithIgnoreCase(possibleDivertName, Narrator::Runtime::StorySyntax::END_DECLARATION))
 					{
+						//Cache Decision Node for Knot Validity
+						story.m_IsAValidKnotSection = true;
+
 						//End Node
 						story.LinkEndNode();
 					}
 					else if (Narrator::Runtime::StringUtils::StartsWithIgnoreCase(possibleDivertName, Narrator::Runtime::StorySyntax::DONE_DECLARATION))
 					{
+						//Cache Decision Node for Knot Validity
+						story.m_IsAValidKnotSection = true;
+
 						//Done Node is a divert node that redirects to the end node by default
 						story.LinkEndNode();
 					}
@@ -259,19 +429,22 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 						//Add the Node to the story
 						if (divertNode)
 						{
+							//Cache Decision Node for Knot Validity
+							story.m_IsAValidKnotSection = true;
+
 							story.AddNode(divertNode);
 							story.AddToDivertNodeMap(divertName, divertNode);
 						}
 						else
 						{
-							//TODO: #NarratorToDoAssert Throw Parse Error : The Divert Node should not be nullptr
+							//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error : The Divert Node should not be nullptr
 							std::cout << "The Divert Node should not be nullptr" << std::endl;
 						}
 					}
 				}
 				else
 				{
-					//TODO: #NarratorToDoAssert Throw Parse Error
+					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error
 					std::cout << "Error - Not a Valid Divert Name" << std::endl;
 				}
 			}
@@ -281,7 +454,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 			if (story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kDivert
 				|| story.GetCurrentNode()->GetType() == Narrator::Runtime::TNodeType::kEnd)
 			{
-				//TODO: #NarratorToDoAssert Throw Parse Error
+				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error
 				std::cout << "Unreachable Dialogue after a divert / END / DONE" << std::endl;
 			}
 
@@ -292,41 +465,91 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 	}
 
 
-	std::map<std::string, Narrator::Runtime::Node*> divertNodeMap = story.GetDivertNodeMap();
-	//Check the Validity of the Divert Nodes
-	for (std::map<std::string, Narrator::Runtime::Node*>::iterator divertNodeMapIterator = divertNodeMap.begin();
-		divertNodeMapIterator != divertNodeMap.end();
-		divertNodeMapIterator++)
 	{
-		Narrator::Runtime::DivertNode* divertNode = dynamic_cast<Narrator::Runtime::DivertNode*>(divertNodeMapIterator->second);
-		if (divertNode)
+		std::map<std::string, Narrator::Runtime::Node*> divertNodeMap = story.GetDivertNodeMap();
+		//Check the Validity of the Divert Nodes
+		for (std::map<std::string, Narrator::Runtime::Node*>::iterator divertNodeMapIterator = divertNodeMap.begin();
+			divertNodeMapIterator != divertNodeMap.end();
+			divertNodeMapIterator++)
 		{
-			std::string divertTargetName = divertNode->GetTargetNodeName();
-			if (story.HasKnotNode(divertTargetName))
+			Narrator::Runtime::DivertNode* divertNode = dynamic_cast<Narrator::Runtime::DivertNode*>(divertNodeMapIterator->second);
+			if (divertNode)
 			{
-				Narrator::Runtime::KnotNode* knotNode = dynamic_cast<Narrator::Runtime::KnotNode*>(story.GetKnotNode(divertTargetName));
-				story.AddNodeLink(divertNode, knotNode);
-				divertNode->SetTargetNode(knotNode);
+				std::string divertTargetName = divertNode->GetTargetNodeName();
+				if (story.HasKnotNode(divertTargetName))
+				{
+					Narrator::Runtime::KnotNode* knotNode = dynamic_cast<Narrator::Runtime::KnotNode*>(story.GetKnotNode(divertTargetName));
+					story.AddNodeLink(divertNode, knotNode);
+					divertNode->SetTargetNode(knotNode);
+				}
+				else
+				{
+					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error.
+					//TODO: #NarratorToDo Add A DebugData Struct that has additional info for the node such as line number
+					std::cout << "Divert Target not Found : " << divertTargetName << std::endl;
+				}
 			}
 			else
 			{
-				//TODO: #NarratorToDoAssert Throw Parse Error.
-				//TODO: #NarratorToDo Add A DebugData Struct that has additional info for the node such as line number
-				std::cout << "Divert Target not Found : " << divertTargetName << std::endl;
+				//TODO: #NarratorToDoAssert Throw Parse Error. This should not be null.
+				std::cout << "DivertNode should not be null" << std::endl;
 			}
+		}
+	}
+
+	{
+		std::map<std::string, Narrator::Runtime::Node*> knotNodeMap = story.GetKnotNodeMap();
+		//Check the Reachability of the Knot Nodes
+		for (std::map<std::string, Narrator::Runtime::Node*>::iterator knotNodeMapIterator = knotNodeMap.begin();
+			knotNodeMapIterator != knotNodeMap.end();
+			knotNodeMapIterator++)
+		{
+			Narrator::Runtime::KnotNode* knotNode = dynamic_cast<Narrator::Runtime::KnotNode*>(knotNodeMapIterator->second);
+			if (knotNode)
+			{
+				const std::string& knotNodeName = knotNode->GetName();
+				if (!story.HasDivertNode(knotNodeName))
+				{
+					//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error. / Warning
+					std::cout << "Unreachable Knot Section Found : " << knotNodeName << std::endl;
+				}
+			}
+			else
+			{
+				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parse Error. This should not be null.
+				std::cout << "KnotNode should not be null" << std::endl;
+			}
+		}
+	}
+
+
+	//Check for Empty Document
+	Narrator::Runtime::StartNode* startNode = dynamic_cast<Narrator::Runtime::StartNode*>(story.m_StartNode);
+	if (startNode)
+	{
+		Narrator::Runtime::Node* nextNode = startNode->GetNextNode();
+		if (!nextNode)
+		{
+			//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Parse Error
+			std::cout << "Empty Document is invalid." << std::endl;
 		}
 		else
 		{
-			//TODO: #NarratorToDoAssert Throw Parse Error. This should not be null.
-			std::cout << "DivertNode should not be null" << std::endl;
+			//Check For loose knots
+			if (!story.m_IsAValidKnotSection)
+			{
+				//TODO: #NarratorToDoAssert #NarratorToDoAssertParse Throw Parsing Error
+				std::cout << "Invalid Knot Flow. Missing DONE / END / Divert." << std::endl;
+			}
 		}
 	}
+
 
 	//Traverse the Graph to validate the flow
 	story.Traverse();
 
 	//TODO: #NarratorToDo Only Export the JSON file if there are no parsing errors
-	story.ToJSONFile("./TestScripts/story_test.json");
+// 	story.ToJSONFile("./TestScripts/story_test.json");
 
 	return story;
 }
@@ -386,6 +609,11 @@ bool Narrator::Runtime::Story::FromJSONFile(const std::string& i_JSONFilePath)
 	{
 		std::cout << "Could not read to file" << std::endl;
 	}
+
+	//TODO: #NarratorToDo Reset Story Read State
+	m_CurrentNode = m_StartNode;
+	m_CurrentChoices.clear();
+	Read();
 
 	return false;
 }
@@ -510,7 +738,7 @@ void Narrator::Runtime::Story::FromJSON(const nlohmann::json& jsonRoot)
 						case Narrator::Runtime::TNodeType::kDivert:
 						case Narrator::Runtime::TNodeType::kKnot:
 						case Narrator::Runtime::TNodeType::kChoice:
-						case Narrator::Runtime::TNodeType::kDesicion:
+						case Narrator::Runtime::TNodeType::kDecision:
 						{
 							Narrator::Runtime::Node* currentNode = m_NodeMap[nodeElement["id"]];
 							currentNode->FromJSON(nodeElement, this);
@@ -540,7 +768,7 @@ void Narrator::Runtime::Story::FromJSON(const nlohmann::json& jsonRoot)
 	}
 
 	Traverse();
-	
+
 	std::cout << "Read Complete" << std::endl;
 }
 
@@ -676,24 +904,65 @@ std::map<std::string, Narrator::Runtime::Node*> Narrator::Runtime::Story::GetKno
 
 Narrator::Runtime::Node* Narrator::Runtime::Story::GetLastDecisionNode() const
 {
-	return m_LastDesicionNode;
+	return m_LastDecisionNode;
 }
 
 Narrator::Runtime::Node* Narrator::Runtime::Story::CreateDecisionNode()
 {
-	if (m_LastDesicionNode == nullptr)
+	if (m_LastDecisionNode == nullptr)
 	{
 		Narrator::Runtime::DecisionNode* newDecisionNode = new Narrator::Runtime::DecisionNode();
 		AddEdge(m_CurrentNode, newDecisionNode);
 
 		m_CurrentNode = newDecisionNode;
-		m_LastDesicionNode = newDecisionNode;
+		m_LastDecisionNode = newDecisionNode;
 	}
 
-	return m_LastDesicionNode;
+	return m_LastDecisionNode;
 }
 
 void Narrator::Runtime::Story::ClearLastDecisionNode()
 {
-	m_LastDesicionNode = nullptr;
+	m_LastDecisionNode = nullptr;
+}
+
+bool Narrator::Runtime::Story::GetCanRead() const
+{
+	return m_canRead;
+}
+
+void Narrator::Runtime::Story::SetCanRead(bool i_CanRead)
+{
+	m_canRead = i_CanRead;
+}
+
+void Narrator::Runtime::Story::ReadChoices(Narrator::Runtime::Node* i_CurrentDecisionNode)
+{
+	Narrator::Runtime::DecisionNode* decisionNode = dynamic_cast<Narrator::Runtime::DecisionNode*>(i_CurrentDecisionNode);
+	if (decisionNode)
+	{
+		m_CurrentChoices.clear();
+
+		std::map<std::uint32_t, Narrator::Runtime::Node*> outFlowNodeMap = decisionNode->GetOutFlowNodeMap();
+
+		for (std::map<std::uint32_t, Narrator::Runtime::Node*>::iterator mapIterator = outFlowNodeMap.begin();
+			mapIterator != outFlowNodeMap.end();
+			mapIterator++)
+		{
+			Narrator::Runtime::ChoiceNode* choiceNode = dynamic_cast<Narrator::Runtime::ChoiceNode*>(mapIterator->second);
+			if (choiceNode)
+			{
+				std::string choiceText = choiceNode->GetChoiceText();
+				m_CurrentChoices.emplace_back(choiceText);
+			}
+			else
+			{
+				//TODO: #NarratorToDoAssert #RuntimeError
+			}
+		}
+	}
+	else
+	{
+		//TODO: #NarratorToDoAssert #RuntimeError
+	}
 }
