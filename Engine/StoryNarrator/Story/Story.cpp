@@ -227,7 +227,7 @@ bool Narrator::Runtime::Story::IsValid() const
 	return !GetIsParseErrorsPresent();
 }
 
-Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_PathToRead, const std::string& i_PathToWrite)
+Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_PathToRead, const std::string& i_PathToWrite, bool i_IsPlayMode/*= false*/)
 {
 	std::map<std::uint64_t, std::string> FileLineMap;
 
@@ -235,18 +235,25 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 	std::ifstream inFile(i_PathToRead);
 	std::string line;
 	std::uint64_t lineNumber = 0;
-	while (std::getline(inFile, line))
+	if (inFile.is_open())
 	{
-		lineNumber++;
-		std::istringstream iss(line);
-		// 		std::cout << line << std::endl;
-		std::string  lineTrim = Narrator::Runtime::StringUtils::TrimCopy(line);
-		if (!lineTrim.empty())
+		while (std::getline(inFile, line))
 		{
-			FileLineMap.insert(std::pair<std::uint64_t, std::string>(lineNumber, lineTrim));
+			lineNumber++;
+			std::istringstream iss(line);
+			// 		std::cout << line << std::endl;
+			std::string  lineTrim = Narrator::Runtime::StringUtils::TrimCopy(line);
+			if (!lineTrim.empty())
+			{
+				FileLineMap.insert(std::pair<std::uint64_t, std::string>(lineNumber, lineTrim));
+			}
 		}
+		inFile.close();
 	}
-	inFile.close();
+	else
+	{
+		//TODO: #NarratorToDoAssert #RuntimeError Error opening file
+	}
 
 	//Create A Story Graph
 	//Narrator::Runtime::Story* story = new Narrator::Runtime::Story();
@@ -640,11 +647,46 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 void Narrator::Runtime::Story::Play()
 {
 	Narrator::Runtime::Node* currentNode = m_StartNode;
-	while (currentNode->GetType() != TNodeType::kEnd)
+	while (canRead())
 	{
+		while (canRead())
+		{
+			std::string dialogue = Read();
+			if (!dialogue.empty())
+			{
+				std::cout << dialogue << std::endl;
+			}
+		}
 
+		std::vector<std::string> choices = GetChoices();
+		size_t choiceCount = choices.size();
+		if (choiceCount > 0)
+		{
+			size_t choiceIndex = 0;
+			for (const std::string& choiceText : choices)
+			{
+				std::cout << "Choice Index: " << choiceIndex << "\t" << choiceText << std::endl;
+				choiceIndex++;
+			}
+
+			size_t selectChoiceIndex = 0;			
+			do
+			{
+				std::cout << "Select Choice Index: ";
+				std::cin >> selectChoiceIndex;
+			} while ((selectChoiceIndex < 0) || (selectChoiceIndex >= choiceCount));				
+
+			
+			std::cout << "Selecting Choice Index: " << selectChoiceIndex << std::endl;
+			SelectChoice((std::uint32_t)selectChoiceIndex);
+		}
+		else
+		{
+			//End of Story
+			break;
+		}
 	}
-	std::cout << "End of Story" << std::endl;
+	//std::cout << "End of Story" << std::endl;
 }
 
 bool Narrator::Runtime::Story::ToJSONFile(const std::string& i_JSONFilePath)
