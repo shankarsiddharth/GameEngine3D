@@ -231,14 +231,14 @@ bool Narrator::Runtime::Story::IsValid() const
 	return !GetIsParseErrorsPresent();
 }
 
-Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Path)
+Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_PathToRead, const std::string& i_PathToWrite)
 {
 	//TODO: #NarratorToDo #Important Check if the End is missing it throws error
 
 	std::map<std::uint64_t, std::string> FileLineMap;
 
 	//Read a text file
-	std::ifstream inFile(i_Path);
+	std::ifstream inFile(i_PathToRead);
 	std::string line;
 	std::uint64_t lineNumber = 0;
 	while (std::getline(inFile, line))
@@ -655,7 +655,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 	}
 	else
 	{
-		story.ToJSONFile("./TestScripts/story_test.json");
+		story.ToJSONFile(i_PathToWrite);
 	}
 
 	return story;

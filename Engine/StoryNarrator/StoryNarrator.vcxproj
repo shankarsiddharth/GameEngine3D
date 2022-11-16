@@ -190,7 +190,7 @@
     <ClInclude Include="Core\StartNode.h" />
     <ClInclude Include="Core\UniInFlowNode.h" />
     <ClInclude Include="Core\UniOutFlowNode.h" />
-    <ClInclude Include="JSONIncludes.h" />
+    <ClInclude Include="Includes.h" />
     <ClInclude Include="JSON\Includes.h" />
     <ClInclude Include="Story\ParseMessageType.h" />
     <ClInclude Include="Story\ParseMetaData.h" />

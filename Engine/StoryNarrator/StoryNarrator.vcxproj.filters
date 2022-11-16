@@ -144,6 +144,6 @@
     <ClInclude Include="JSON\Includes.h">
       <Filter>JSON</Filter>
     </ClInclude>
-    <ClInclude Include="JSONIncludes.h" />
+    <ClInclude Include="Includes.h" />
   </ItemGroup>
 </Project>
