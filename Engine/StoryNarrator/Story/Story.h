@@ -18,7 +18,7 @@ namespace Narrator
 
 		public:
 
-			static Narrator::Runtime::Story Parse(const std::string& i_PathToRead, const std::string& i_PathToWrite);
+			static Narrator::Runtime::Story Parse(const std::string& i_PathToRead, const std::string& i_PathToWrite, bool i_IsPlayMode = false);
 
 			Story();
 			virtual ~Story();
