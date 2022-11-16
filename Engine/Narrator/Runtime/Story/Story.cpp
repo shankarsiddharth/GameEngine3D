@@ -249,7 +249,7 @@ Narrator::Runtime::Story Narrator::Runtime::Story::Parse(const std::string& i_Pa
 		std::string  lineTrim = Narrator::Runtime::StringUtils::TrimCopy(line);
 		if (!lineTrim.empty())
 		{
-			FileLineMap.insert(std::pair<std::size_t, std::string>(lineNumber, lineTrim));
+			FileLineMap.insert(std::pair<std::uint64_t, std::string>(lineNumber, lineTrim));
 		}
 	}
 	inFile.close();
