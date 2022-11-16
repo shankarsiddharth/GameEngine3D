@@ -79,7 +79,6 @@ namespace Narrator
 			void SetIsParseErrorsPresent(bool i_IsParseErrorsPresent);
 
 			//Parser Meta Data
-			//TODO: #NarratorToDo #NarratorMetaData see:#NarratorMetaDataSample Add a data structure to keep track of the line numbers for the nodes to diaplay the error
 			//Line Number and Corresponding ParseMetaData Map
 			std::multimap<std::uint64_t, Narrator::Parser::ParseMetaData> m_ParseMetaDataMap;
 			bool m_IsParseErrorsPresent;
