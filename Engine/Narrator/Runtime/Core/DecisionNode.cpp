@@ -1,9 +1,9 @@
 #include "DecisionNode.h"
 
 Narrator::Runtime::DecisionNode::DecisionNode()
-	:Narrator::Runtime::Node(TNodeType::kDesicion),
-	Narrator::Runtime::UniInFlowNode(TNodeType::kDesicion),
-	Narrator::Runtime::MultiOutFlowNode(TNodeType::kDesicion)
+	:Narrator::Runtime::Node(TNodeType::kDecision),
+	Narrator::Runtime::UniInFlowNode(TNodeType::kDecision),
+	Narrator::Runtime::MultiOutFlowNode(TNodeType::kDecision)
 {
 
 }

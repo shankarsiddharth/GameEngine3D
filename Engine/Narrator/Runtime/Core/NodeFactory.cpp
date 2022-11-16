@@ -49,7 +49,7 @@ Narrator::Runtime::Node* Narrator::Runtime::NodeFactory::Create(Narrator::Runtim
 		return new Narrator::Runtime::ChoiceNode();
 	}
 	break;
-	case Narrator::Runtime::TNodeType::kDesicion:
+	case Narrator::Runtime::TNodeType::kDecision:
 	{
 
 		return new Narrator::Runtime::DecisionNode();

@@ -24,7 +24,7 @@ namespace Narrator
 			bool canRead();
 			std::string Read();
 
-			std::vector<Narrator::Runtime::ChoiceNode*> GetChoices();
+			std::vector<std::string> GetChoices();
 			void SelectChoice(uint32_t i_ChoiceIndex);
 
 			static Narrator::Runtime::Story Parse(const std::string& i_Path);
@@ -34,7 +34,7 @@ namespace Narrator
 			bool ToJSONFile(const std::string& i_JSONFilePath);
 
 			bool FromJSONFile(const std::string& i_JSONFilePath);
-
+						
 		protected:
 
 			void ToJSON(nlohmann::json& jsonRoot) override;
@@ -65,18 +65,29 @@ namespace Narrator
 			Narrator::Runtime::Node* CreateDecisionNode();
 			void ClearLastDecisionNode();
 
+			bool GetCanRead() const;
+			void SetCanRead(bool i_CanRead);
+
+			void ReadChoices(Narrator::Runtime::Node* i_CurrentDecisionNode);
+
 			//Parser Meta Data
-			//TODO: #NarratorToDo #NarratorMetaData see:#NarratorMetaDataSample Add a data structure to keep track of the line numbers for the nodes to diaplsy the error
+			//TODO: #NarratorToDo #NarratorMetaData see:#NarratorMetaDataSample Add a data structure to keep track of the line numbers for the nodes to diaplay the error
 
 			//Story State
 			Narrator::Runtime::Node* m_StartNode;
 			Narrator::Runtime::Node* m_EndNode;
 			Narrator::Runtime::Node* m_CurrentNode;
 
-			Narrator::Runtime::Node* m_LastDesicionNode;
+			Narrator::Runtime::Node* m_LastDecisionNode;
 			Narrator::Runtime::Node* m_LastChoiceNode;
 			std::uint32_t m_CurrentChoiceIndex = 0;
 
+			bool m_IsAValidKnotSection;
+
+			//Runtime Story State
+			bool m_canRead;
+			std::vector<std::string> m_CurrentChoices;
+			
 		};
 	}
 }
