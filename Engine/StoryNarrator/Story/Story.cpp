@@ -54,7 +54,7 @@ Narrator::Runtime::Story::~Story()
 
 }
 
-bool Narrator::Runtime::Story::canRead()
+bool Narrator::Runtime::Story::canRead()  const
 {
 	return m_canRead;
 }
@@ -170,7 +170,7 @@ std::string Narrator::Runtime::Story::Read()
 	return storyText;
 }
 
-std::vector<std::string> Narrator::Runtime::Story::GetChoices()
+std::vector<std::string> Narrator::Runtime::Story::GetChoices() const
 {
 	return m_CurrentChoices;
 }

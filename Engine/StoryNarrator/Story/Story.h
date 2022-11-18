@@ -24,17 +24,17 @@ namespace Narrator
 			virtual ~Story();
 
 			//Runtime Methods
-			bool canRead();
+			bool canRead() const;
 			std::string Read();
 
-			std::vector<std::string> GetChoices();
+			std::vector<std::string> GetChoices() const;
 			void SelectChoice(uint32_t i_ChoiceIndex);
+
+			bool FromJSONFile(const std::string& i_JSONFilePath);
 
 			bool IsValid() const;
 
 			void Play();
-
-			bool FromJSONFile(const std::string& i_JSONFilePath);
 
 		protected:
 
