@@ -108,6 +108,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StoryBuilder", "Tools\Story
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StoryNarratorCommandLine", "Engine\StoryNarratorCommandLine\StoryNarratorCommandLine.vcxproj", "{DDE0E578-69AC-4B2C-993A-9FA63E0E20AE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imgui", "External\imgui\imgui.vcxproj", "{9B8EF19B-25B2-4148-AEFA-0AB3370AB5ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -402,6 +404,14 @@ Global
 		{DDE0E578-69AC-4B2C-993A-9FA63E0E20AE}.Release|x64.Build.0 = Release|x64
 		{DDE0E578-69AC-4B2C-993A-9FA63E0E20AE}.Release|x86.ActiveCfg = Release|Win32
 		{DDE0E578-69AC-4B2C-993A-9FA63E0E20AE}.Release|x86.Build.0 = Release|Win32
+		{9B8EF19B-25B2-4148-AEFA-0AB3370AB5ED}.Debug|x64.ActiveCfg = Debug|x64
+		{9B8EF19B-25B2-4148-AEFA-0AB3370AB5ED}.Debug|x64.Build.0 = Debug|x64
+		{9B8EF19B-25B2-4148-AEFA-0AB3370AB5ED}.Debug|x86.ActiveCfg = Debug|Win32
+		{9B8EF19B-25B2-4148-AEFA-0AB3370AB5ED}.Debug|x86.Build.0 = Debug|Win32
+		{9B8EF19B-25B2-4148-AEFA-0AB3370AB5ED}.Release|x64.ActiveCfg = Release|x64
+		{9B8EF19B-25B2-4148-AEFA-0AB3370AB5ED}.Release|x64.Build.0 = Release|x64
+		{9B8EF19B-25B2-4148-AEFA-0AB3370AB5ED}.Release|x86.ActiveCfg = Release|Win32
+		{9B8EF19B-25B2-4148-AEFA-0AB3370AB5ED}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -444,6 +454,7 @@ Global
 		{1D8FD6E2-9B7C-4025-87C1-8EBF00F7D4D7} = {E5C51EF7-81D3-4030-A4CE-0D2D666CEF4F}
 		{5D202B8D-5167-4AC1-8C05-0F2C9F36F101} = {31B05C03-4BB2-4A0D-B621-B41DA6B0F57E}
 		{DDE0E578-69AC-4B2C-993A-9FA63E0E20AE} = {E5C51EF7-81D3-4030-A4CE-0D2D666CEF4F}
+		{9B8EF19B-25B2-4148-AEFA-0AB3370AB5ED} = {EE37D457-6F3F-4596-B682-FC8CB683E326}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A89F366F-0B7F-464F-90A8-A4828B273298}
