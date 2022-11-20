@@ -52,7 +52,7 @@ eae6320::cResult eae6320::Graphics::DearImGui::CleanUpImGui()
 	// Cleanup
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
-	//ImGui::DestroyContext();
+	ImGui::DestroyContext();
 
 	return result;
 }
