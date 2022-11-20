@@ -446,3 +446,9 @@ eae6320::cResult eae6320::cMyGame::InitializeStory()
 	return result;
 }
 
+void eae6320::cMyGame::GetDefaultInitialResolution(uint16_t& o_width, uint16_t& o_height) const
+{
+	o_width = 1280;
+	o_height = 800;
+}
+
