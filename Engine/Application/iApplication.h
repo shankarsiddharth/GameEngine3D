@@ -192,6 +192,10 @@ namespace eae6320
 			virtual cResult Initialize() = 0;
 			virtual cResult CleanUp() = 0;
 
+			// ImGui UI
+			//=========
+			virtual void RenderImGuiUI();
+
 			// Data
 			//=====
 

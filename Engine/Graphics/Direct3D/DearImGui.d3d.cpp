@@ -5,7 +5,7 @@
 #include <External/imgui/backends/imgui_impl_win32.h>
 #include <External/imgui/backends/imgui_impl_dx11.h>
 
-eae6320::cResult eae6320::Graphics::DearImGui::InitializeImGuiPlatformRenderer(const sInitializationParameters& i_initializationParameters)
+eae6320::cResult eae6320::Graphics::DearImGui::InitializeImGuiPlatformRendererBackend(const sInitializationParameters& i_initializationParameters)
 {
 	auto result = Results::Success;
 
@@ -33,7 +33,7 @@ eae6320::cResult eae6320::Graphics::DearImGui::RenderImGui_DrawData()
 
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-	auto ImGui_IO = GetImGuiIO();
+	ImGuiIO& ImGui_IO = ImGui::GetIO();
 
 	// Update and Render additional Platform Windows
 	if (ImGui_IO.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
