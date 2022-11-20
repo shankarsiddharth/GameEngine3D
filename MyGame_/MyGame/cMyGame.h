@@ -132,7 +132,10 @@ namespace eae6320
 		eae6320::cResult InitializePairs();
 		eae6320::cResult InitializeGameObjects();
 		eae6320::cResult InitializeStory();
-				
+
+		void GetDefaultInitialResolution(uint16_t& o_width, uint16_t& o_height) const override;
+
+
 	};
 }
 
