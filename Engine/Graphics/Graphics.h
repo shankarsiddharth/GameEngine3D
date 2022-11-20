@@ -9,14 +9,10 @@
 //=========
 
 #include "Configuration.h"
+#include "InitializationParameters.h"
 
-#include <cstdint>
 #include <Engine/Results/Results.h>
 #include <Engine/Math/cMatrix_transformation.h>
-
-#if defined( EAE6320_PLATFORM_WINDOWS )
-	#include <Engine/Windows/Includes.h>
-#endif
 
 // Forward Declaration
 //==================
@@ -73,18 +69,6 @@ namespace eae6320
 
 		// Initialize / Clean Up
 		//----------------------
-
-		struct sInitializationParameters
-		{
-#if defined( EAE6320_PLATFORM_WINDOWS )
-			HWND mainWindow = NULL;
-	#if defined( EAE6320_PLATFORM_D3D )
-			uint16_t resolutionWidth = 0, resolutionHeight = 0;
-	#elif defined( EAE6320_PLATFORM_GL )
-			HINSTANCE thisInstanceOfTheApplication = NULL;
-	#endif
-#endif
-		};
 
 		cResult Initialize( const sInitializationParameters& i_initializationParameters );
 		cResult CleanUp();

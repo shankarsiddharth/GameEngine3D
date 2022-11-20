@@ -28,6 +28,9 @@
     <ClInclude Include="Windows\ExternalLibraries.win.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\External\imgui\imgui.vcxproj">
+      <Project>{9b8ef19b-25b2-4148-aefa-0ab3370ab5ed}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Asserts\Asserts.vcxproj">
       <Project>{464a6551-fca9-4027-bd9e-2b26914782ab}</Project>
     </ProjectReference>

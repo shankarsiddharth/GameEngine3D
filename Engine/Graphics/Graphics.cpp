@@ -9,11 +9,12 @@
 #include "cView.h"
 #include "MeshEffectPair.h"
 
+#include "DearImGui.h"
+
 #include <Engine/Asserts/Asserts.h>
 #include <Engine/Concurrency/cEvent.h>
 #include <Engine/Logging/Logging.h>
 #include <Engine/UserOutput/UserOutput.h>
-
 
 
 // Static Data
@@ -21,6 +22,7 @@
 
 namespace
 {
+
 	// View Data
 	//--------------
 
@@ -166,6 +168,10 @@ void eae6320::Graphics::RenderFrame()
 		}
 	}
 
+	eae6320::Graphics::DearImGui::CreateImGuiFrame();
+	eae6320::Graphics::DearImGui::RenderImGuiUI();
+	eae6320::Graphics::DearImGui::RenderImGuiFrame();
+
 	EAE6320_ASSERT(s_dataBeingRenderedByRenderThread);
 	auto* const dataRequiredToRenderFrame = s_dataBeingRenderedByRenderThread;
 
@@ -198,6 +204,8 @@ void eae6320::Graphics::RenderFrame()
 			dataRequiredToRenderFrame->meshEffectPair[index].mesh->Draw();
 		}
 	}	
+	
+	eae6320::Graphics::DearImGui::RenderImGui_DrawData();
 
 	s_View->Swap();
 
@@ -274,6 +282,16 @@ eae6320::cResult eae6320::Graphics::Initialize(const sInitializationParameters& 
 			return result;
 		}
 	}
+	
+	// Initialize the Dear ImGui
+	{
+		if (!(result = eae6320::Graphics::DearImGui::InitializeImGui(i_initializationParameters)))
+		{
+			EAE6320_ASSERTF(false, "Can't initialize ImGui");
+			return result;
+		}
+	}
+
 	// Initialize the shading data
 	{
 		if (!(result = InitializeShadingData()))
@@ -354,6 +372,8 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 			}
 		}
 	}
+
+	//result = eae6320::Graphics::DearImGui::CleanUpImGui();
 
 	return result;
 }
