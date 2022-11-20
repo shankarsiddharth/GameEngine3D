@@ -132,6 +132,9 @@
     <None Include="cRenderState.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\External\imgui\imgui.vcxproj">
+      <Project>{9b8ef19b-25b2-4148-aefa-0ab3370ab5ed}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\External\OpenGlExtensions\OpenGlExtensions.vcxproj">
       <Project>{433f6d20-943a-4d7b-bffe-bc9dfc932e6e}</Project>
     </ProjectReference>

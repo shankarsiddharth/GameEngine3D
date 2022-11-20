@@ -18,7 +18,7 @@ namespace eae6320
 
 			cResult CreateImGuiContext();
 			//Platform / Renderer Backend Specific 
-			cResult InitializeImGuiPlatformRenderer(const sInitializationParameters& i_initializationParameters);
+			cResult InitializeImGuiPlatformRendererBackend(const sInitializationParameters& i_initializationParameters);
 
 			cResult InitializeImGuiIO();
 			void InitializeImGuiStyle();
@@ -30,8 +30,6 @@ namespace eae6320
 			void RenderImGuiFrame();
 			//Platform / Renderer Backend Specific 
 			cResult RenderImGui_DrawData();
-
-			ImGuiIO& GetImGuiIO();
 		}
 	}
 }

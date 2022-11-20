@@ -79,9 +79,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScopeGuard", "Engine\ScopeGuard\ScopeGuard.vcxproj", "{B7ED3F7D-BFA1-42C9-9089-C6401FFDE3D4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphics", "Engine\Graphics\Graphics.vcxproj", "{181B6042-93D1-4FF5-96B9-A61104A53B8D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A5B86626-9CBF-461E-8440-4D2E12AF20E0} = {A5B86626-9CBF-461E-8440-4D2E12AF20E0}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BuildMyGameAssets", "MyGame_\BuildMyGameAssets\BuildMyGameAssets.vcxproj", "{1F5C0E4B-4631-462B-A43F-C83478BDB391}"
 	ProjectSection(ProjectDependencies) = postProject

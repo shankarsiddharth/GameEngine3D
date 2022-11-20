@@ -3,18 +3,6 @@
 
 #include <Engine/Asserts/Asserts.h>
 
-namespace eae6320
-{
-	namespace Graphics
-	{
-		namespace DearImGui
-		{
-			ImGuiIO ImGui_IO;
-		}
-	}
-}
-
-
 eae6320::cResult eae6320::Graphics::DearImGui::InitializeImGui(const sInitializationParameters& i_initializationParameters)
 {
 	auto result = Results::Success;
@@ -37,7 +25,7 @@ eae6320::cResult eae6320::Graphics::DearImGui::InitializeImGui(const sInitializa
 	InitializeImGuiStyle();
 
 	// Initialize platform-specific / Renderer backend specific ImGui context
-	if (!(result = InitializeImGuiPlatformRenderer(i_initializationParameters)))
+	if (!(result = InitializeImGuiPlatformRendererBackend(i_initializationParameters)))
 	{
 		EAE6320_ASSERTF(false, "Can't initialize platform-specific / Renderer backend specific ImGui context");
 		return result;
@@ -59,11 +47,6 @@ void eae6320::Graphics::DearImGui::RenderImGuiFrame()
 	ImGui::Render();
 }
 
-ImGuiIO& eae6320::Graphics::DearImGui::GetImGuiIO()
-{
-	return ImGui_IO;
-}
-
 eae6320::cResult eae6320::Graphics::DearImGui::CreateImGuiContext()
 {
 	auto result = Results::Success;
@@ -79,11 +62,11 @@ eae6320::cResult eae6320::Graphics::DearImGui::InitializeImGuiIO()
 {
 	auto result = Results::Success;
 
-	ImGui_IO = ImGui::GetIO(); (void)ImGui_IO;
+	ImGuiIO& ImGui_IO = ImGui::GetIO(); (void)ImGui_IO;
 	ImGui_IO.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 	//ImGui_IO.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 	ImGui_IO.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-	ImGui_IO.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+	//ImGui_IO.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 	ImGui_IO.WantCaptureMouse = true;
 	ImGui_IO.WantCaptureKeyboard = true;
 	//ImGui_IO.ConfigViewportsNoAutoMerge = true;
@@ -105,12 +88,13 @@ void eae6320::Graphics::DearImGui::InitializeImGuiStyle()
 
 	// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 	ImGuiStyle& style = ImGui::GetStyle();
-	ImGui_IO = GetImGuiIO();
+
+	/*ImGuiIO& ImGui_IO = ImGui::GetIO();
 	if (ImGui_IO.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
 		style.WindowRounding = 0.0f;
 		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-	}
+	}*/
 }
 
 eae6320::cResult eae6320::Graphics::DearImGui::LoadImGuiFonts()
