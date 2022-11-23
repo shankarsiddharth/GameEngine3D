@@ -67,6 +67,7 @@
     <ClInclude Include="imstb_rectpack.h" />
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
+    <ClInclude Include="Includes.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="LICENSE.txt">

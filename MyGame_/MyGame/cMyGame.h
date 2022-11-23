@@ -50,6 +50,8 @@ namespace eae6320
 
 		void UpdateBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate) override;
 
+		void RenderUI();
+
 	private:
 
 		eae6320::Graphics::cMesh* m_planeMesh = nullptr;
@@ -134,8 +136,6 @@ namespace eae6320
 		eae6320::cResult InitializeStory();
 
 		void GetDefaultInitialResolution(uint16_t& o_width, uint16_t& o_height) const override;
-
-
 	};
 }
 

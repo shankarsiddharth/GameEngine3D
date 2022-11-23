@@ -11,6 +11,7 @@
 // Includes
 //=========
 
+#include <functional>
 #include <cstdint>
 #include <Engine/Concurrency/cThread.h>
 #include <Engine/Results/Results.h>
@@ -18,6 +19,7 @@
 #if defined( EAE6320_PLATFORM_WINDOWS )
 	#include <Engine/Windows/Includes.h>
 #endif
+
 
 // Forward Declarations
 //=====================
@@ -114,8 +116,14 @@ namespace eae6320
 			iApplication();
 			virtual ~iApplication() = 0;
 
+		protected:
+
 			// Inheritable Implementation
 			//===========================
+			
+			// ImGui UI
+			//=========
+			virtual void RegisterOnImGuiRenderUI(const std::function<void()>& i_OnImGuiRenderUI);
 
 		private:
 
@@ -191,10 +199,6 @@ namespace eae6320
 			// a derived class only needs to worry about itself)
 			virtual cResult Initialize() = 0;
 			virtual cResult CleanUp() = 0;
-
-			// ImGui UI
-			//=========
-			virtual void RenderImGuiUI();
 
 			// Data
 			//=====
