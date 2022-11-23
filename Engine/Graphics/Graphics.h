@@ -14,6 +14,8 @@
 #include <Engine/Results/Results.h>
 #include <Engine/Math/cMatrix_transformation.h>
 
+#include <functional>
+
 // Forward Declaration
 //==================
 
@@ -32,6 +34,8 @@ namespace eae6320
 {
 	namespace Graphics
 	{
+
+		void RegisteronImGuiRenderUI(const std::function<void()>& i_OnRenderImGuiRenderUI);
 
 		// Submission
 		//-----------

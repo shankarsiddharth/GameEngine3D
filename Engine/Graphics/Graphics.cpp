@@ -16,12 +16,12 @@
 #include <Engine/Logging/Logging.h>
 #include <Engine/UserOutput/UserOutput.h>
 
-
 // Static Data
 //============
 
 namespace
 {
+	std::function<void()> OnImGuiRenderUI = nullptr;
 
 	// View Data
 	//--------------
@@ -77,6 +77,11 @@ namespace
 	eae6320::cResult InitializeShadingData();
 	eae6320::cResult InitializeViews(const eae6320::Graphics::sInitializationParameters& i_initializationParameters);
 	eae6320::cResult CleanUpRenderData(sDataRequiredToRenderAFrame* i_renderData);
+}
+
+void eae6320::Graphics::RegisteronImGuiRenderUI(const std::function<void()>& i_OnRenderImGuiRenderUI)
+{
+	OnImGuiRenderUI = i_OnRenderImGuiRenderUI;
 }
 
 // Submission
@@ -169,7 +174,11 @@ void eae6320::Graphics::RenderFrame()
 	}
 
 	eae6320::Graphics::DearImGui::CreateImGuiFrame();
-	eae6320::Graphics::DearImGui::RenderImGuiUI();
+	//eae6320::Graphics::DearImGui::RenderImGuiUI();
+	if (OnImGuiRenderUI != nullptr)
+	{
+		OnImGuiRenderUI();
+	}
 	eae6320::Graphics::DearImGui::RenderImGuiFrame();
 
 	EAE6320_ASSERT(s_dataBeingRenderedByRenderThread);
