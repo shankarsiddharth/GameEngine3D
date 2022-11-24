@@ -108,7 +108,7 @@ eae6320::Application::iApplication::~iApplication()
 
 void eae6320::Application::iApplication::RegisterOnImGuiRenderUI(const std::function<void()>& i_OnImGuiRenderUI)
 {
-	Graphics::RegisteronImGuiRenderUI(i_OnImGuiRenderUI);
+	Graphics::RegisterOnImGuiRenderUI(i_OnImGuiRenderUI);
 }
 
 // Run

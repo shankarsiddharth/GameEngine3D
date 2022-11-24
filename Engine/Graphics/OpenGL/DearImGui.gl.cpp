@@ -59,3 +59,11 @@ eae6320::cResult eae6320::Graphics::DearImGui::CleanUpImGui()
 	return result;
 }
 
+ImTextureID eae6320::Graphics::DearImGui::GetTexture(const eae6320::Graphics::cFrameBuffer& i_FrameBuffer)
+{
+#if defined( EAE6320_PLATFORM_GL )
+	return (ImTextureID)i_FrameBuffer.GetCurrentFrame();
+#elif
+	return nullptr;
+#endif
+}

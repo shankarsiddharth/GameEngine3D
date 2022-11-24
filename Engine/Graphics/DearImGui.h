@@ -1,9 +1,11 @@
 #pragma once
 
 #include "InitializationParameters.h"
+#include "cFrameBuffer.h"
 
 #include <External/imgui/imgui.h>
 #include <Engine/Results/Results.h>
+
 
 
 namespace eae6320
@@ -26,10 +28,13 @@ namespace eae6320
 
 			//Platform / Renderer Backend Specific 
 			cResult CreateImGuiFrame();
-			void RenderImGuiUI();
+			void RenderImGuiUI(eae6320::Graphics::cFrameBuffer& i_FrameBuffer);
 			void RenderImGuiFrame();
 			//Platform / Renderer Backend Specific 
 			cResult RenderImGui_DrawData();
+
+			//Platform / Renderer Backend Specific 
+			ImTextureID GetTexture(const eae6320::Graphics::cFrameBuffer& i_FrameBuffer);
 		}
 	}
 }

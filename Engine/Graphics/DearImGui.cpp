@@ -120,7 +120,28 @@ eae6320::cResult eae6320::Graphics::DearImGui::LoadImGuiFonts()
 	return result;
 }
 
-void eae6320::Graphics::DearImGui::RenderImGuiUI()
+void eae6320::Graphics::DearImGui::RenderImGuiUI(eae6320::Graphics::cFrameBuffer& i_FrameBuffer)
 {
-	
+	auto tex = GetTexture(i_FrameBuffer);
+	bool showWindow = true;
+	ImGui::Begin("GameWindow", &showWindow, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	{
+		if (i_FrameBuffer.GetWidth() != ImGui::GetWindowWidth() ||
+			i_FrameBuffer.GetHeight() != ImGui::GetWindowHeight())
+		{
+			i_FrameBuffer.SetWidth((uint16_t)ImGui::GetWindowWidth());
+			i_FrameBuffer.SetHeight((uint16_t)ImGui::GetWindowHeight());
+			i_FrameBuffer.Initialize();
+		}
+
+		/*// Using a Child allow to fill all the space of the window.
+		// It also allows customization
+		ImGui::BeginChild("GameRender");*/
+		// Get the size of the child (i.e. the whole draw size of the windows).
+		ImVec2 wsize = ImGui::GetWindowSize();
+		// Because I use the texture from OpenGL, I need to invert the V from the UV.
+		ImGui::Image((ImTextureID)tex, wsize, ImVec2(0, 1), ImVec2(1, 0));
+		/*ImGui::EndChild();*/
+	}
+	ImGui::End();
 }

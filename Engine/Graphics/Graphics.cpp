@@ -10,11 +10,13 @@
 #include "MeshEffectPair.h"
 
 #include "DearImGui.h"
+#include "cFrameBuffer.h"
 
 #include <Engine/Asserts/Asserts.h>
 #include <Engine/Concurrency/cEvent.h>
 #include <Engine/Logging/Logging.h>
 #include <Engine/UserOutput/UserOutput.h>
+
 
 // Static Data
 //============
@@ -27,6 +29,9 @@ namespace
 	//--------------
 
 	eae6320::Graphics::cView* s_View = new eae6320::Graphics::cView();
+
+	// Frame buffer object
+	eae6320::Graphics::cFrameBuffer s_FrameBuffer_frame(eae6320::Graphics::FrameBufferTypes::Frame);
 
 	// Constant buffer object
 	eae6320::Graphics::cConstantBuffer s_constantBuffer_frame(eae6320::Graphics::ConstantBufferTypes::Frame);
@@ -79,7 +84,7 @@ namespace
 	eae6320::cResult CleanUpRenderData(sDataRequiredToRenderAFrame* i_renderData);
 }
 
-void eae6320::Graphics::RegisteronImGuiRenderUI(const std::function<void()>& i_OnRenderImGuiRenderUI)
+void eae6320::Graphics::RegisterOnImGuiRenderUI(const std::function<void()>& i_OnRenderImGuiRenderUI)
 {
 	OnImGuiRenderUI = i_OnRenderImGuiRenderUI;
 }
@@ -173,19 +178,19 @@ void eae6320::Graphics::RenderFrame()
 		}
 	}
 
-	eae6320::Graphics::DearImGui::CreateImGuiFrame();
-	//eae6320::Graphics::DearImGui::RenderImGuiUI();
-	if (OnImGuiRenderUI != nullptr)
-	{
-		OnImGuiRenderUI();
-	}
-	eae6320::Graphics::DearImGui::RenderImGuiFrame();
-
 	EAE6320_ASSERT(s_dataBeingRenderedByRenderThread);
 	auto* const dataRequiredToRenderFrame = s_dataBeingRenderedByRenderThread;
 
 	// Clear the Background Color
 	s_View->Clear(dataRequiredToRenderFrame->clearColorRed, dataRequiredToRenderFrame->clearColorGreen, dataRequiredToRenderFrame->clearColorBlue, dataRequiredToRenderFrame->clearColorAlpha);
+
+	{
+		s_FrameBuffer_frame.Bind(static_cast<uint_fast8_t>(eShaderType::Vertex) | static_cast<uint_fast8_t>(eShaderType::Fragment));
+	}
+
+	// Clear the Background Color
+	s_View->Clear(dataRequiredToRenderFrame->clearColorRed, dataRequiredToRenderFrame->clearColorGreen, dataRequiredToRenderFrame->clearColorBlue, dataRequiredToRenderFrame->clearColorAlpha);
+
 
 	// Update the frame constant buffer
 	{
@@ -214,6 +219,17 @@ void eae6320::Graphics::RenderFrame()
 		}
 	}	
 	
+	{
+		s_FrameBuffer_frame.UnBind();
+	}
+
+	eae6320::Graphics::DearImGui::CreateImGuiFrame();
+	eae6320::Graphics::DearImGui::RenderImGuiUI(s_FrameBuffer_frame);
+	if (OnImGuiRenderUI != nullptr)
+	{
+		OnImGuiRenderUI();
+	}
+	eae6320::Graphics::DearImGui::RenderImGuiFrame();
 	eae6320::Graphics::DearImGui::RenderImGui_DrawData();
 
 	s_View->Swap();
@@ -244,6 +260,21 @@ eae6320::cResult eae6320::Graphics::Initialize(const sInitializationParameters& 
 	}
 	// Initialize the platform-independent graphics objects
 	{
+		if (result = s_FrameBuffer_frame.Initialize())
+		{
+			// There is only a single frame constant buffer that is reused
+			// and so it can be bound at initialization time and never unbound
+			s_FrameBuffer_frame.Bind(
+				// In our class both vertex and fragment shaders use per-frame constant data
+				static_cast<uint_fast8_t>(eShaderType::Vertex) | static_cast<uint_fast8_t>(eShaderType::Fragment));
+		}
+		else
+		{
+			EAE6320_ASSERTF(false, "Can't initialize Graphics without frame buffer");
+			return result;
+		}
+
+
 		if (result = s_constantBuffer_frame.Initialize())
 		{
 			// There is only a single frame constant buffer that is reused
@@ -366,6 +397,18 @@ eae6320::cResult eae6320::Graphics::CleanUp()
 			if (result)
 			{
 				result = result_constantBuffer_drawCall;
+			}
+		}
+	}
+
+	{
+		const auto result_FrameBuffer_frame = s_FrameBuffer_frame.CleanUp();
+		if (!result_FrameBuffer_frame)
+		{
+			EAE6320_ASSERT(false);
+			if (result)
+			{
+				result = result_FrameBuffer_frame;
 			}
 		}
 	}

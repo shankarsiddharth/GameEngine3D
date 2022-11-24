@@ -64,6 +64,13 @@
     <ClCompile Include="OpenGL\DearImGui.gl.cpp">
       <Filter>OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="cFrameBuffer.cpp" />
+    <ClCompile Include="OpenGL\cFrameBuffer.gl.cpp">
+      <Filter>OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Direct3D\cFrameBuffer.d3d.cpp">
+      <Filter>Direct3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cConstantBuffer.h" />
@@ -91,6 +98,7 @@
     <ClInclude Include="MeshEffectPair.h" />
     <ClInclude Include="DearImGui.h" />
     <ClInclude Include="InitializationParameters.h" />
+    <ClInclude Include="cFrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cRenderState.inl" />
