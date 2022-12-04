@@ -25,6 +25,17 @@ namespace eae6320
 		// Inherited Implementation
 		//=========================
 
+		void SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime,
+			const float i_elapsedSecondCount_sinceLastSimulationUpdate) override;
+
+		void UpdateSimulationBasedOnInput() override;
+
+		void UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate) override;
+
+		void UpdateBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate) override;
+
+		void RenderUI();
+
 	private:
 
 		// Configuration
@@ -77,6 +88,11 @@ namespace eae6320
 
 		cResult Initialize() final;
 		cResult CleanUp() final;
+
+
+		eae6320::cResult InitializeStory();
+
+		void GetDefaultInitialResolution(uint16_t& o_width, uint16_t& o_height) const override;
 
 	};
 }
