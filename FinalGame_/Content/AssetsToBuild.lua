@@ -11,4 +11,8 @@ return
 
 		{ path = "Shaders/Vertex/vertexInputLayout_mesh.shader", arguments = { "vertex" } },
 	},
+	stories =
+	{
+		"Stories/test_story.txt",
+	},
 }
