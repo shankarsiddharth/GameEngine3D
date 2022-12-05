@@ -21,7 +21,14 @@ void eae6320::cFinalGame::SubmitDataToBeRendered(const float i_elapsedSecondCoun
 
 void eae6320::cFinalGame::UpdateSimulationBasedOnInput()
 {
-	
+	if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Space))
+	{
+		show_demo_window = false;
+	}
+	else
+	{
+		show_demo_window = true;
+	}
 }
 
 void eae6320::cFinalGame::UpdateSimulationBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
@@ -79,6 +86,8 @@ eae6320::cResult eae6320::cFinalGame::InitializeStory()
 			std::string dialogue = story.Read();
 			if (!dialogue.empty())
 			{
+				story_string.append("\n");
+				story_string.append(dialogue);
 				eae6320::Logging::OutputMessage(dialogue.c_str());
 				// 				std::cout << dialogue << std::endl;
 			}
@@ -93,6 +102,8 @@ eae6320::cResult eae6320::cFinalGame::InitializeStory()
 			{
 				const std::string message = "Choice Index: " + std::to_string(choiceIndex) + std::string("\t") + choiceText;
 				// 				std::cout << message << std::endl;
+				story_string.append("\n");
+				story_string.append(message);
 				eae6320::Logging::OutputMessage(message.c_str());
 				choiceIndex++;
 			}
@@ -104,6 +115,8 @@ eae6320::cResult eae6320::cFinalGame::InitializeStory()
 			auto selectChoiceIndex = distrib(gen);
 			const std::string message = "Selecting Choice Index: " + std::to_string(selectChoiceIndex);
 			// 			std::cout << message << std::endl;
+			story_string.append("\n");
+			story_string.append(message);
 			eae6320::Logging::OutputMessage(message.c_str());
 			story.SelectChoice((std::uint32_t)(selectChoiceIndex));
 		}
@@ -125,7 +138,6 @@ void eae6320::cFinalGame::GetDefaultInitialResolution(uint16_t& o_width, uint16_
 
 void eae6320::cFinalGame::RenderUI()
 {
-	bool show_demo_window = true;
 	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
@@ -150,6 +162,7 @@ void eae6320::cFinalGame::RenderUI()
 			counter++;
 		ImGui::SameLine();
 		ImGui::Text("counter = %d", counter);
+		ImGui::Text("%s", story_string.c_str());
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
