@@ -38,6 +38,9 @@ namespace eae6320
 
 	private:
 
+		bool show_demo_window = true;
+		std::string story_string;
+
 		// Configuration
 		//--------------
 
