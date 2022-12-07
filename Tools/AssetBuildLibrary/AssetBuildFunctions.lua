@@ -318,6 +318,17 @@ NewAssetTypeInfo( "stories",
 	}
 )
 
+-- Audio Asset Type
+--------------------
+
+NewAssetTypeInfo( "audios",
+	{
+		GetBuilderRelativePath = function()
+			return "AudioBuilder.exe"
+		end
+	}
+)
+
 -- Local Function Definitions
 --===========================
 
