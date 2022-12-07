@@ -44,6 +44,7 @@ namespace eae6320
 	private:
 
 		ImFont* m_latoFont = nullptr;
+		ImFont* m_defaultFont = nullptr;
 		ImGuiWindowFlags window_flags = 0;
 
 		std::string story_string;
@@ -54,8 +55,11 @@ namespace eae6320
 		size_t m_currentChoiceCount = 0;
 		size_t m_selectedChoice = 0;
 		bool m_enableScrollTrack = true;
+		
+		bool m_isEndOfStory = false;
 
 		eae6320::AudioSystem::cAudio m_BGAudio;
+		eae6320::AudioSystem::cAudio m_SelectAudio;
 
 		// Configuration
 		//--------------
