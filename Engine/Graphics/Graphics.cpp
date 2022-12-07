@@ -79,7 +79,7 @@ namespace
 	eae6320::cResult CleanUpRenderData(sDataRequiredToRenderAFrame* i_renderData);
 }
 
-void eae6320::Graphics::RegisteronImGuiRenderUI(const std::function<void()>& i_OnRenderImGuiRenderUI)
+void eae6320::Graphics::RegisterOnImGuiRenderUI(const std::function<void()>& i_OnRenderImGuiRenderUI)
 {
 	OnImGuiRenderUI = i_OnRenderImGuiRenderUI;
 }
