@@ -15,4 +15,8 @@ return
 	{
 		"Stories/test_story.txt",
 	},
+	audios =
+	{
+		{ path = "Audios/Test.mp3"},
+	},
 }
