@@ -18,6 +18,7 @@ void eae6320::cFinalGame::SubmitDataToBeRendered(const float i_elapsedSecondCoun
 	const float i_elapsedSecondCount_sinceLastSimulationUpdate)
 {
 	m_BGAudio.SubmitAudioSource();
+	m_SelectAudio.SubmitAudioSource();
 }
 
 void eae6320::cFinalGame::UpdateSimulationBasedOnInput()
@@ -27,16 +28,26 @@ void eae6320::cFinalGame::UpdateSimulationBasedOnInput()
 		ReadStory();
 	}*/
 
-	if (!m_BGAudio.IsPlaying())
-	{
-		m_BGAudio.Play();
-	}
-
 	/*if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Space))
 	{
 		
 	}*/
-	
+
+	if (!m_isEndOfStory)
+	{
+		if (!m_BGAudio.IsPlaying())
+		{
+			m_BGAudio.Play();
+		}
+	}
+	else
+	{
+		if (m_BGAudio.IsPlaying())
+		{
+			m_BGAudio.PauseAudio();
+		}
+	}
+		
 	if (m_enableScrollTrack)
 	{
 		m_enableScrollTrack = false;
@@ -82,6 +93,11 @@ void eae6320::cFinalGame::ReadStory()
 		else
 		{
 			//End of Story
+			if (!m_isEndOfStory)
+			{
+				m_isEndOfStory = true;
+				return;
+			}
 		}
 	}
 }
@@ -212,6 +228,7 @@ eae6320::cResult eae6320::cFinalGame::InitializeAudio()
 	auto result = eae6320::Results::Success;
 	
 	m_BGAudio.CreateAudioData("data/audios/bg.mp3", "bg_audio", 150, true);
+	m_SelectAudio.CreateAudioData("data/audios/select_choice.wav", "select_choice", 1000, false);
 
 	return result;
 }
@@ -233,13 +250,18 @@ void eae6320::cFinalGame::RenderUI()
 		{
 			if (ImGui::Button("Start Story"))
 			{
+				m_SelectAudio.PlayIndependent();
+				
 				m_showStartStory = false;
 				ReadStory();				
 			}
 		}
 		else
 		{
-			ReadStory();
+			if (!m_isEndOfStory)
+			{
+				ReadStory();
+			}
 		}
 		
 		ImGui::TextWrapped("%s", story_string.c_str());
@@ -263,6 +285,7 @@ void eae6320::cFinalGame::RenderUI()
 				const std::string& choiceText = choices[choiceIndex];
 				if (ImGui::Button(choiceText.c_str()))
 				{
+					m_SelectAudio.PlayIndependent();
 					m_enableScrollTrack = true;
 					m_selectedChoice = choiceIndex;
 					m_choiceSelected = true;

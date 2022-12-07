@@ -17,8 +17,8 @@ return
 	},
 	audios =
 	{
-		{ path = "Audios/BG.mp3"},
-		{ path = "Audios/Test.mp3"},
+		{ path = "Audios/bg.mp3"},
+		{ path = "Audios/select_choice.wav"},
 	},
 	fonts =
 	{
