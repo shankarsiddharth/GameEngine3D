@@ -253,7 +253,7 @@ void eae6320::cFinalGame::RenderUI()
 	{
 		if (m_displayChoices)
 		{
-			ImGui::Begin("Choices");
+			ImGui::Begin("Choices", NULL, window_flags);
 
 			std::vector<std::string> choices = story.GetChoices();
 			size_t choiceCount = choices.size();
