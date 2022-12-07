@@ -1,0 +1,461 @@
+->Prologue
+
+=== Prologue ===
+It's been said that... if we are open to adventure in our lives, we may even find true friends in the worst possible places that we never thought existed. What you are about to experience is a tale of a world filled with possibilities, moral values, surprising allies, justice, a clear conscience, and of course, action and magic.
+You are King Vikramadityan, the King of a vast land filled with fertile soil for agriculture, the birthplace of spices, zero, Hinduism, Buddhism, nirvana, and karma; the land that tells tales as old as time itself; the vast land is what we call India today. The people of that ancient land always believed in "Karma," that life and death are a neverending cycle in the expanse of the time. It is still believed that "Nirvana" is a state where a person is free of all humanly suffering and world problems. Even today, some people still strive to achieve this enlightenment. What do "Karma" and "Nirvana" have to do with anything you are about to experience? Well, everything!
+
+Exploration is the Key.
+Don't forget What goes around comes around!
+
+* Continue
+->c1s1_breakfast_at_the_palace
+
+=== c1s1_breakfast_at_the_palace ===
+You are lost in your thoughts as the voice of your maid slowly reaches your ears, "Arasae (O King!), Do you need more water?".
+Suddenly you realize that you are in front of the breakfast feast. You see various food right in front of you, such as mutton curry, dosai, basmati rice, fruits, vegetables, spinach varieties, eggs, fish, and chicken biriyani. Still, you cannot shake the thought bugging you from the inside. Because the Sorcerer mentioned earlier that something terrible is about to happen if you are not careful. 
+"No, this is enough," you reply to the maid. 
+You finish your breakfast half-minded, and you go to the court. You seek counsel with the Rajathandiri (Strategist/Senior Counsel) with a troubled mind. He advises you to believe in your capabilities, deal with the problem when it actually arises, not worry about it now, and focus on today's duties.
+Various people are coming into the court; some are scholars, poets, musicians, artists, and dancers. Some come to the court to seek justice and charity. You attend to everyone one by one; a considerable queue is waiting to get your audience today. 
+You just finished a judgment; next in line, you see a Sage, wearing saffron clothes, with rudraksha around his neck and wrist and hair tied up in a top Manbunn knot. He is physically fit considering his age which looks like he is in the 70s. Slim build and with wise blue eyes. He has a beard that falls to his chest. You realize that he is an essential person in the courtroom. 
+You get up from your throne, walk towards the Sage and greet him. You then take him to the private audience chamber along with your Prime Minister.
+Sage gives you a gift – a box full of fruits that weigh more than usual.
+
+* Accept the gift happily
+    ->c1s2_accept_the_gift_happy
+* Accept the gift but you are skeptical
+    ->c1s3_accept_the_gift_skeptical
+
+=== c1s2_accept_the_gift_happy ===
+You accept the gift happily. You call for your treasurer and hand the gift over to him. The Sage thanks you and leaves.
+
+* Continue
+->c2s3_fruit_turns_to_gold
+
+
+=== c1s3_accept_the_gift_skeptical ===
+You accept the gift, but you are skeptical. You call for the treasurer and hand the gift over to him. The Sage thanks you and leaves.
+After the Sage leaves the Palace, you call for your confidant spy. You ask him to gather information regarding the Sage.
+Your courtroom confidant leaves the Kingdom in search of information.
+
+#Test your Luck: If you roll 1-3 you are LUCKY. If you roll 4-6 you are UNLUCKY.
+
+* Confidant returns
+->c1s4_confidant_returns
+* Confidant does not return
+->c1s5_confidant_does_not_return
+
+=== c1s4_confidant_returns ===
+After a few weeks, the confidant return to the courtroom; he has gathered essential information on the Sage. You come to know that he has evil intentions. So you send a tracker to find the Sage, but the Sage could not be found. 
+You wait for the Sage to return. 
+After some weeks, the Sage returns, you confront the Sage, and the Sage gets angry and challenges you for a duel.
+
+#BATTLE	SAGE	SKILL – 9	STAMINA – 9 
+
+* Sage attacks you and the battle begins
+->c2s1_sage_disappears
+* You attack the Sage and the battle begins
+->c6s1_game_over
+
+=== c1s5_confidant_does_not_return ===
+After a few weeks, you receive information that the confidant you sent has been found dead; he had been attacked by a wild bear during his travels and died.
+Now Sage is aware of your suspicions about him. He returns after some weeks and challenges you for a duel for doubting him.
+
+#BATTLE	SAGE	SKILL – 9	STAMINA – 9 
+
+* Sage attacks you and the battle begins
+->c2s1_sage_disappears
+* You attack the Sage and the battle begins
+->c6s1_game_over
+
+=== c2s1_sage_disappears ===
+At the end of the battle, the Sage escapes the battle arena and suddenly disappears – before you can destroy him. 
+
+* Continue
+->c2s2_collect_more_info_on_the_sage
+
+=== c2s2_collect_more_info_on_the_sage ===
+You send your most trusted informant of the court to collect information about the Sage.
+After a few days, the informant returns to the Palace. 
+He explains that a celestial being, Vedha, lives in a forest, and with his help, we can destroy the Sage.
+To find Vedha, you have to take up a long and tedious journey before you can reach him.
+Vedha will know how to reach Sage once you meet Vedha. 
+The informant shares the clue he gathered about the Vedha and advises you to start at Nanmangalam Forrest.
+
+* Continue
+->c2s4_leave_the_kingdom
+
+=== c2s3_fruit_turns_to_gold ===
+After some weeks, Sage returns to your court and asks for the gift back. You request your treasurer to bring the fruit back from the treasury. Once the fruit has been brought to the court, the Sage turns the fruit into priceless gems and asks a favor. Since he has given priceless treasures to the Kingdom, you happily accept Sage's request. 
+Sage tells about a celestial being called Vedha, who possesses powers to destroy the Kingdom. 
+"You must seek Vedha and defeat him to make your Kingdom safe," says Sage.
+Sage asks you to start your search at Nanmangalam Forrest.
+
+* Continue
+->c2s4_leave_the_kingdom
+
+=== c2s4_leave_the_kingdom ===
+You hand over all your duties to your Prime Minister in the court and start your journey towards Nanmangalam Forrest, situated in the northern part of your Kingdom.
+
+* Continue
+->c3s1_nanmangalam_forest_discovering_the_banyan_trunks
+
+=== c3s1_nanmangalam_forest_discovering_the_banyan_trunks ===
+As you walk, you notice the tree trunks are getting bigger and bigger, the leaves thicker, shoots trying to reach the sky, thick bushes, hardened soil with layers of grasses below your feet, branches that have grown into every possible direction, and the sun rays begin to have difficulties reaching the ground, sounds of insects' chirping gets louder and louder; even though the sun is up in the sky, the sunlight is fading slowly with each and every step that you take. You realize that you have ventured deep into the forest, a path only familiar to the likes of sages, sorcerers, and creatures of unknown origin and abilities. After a few hundred steps, it is now difficult to see where you are going. You take olipperukki (a magical torch or orb) out of your vest pouch and recite a spell. Olipperukki attaches to the back of your vest, and an ambient light surrounds you for about 30 steps in all directions. The light is warm and soft, just enough for you to see the surroundings clearly. You continue your walk for a few thousand steps, and you see some light flakes far in the distance. You start to walk towards the flakes.
+You hear hundreds of birds cooing, cawing, hooting in the branches. You can smell a dry, brittle, floral fragrance engulfing the atmosphere. You see the prop roots of a banyan tree that have grown into thicker trunks that are not very different from the primary trunk of the tree. You walk further and still see only the prop root trunks, not the primary trunks, quickly deduct that the tree is about a thousand years old, and realize the light flakes are from the primary trunk of the tree. You move closer slowly to the primary trunk, measuring each step you take, and all of your senses are heightened. You are expecting something to happen as you approach the light. But, except for the birds' sounds and the fragrance, your senses don't pick up anything. The light flakes are soft, and you can now see the surroundings; you recite another spell to put out your olipperukki. You see, not one but three primary trunks next to each other. One trunk faces the south, the next one faces the west direction, and the other faces the east direction. Below each trunk is rock, which has engraving on it. The edges of the engravings are painted with bioluminescent paint that glows. 
+You had already seen something like these trunks when you were a kid wandering through the forest with your dad; these are portals to far-off lands on the continent – teleportation devices. You remember your dad saying, "Don't touch these glowing trunks when nobody is with you." 
+Your senses are already sharp; You move to the west-facing trunk – you hear an elk grazing, and your skin can feel the icy winds; the engraving reads "Karakoram."
+Next, you move closer to the south-facing trunk – you hear splashes of water, and it smells like a salty breeze, the rock below it reads "Kumari." 
+You approach the last glowing trunk that is east-facing. You hear the monkeys jumping from branches to branches. You look up suddenly, but there are no monkeys nearby; the sound comes from within the trunks. The rock below the east-facing trunk reads as "Kanha." 
+
+* Touch the west-facing trunk - Karakoram
+->c3s2_karakoram_initial_landing
+* Touch the south-facing trunk - Kumari
+->c3s9_kumari_initial_landing
+* Touch the east-facing trunk - Kanha
+->c3s17_kanha_initial_landing
+
+=== c3s2_karakoram_initial_landing ===
+You touch the Karakoram trunk. You feel cold snow on your skin and realize that you are in a new place. You feel the heavy chill winds as you slowly get up from the ground. You are now at the Karakoram mountain range, one of the continent's tallest peaks. You see a bunch of elk grazing through the snowgrass. Behind you, you see a glowing pine tree similar to the banyan tree trunks – the portal to the banyan tree.
+
+* Continue
+->c3s3_karakoram_see_the_cave
+
+=== c3s3_karakoram_see_the_cave ===
+You steady yourself and start to walk out of the pine tree area. About a few thousand feet straight from where you are standing, you see a giant cave opening. To your right, you see blood trail marks on the snow.
+
+* Go towards the cave
+->c3s6_karakoram_approach_the_cave
+* Follow the blood trails
+->c3s4_karakoram_follow_the_blood_trail
+
+=== c3s4_karakoram_follow_the_blood_trail ===
+You start to follow the blood trails to your right; it looks like it goes into a pine tree cluster on the mountain slope. Near the end of the slope is a small lake. The blood trail takes you near to the lake. You see a woman with white hair and a face tattoo similar to those inked by mountain shamans. She is bleeding in the arms and is heavily wounded. 
+
+* Help the woman
+->c3s5_karakoram_help_the_mountain_shaman
+* Go back to the path towards the cave
+->c3s6_karakoram_approach_the_cave
+
+=== c3s5_karakoram_help_the_mountain_shaman ===
+You go near to the woman; it looks like she is unconscious. You tend to her wounds and give her water and some medicine portions. You wait for her to wake up. After some time, she wakes up and starts to speak with you. 
+"Thank you for helping me.", says the woman.
+"It's the least I can do. If you don't mind, can I ask what are you doing here?" you ask.
+"I'm one of the Mountain Shaman from the village near the other side of the slope. I was attacked by a mountain snow lion, I managed to fight it off, and during the fight, I lost some blood; I tried to reach the lake to tend to my wound. But I must have dozed off. "
+"I'm sorry to hear that; it looks like you are weak now; I can take your village."
+"That's really nice of you; I'll show you the way." says the Shaman.
+You both start to walk towards the other side of the slope.
+"This is the dangerous region of the mountain; who are you, and what are you doing here?" asks the Shaman.
+You hold her in your arms and support her while walking. You start to explain who you are and narrate your journey until now to her. You both reach the village. She insists that you stay in her village for the night. Initially, you hesitate, but you agree to stay the night after she insists further. You eat a nicely cooked meal in the house of Shamans, where you meet various other shamans in the village. After some time, you go to sleep for the night. You sleep through till the afternoon the next day. You wake and freshen yourself up in the nearby hot springs. Before you leave, the Shaman, gift you power. You accept the gift, say goodbye, and continue towards the path to the cave.
+
+#GIFTITEM Add 3 STAMINA to your MAX STAMINA
+
+#GIFTITEM Add 3 SKILL to your MAX SKILL
+
+#GIFTITEM Add 1 STAMINA POTIONS, 1 SKILL POTIONS, 1 FORTUNE POTIONS
+
+* Continue
+->c3s6_karakoram_approach_the_cave
+
+=== c3s6_karakoram_approach_the_cave ===
+You walk for a few distances towards the cave, nearing the cave. It gets darker; you approach the cave with caution; you light up your olipperukki. You see a big entrance to the cave about thirty feet tall. You walk step towards the entrance; as you get closer, you hear a strange noise coming from within the cave. A few feet into the cave opening, you see humans' broken bones and skulls scattered on the ground. Some corpses are preserved with all the scratches and tears with frozen blood resulting from the heavy mauling. You see footmarks that are roughly about nine inches wide and thirty-two inches long. The sound gradually increases as you go further into the cave. You can hear the heavy footsteps. You see the stalactites growing from the ground and stalagmites growing from the ceiling of the caves. Some stalagmites are grouped together to form a thick transparent shield from the top through which you see a fifteen-foot creature with thick white fur covered all over its body. It looks like a giant gorilla-like figure; you realize that it is Yeti, a powerful shy creature that roams around the snow mountain ranges of Karakoram. You have heard tales of Yeti, which have torn the humans into pieces with a single strike and crushed the humans' skulls into dust. You slip right through the opening right in front of you and land in the pit of Yeti.
+
+#BATTLE	YETI	SKILL – 3	STAMINA - 5	
+
+* Yeti attacks you and the battle begins
+->c3s7_karakoram_win_battle_with_yeti
+* You attack the Yeti and the battle begins
+->c3s8_karakoram_lose_battle_with_yeti
+
+=== c3s7_karakoram_win_battle_with_yeti ===
+You strike the Yeti down with a last powerful blow to its head. The Yeti falls slowly to the ground rising the snow particles on the surface up in the air. You stand there with all the misty snow particles slowly reaching back to the ground again. 
+
+* Continue
+->c3s21_return_to_the_banyan_tree
+
+=== c3s8_karakoram_lose_battle_with_yeti ===
+Yeti grabs you by its hand, crushes your bones, and throws you to the ice wall inside the cave, and you die instantly.
+
+* Continue
+->c6s1_game_over
+
+=== c3s9_kumari_initial_landing ===
+You touch the Kumari trunk. You feel beach sand on your skin and realize that you are on a new island. You feel the salty breeze as you slowly get up from the ground. You are now at Kumari island, surrounded by a vast ocean. One of the continent's deepest trenches is on this island. You see, at a distance, the sharks swimming; the water is shallow green and slowly gradients to deep dark blue. Behind you, you see a glowing coconut tree similar to the banyan tree trunks – the portal to the banyan tree. And the sun is about to set down.
+
+* Continue
+->c3s10_kumari_see_the_triangle_rocks
+
+=== c3s10_kumari_see_the_triangle_rocks ===
+You pick yourself up and see the surroundings. Far away on the island, you can see the water cave "Gaint Blue Hole," surrounded by coral reefs and the triangle rocks that look like the vertices of a triangle. The coral rocks are huge and tall. The water inside the rocks looks red because of the sun going down. To your left, you see human footprints running into the island.
+
+* Go towards the rocks
+->c3s14_kumari_approach_the_great_blue_reef
+* Follow the human footprints
+->c3s11_kumari_follow_the_footstep_trail
+
+=== c3s11_kumari_follow_the_footstep_trail ===
+You start to follow the footstep trails to your left, which lead to a sand pathway. You begin to follow the sand path. After a few minutes of walking, you come across a small town following the way. People of the town are lighting the campfire in the center of the town. Few of them are holding different musical instruments in their hand. They have sanghu (a sea shell musical instrument), nadaswaram (a flute-like instrument), gatham (a drum-like instrument), and parai (a drum-like instrument). They start to play the music as you approach the campfire. The people are beginning to dance to the tunes. A small crowd forms to hear the music and dance near the campfire. You can see people of all ages near the campfire; children, men, women, and even pet dogs. Close to the campfire, there are several fire pits. Each of the pits is separate from the others. Each pit holds an open fire roasting shark meat. People take the roasted fish kept on the banana leaf for dinner. Moms are feeding their children. It looks like a community event. 
+You begin a conversation with one of the middle-aged men sitting next to one of the fire pits roasting the fish.  
+"Vanakkam (Greetings!)," you greet the man.
+He greets you back and says, " You are new here. Are you a King?"
+You reply with a Yes.
+He asks about your business here. You replay that you are here looking for Vedha. 
+Many dried coconut leaves catch fire next to the children's play area. 
+
+* Help put out the fire
+->c3s12_kumari_help_put_out_the_fire
+* Go back to the path towards the rock
+->c3s14_kumari_approach_the_great_blue_reef
+
+=== c3s12_kumari_help_put_out_the_fire ===
+You point out the fire to the man, and he alerts everyone in the town square by sounding the alarm bell. Everyone tries really hard to put out the fire, but the fire is growing in volume, and the night wind makes it even worse. 
+You step in, recite a spell, and put out the fire by sending bursts of water onto it. 
+The fire dies downs instantly. 
+Everyone thanks and praises you, and this news reaches the Yogi living on the island there.
+A woman approaches you. "I'm Mina. We are very grateful for saving the children. There is a request from our Yogi. Please stay in the town for tonight. We have a place arranged for you, and tomorrow morning, Yogi would like to meet with you," she says.
+You accept the request from Yogi.
+You have roasted fish for dinner, enjoy the good music with the people around the campfire, and go to sleep later that night.
+You wake up the following day early, freshen up, and meet Mina.
+
+* Continue
+->c3s13_kumari_meet_with_the_yogi
+
+=== c3s13_kumari_meet_with_the_yogi ===
+Mina takes you to the Yogi. 
+You greet him with "Vanakkam."
+He greets you and thanks, "We are grateful for saving our children." 
+He asks," Is there anything we can help you with?"
+"Yes, do you know about the celestial being Vedha?" you ask.
+"No, but there is a creature in the triangle rocks that you can check."
+"Thank you for sharing the knowledge."
+"I'll continue my journey," you say.
+Yogi stops you before leaving and gifts you power. 
+"This will help in your adventure," he says.
+
+#GIFTITEM Add 3 STAMINA to your MAX STAMINA
+
+#GIFTITEM Add 3 SKILL to your MAX SKILL
+
+#GIFTITEM Add 1 STAMINA POTIONS, 1 SKILL POTIONS, 1 FORTUNE POTIONS
+
+* Continue
+->c3s14_kumari_approach_the_great_blue_reef
+
+=== c3s14_kumari_approach_the_great_blue_reef ===
+You approach the gigantic triangle rocks, which stand tall, a hundred feet from the sea level. You reach the entrance of the rocks that pave the way to the Great Blue Reef, wholly covered with rich coral reefs. You climb up to one of the edges of the rocks and look down below; the view from the top is breathtaking. The edges of the rocks where it meets with the ocean water it is colorful with different shades of yellow, red, green, sky-blue, and deep blue. It looks like a deep dark blue hole at the center of the rocks. This is because the center is intensely deep compared to the edges. You recite a spell to help you breathe under the water and dive deep into the ocean from the top ridge. 
+As soon as your body touches the water, an invisible air shield cover your entire body, enabling you to breathe under the water. The ocean is eerily tranquil. As you reach deep and deep into the sea, you see the sunlight fades away. You cross the twilight under the sea into the midnight region where it is completely dark; you recite a spell and light up. Various water creatures have become visible now. You still go deep into the ocean, and you reach the abyss. The animals are bioluminescent. Predators attract their prey using the light emanating from the body. 
+Now you hear a deep rumbling sound and a horn blowing sound mixed together, and you realize that you are in the deepest region of the Blue Reef. Suddenly water current pushes you in the opposite direction you were moving forward. The water current drags you into a dark alley, where you can see a silhouette of a colossal monster. As you approach the creature silently, you hit a reef on the sides. It creates a chain reaction propagating light throughout the surroundings. This attracts the huge beast and draws its attention toward you. 
+Now you can see the legendary creature you have only heard about in the stories. It is Kraken, a beast with 16 tentacles, a huge head, and large complex eyes that can see through far distances, even in the dark.
+
+#BATTLE	KRAKEN	SKILL – 5	STAMINA – 6
+
+* Kraken attacks you and the battle begins
+->c3s15_kumari_win_battle_with_kraken
+* You attack the Kraken and the battle begins
+->c3s16_kumari_lose_battle_with_kraken
+
+=== c3s15_kumari_win_battle_with_kraken ===
+You grab two tentacles of Kraken by your hand and start to spin and release so that it hits the rocks that are on the sides. The Kraken falls to the trench that is down below. You have defeated the legendary Kraken. With a single upward push through the water, you reach the water surface and the triangle rocks. 
+
+* Continue
+->c3s21_return_to_the_banyan_tree
+
+=== c3s16_kumari_lose_battle_with_kraken ===
+Kraken grabs you by its tentacles and sucks all your blood. You die instantly and hit the trench as nothing but your armors.
+
+* Continue
+->c6s1_game_over
+
+=== c3s17_kanha_initial_landing ===
+You touch the Kanha trunk. You feel rough tree trunk barks on your skin and realize that you are in a new place. You hear the Monkeys' sounds circulating the forest, insects chirping. It is the densest part of the forest. Behind you, you see a glowing red sandalwood tree similar to the banyan tree trunks – the portal to the banyan tree. 
+
+* Continue
+->c3s18_kanha_kali_temple
+
+=== c3s18_kanha_kali_temple ===
+You steady yourself and start to walk away from the red sandalwood tree. You see the top dome of a temple far away from where you are standing. You start walking towards the temple. When you start walking towards the temple, the forest becomes less and less dense after a few thousand steps. Now you are walking on the grasslands and approaching the Kali Temple. 
+The temple is enormous, with large granite blocks making the exterior wall of the temple. Numerous scripts are engraved into these walls. You notice that all the structures are kept in place without binding materials. The cap of the central tower inside the temple is made of gold. There are four towers surrounding the central tower inside the temple. You walk into the temple's main entrance; the gigantic entrance doors are made up of giant oak tree wood. The dome of the central tower is about seventy feet tall. 
+When you reach closer to the central tower, you hear a woman's weeping sound. You searched the surroundings but could not find anyone. You see the central lake inside the temple. On the steps of the temple lake, you find a weeping woman.
+
+* Continue
+->c3s19_kanha_meet_devadhathai
+
+=== c3s19_kanha_meet_devadhathai ===
+You approach the woman and ask about her.
+"Are you alright?" you ask.
+"No," she replies.
+"If you tell me your problem, I'll help you if I can," you say.
+"I'm Devadhathai. My husband's name is Putpadhan. He and I are the dressmakers of the Lords and Angels. We decided to make a unique dress for Lord Shiva and Goddess Parvathi one day. We worked hard on the design for the clothing in our workshop. We weaved the clothes with silk, gold, and silver threads. We both worked on the dresses for months before making them perfect pieces for Shiva. After finishing the dresses, my husband took them to Kailash, the homeland of Lord Shiva. Since our work was one of the best works, many people in the court of Kailash sought our services. So, my husband had various meetings and discussions with these court members. Because of these meetings, he forgot to present the clothes to Lord Shiva and Parvathi. After leaving Kailash, he realized this mistake. So, he went back to Kailash. Since the court timings were past the usual hours, He was provided with lodging for the night at Kailash. He had our specialty dresses to gift the following day. He recently started to have problems with sleep. On that day, he couldn't sleep. So, he wandered around the castle of Kailash that night because of his sleeplessness. While roaming around the castle at night, he overheard an important deity secret between Shiva and Parvati. He gifted the dresses to Shiva the next day and expressed his concern about his overheard secret. Shiva sent my husband back with a warning that my husband would face grave consequences if he ever shared the secret with anyone else."
+"Then what happened?" you ask.
+"The burden and responsibility started to weigh my husband heavily; his sleepless nights got even worse after that visit to Kailash. I was apprehensive about his health and peace. So, I constantly asked him what was wrong. One day, he told me about all that happened at Kailash during that particular visit. But, he didn't share the secret with me at that time. After some days, unable to bear the weight of the secret, he revealed the secret to me. Lord Shiva came to know about this. So, Shiva cursed my husband to become Vedha (a celestial spirit)."
+"Vedha is your husband? I was searching for Vedha all this time for a request from a Sage."
+"Yes, he is my husband. He now hangs upside down in the drumstick tree in the crematorium of Puttaparthi."
+You ask, "Is there any cure for this curse?"
+"Yes, someone has to solve all of his puzzles and bring him to this temple when I'm here," says Devadhathai.
+"Show me the way to Puttaparthi. I'll see what I can do."
+She hopefully showed the way and thanked you for agreeing to help her husband.
+
+* Continue
+->c3s20_kanha_puttaparthi
+
+=== c3s20_kanha_puttaparthi ===
+Puttaparthi is a small town situated within Kanha, further east of the Kali temple. You go into a sparsely populated town and ask for the way to the graveyard from the person you meet. They show the way to the cemetery. You follow the path and reach the cemetery. 
+You see the drumstick tree in the cemetery, and there is a white celestial spirit dancing and hanging upside down from a branch of the tree. You knew that was Vedha. You go there, pick up Vedha from the tree, place him on your shoulder, and start walking. You ask about him. Suddenly, Vedha escapes from your shoulder and goes back to the tree. You again chase Vedha and go back to the tree, grab him, carry him, and start to walk. You ask him, "What's the problem?" Again to your surprise, the Vedha goes back to the tree. You chase again and carry him again on your shoulder. "Why are you going back to the tree?" you ask. Once again, Vedha goes to the tree. Now you realize that Vedha flies back to the tree when you open your mouth. So, now you go to the tree, pick up Vedha and start to walk without saying anything; after some time, slowly, Vedha starts talking. 
+"Vikram manna, How are you?"
+You still don't answer Vedha. 
+"Oh, Do you realize now that you shouldn't talk? It is good," says Vedha.
+You still don't talk.
+"Since I'm coming along with you, I've certain conditions that you have to obey; the first condition is that if you talk or open your mouth, I'll go back to the tree.
+Second, I'll tell you a story and ask a question at the end, but you have to respond if you know the answer. 
+If you know the answer and don't respond, your head will explode into thousand tiny pieces."
+You still don't respond to the conversation.
+At this point, you feel like it's a monologue rather than dialogue.
+Vedha starts to tell the story.
+
+* Continue
+-> c5s1_story_of_three_princes
+
+=== c3s21_return_to_the_banyan_tree ===
+You return to the Banyan tree.
+
+# If you have already traveled to a region, you cannot travel to the same region again.
+
+* Touch the west-facing trunk - Karakoram
+->c3s2_karakoram_initial_landing
+* Touch the south-facing trunk - Kumari
+->c3s9_kumari_initial_landing
+* Touch the east-facing trunk - Kanha
+->c3s17_kanha_initial_landing
+
+=== c4s1_vedha_reaches_the_kali_temple ===
+After successfully completing all the story puzzles from Vedha, you are relieved. Now you can take Vedha to the Kali temple. On the way to the Kali temple, Vedha reveals the actual image of the Sage. Vedha mentions that the Sage wants to rule the world. To finally obtain his powers, he has to sacrifice 1000 heads of Kings to the deity Kali. The cruel Sage has already offered 999 King's heads, and Sage has lived 999 lifetimes. If he succeeds in this attempt, a doom will fall upon this world.
+As soon as you hear this, you ask, "Is there any way we can stop the Sage?"
+Vedha answers, "Yes, there is. I'll also join in the fight against the Sage."
+You and Vedha both reach the Kali temple. Vedha meets his wife, Devadhathai. He is happy. Vedha asks his wife to wait there until we take care of the Sage because he wants to use his celestial powers against Sage in your fight against the Sage.
+
+* Continue
+->c4s2_vedha_vikram_fight_sage
+
+=== c4s2_vedha_vikram_fight_sage ===
+You and Vedha go to the place where Sage is meditating for your return. You confront Sage about his vile intentions. The Sage reveals his true nature. And start to attack you both.
+
+# BATTLE	SAGE	SKILL – 9	STAMINA – 9
+
+* Sage attacks first and the battle begins
+->c4s3_vedha_reunites_with_wife
+* You & Vedha attack the Sage first and the battle begins
+->c6s1_game_over
+
+=== c4s3_vedha_reunites_with_wife ===
+After winning the battle against the Sage, you take Vedha to the Kali temple again. Vedha and Devadhathai offer their prayers to Goddess Kali. Kali cures Vedha's curse and brings him back to his standard Human form. Now, Putpadhan and Devadhathai are united with each other. You offer a council position for Putpadhan in your court. He accepts the offer happily. All three of you return to your Palace.
+
+* Continue
+->epilogue
+
+=== c5s1_story_of_three_princes ===
+Magadha kingdom was ruled by a fierce King named Mahendra. He had a wife and a daughter. His wife's name was Mahini. The princess of Magadha, Chandraleka, was growing up and coming of age. So there were many suitors with marriage proposals who often visited the Kingdom of Magadha. Days went by, and the princess was not interested in any of the suitors. This worried her mother, Mahini. 
+One day Mahini went to her daughter and asked why she was not interested in the suitors. Her mother even questioned her interest in marriage. Chandraleka replied that she was interested in marriage, but she was just waiting for the proper suitor. 
+"What qualities do you look for in a suitor?" asked her mother.
+"The one who is mighty and can protect his wife," replied Chandraleka.
+"Okay," replied Mahini.
+The following month, three princes arrived at Magadha from far away kingdoms. The first was the prince from the Nanda kingdom. His name was Veerendra. The second was the prince from the Sunga dynasty, and his name was Udayaveer. The third was the prince from the Yuchi kingdom, and his name was Dhana. All three princes had stay arrangements in the Magadha city. They were all called to meet the princess by King Mahendra.   
+All three of them arrived at the royal court, the court of King Mahendra. Chadraleka was also present at the court. She met with each prince separately and asked about their abilities. 
+Veerendra said, "I can sense the past and the present."
+Udayaveer said, "I have built a chariot that can fly on any terrain – water, land, air."
+Dhana said, "Well, I'm versed in sword and arrows, and his strike never misses."
+After speaking with all the princes, Chandraleka was confused because they all had very unique and special skills. So, she said that she needed time to think this through.
+A few days passed by, and it was brought to the attention of the King by Mahini that the princess was missing. This shocked the King. Soon the news spread like wildfire across the Kingdom. The three princes also heard the news, rushed their way to the court, and offered help to the King in search of his daughter. 
+Veerendra offered his skills to sense what had happened. So, he used his senses to track the last day at the Palace. He saw an invisible monster taking Chandraleka away from the Kingdom. He drew a map of the place and the route to reach the site where the princess is held captive.
+Udayaveer offered his chariot so that they could quickly fly to the place and rescue the princess.
+Dhana offered his sword and arrow abilities so that they could fight the monster.
+All three princes boarded the flying chariot and reached the place where the princess was held.  
+It was Aairavathi hills. A small mountain range with grasslands and tea plantations. They all followed the map that they had. They reached the containment facility in the mountains. When they got there, the princess was already fighting the invisible monster, but she took a lot of damage; the three gentlemen also joined the fight. All of them attacked the invisible monster. The beast fell to the ground on Dhana's single sword strike. They all jumped back into the flying chariot and reached the Magadha city palace. The crowds were rejoicing for the return of their princess. Mahendra and Mahini were pleased and thankful to all the three princes. All four of them were very tired, exhausted. All went and took rest for the day.
+Yet the question of suitor remained unanswered. 
+The next day court gathered, and all of the Kingdom was waiting for Chadraleka's answer.
+"Now, Vikram, all the young princes showed initiative, bravery, commitment, and unique abilities. Who do you think Chadraleka will choose as a suitor?"
+
+* It's Veerendra
+->c5s2_veerendra
+* It's Udayaveer
+->c5s3_udayaveer
+* It's Dhana
+->c5s4_dhana
+* You don't say anything
+->c5s5_dont_say_anything
+
+=== c5s2_veerendra ===
+"No, this is not the right answer," said Vedha.
+"Be prepared to die, my friend," said Vedha.
+
+* Continue
+->c6s1_game_over
+
+=== c5s3_udayaveer ===
+"No, this is not the right answer," said Vedha.
+"Be prepared to die, my friend," said Vedha.
+
+* Continue
+->c6s1_game_over
+
+=== c5s4_dhana ===
+"Yes, this is the right answer. You are as intelligent as told in the tales," said Vedha.
+The princess was looking for someone mighty and someone who could protect her. It was Dhana who slashed the monster and saved everyone, including Chandraleka. So, she will choose him.
+
+* Continue
+->c5s6_impossible_answer
+
+=== c5s5_dont_say_anything ===
+"No, why are you keeping your mouth shut when there is a clear answer," said Vedha.
+"Be prepared to transform your head into pieces, my friend," said Vedha.
+
+* Continue
+->c6s1_game_over
+
+=== c5s6_impossible_answer ===
+Once there lived a King named Satakarni of the Satavahan dynasty. He had a wife, Kasturi, and a daughter, Gautami. Kasturi had her child Gautami at a very young age. Amaravati river was close to the Kingdom.  
+On the other side of the river, there was another Kingdom called Ikshvaku, ruled by King Ayodhya. In the Ikshvaku kingdom, there lived a famous merchant Saketa. His son Nala was also in the trade business. They both cross the river for daily trades to come into the Satavahan kingdom. Saketa's wife died when Nala was two years old.
+Satakarni had many enemies within the Kingdom who tried to assassinate him. He was aware of this, and he was making arrangements with the help of a few trusted people in his courtroom. He found a place for himself and his family in the nearby Kingdom, Ikshvaku. As the days passed by, the situation in the courtroom was not in his favor. One evening, his confidants told him that the enemies were planning to assassinate him that night, so he had to escape to a safe place. During the night, he and his family try to cross the river. They had to go through a forest, and they lost the pathway along the way. Now they are traveling through the bushes inside the forest. Satakarni sees a bunch of people who look like robbers at night. So he told his wife and daughter to go around the robber's camp.
+Meanwhile, Satakarni was spotted by one of the camp members. So, he tried to fight them off, but they captured him and killed him. Kasturi and Gautami saw Satakarni getting killed from far away and started to run towards the nearby city. They were dashing.
+Saketa and Nala were returning back to their homes after a long day of trade. Kasturi and Gautami bumped into Nala and Saketa. They narrated the whole story of the robbers and the King getting killed. Hearing this story,  they both offered shelter in their homes for Kasturi and Gautami. As time passed by, they became acquainted well. 
+Saketa married Gautami and Nala married Kasturi. After a few years, Saketa and Gautami had a boy; Nala and Kasturi had a girl.
+"You are wondering what is wrong here, right? Nothing is wrong here. But you have to answer my question. How is the newborn boy related to the girl?"
+
+* It's Nephew
+->c5s7_nephew
+* It's Uncle
+->c5s8_uncle
+* You don't say anything
+->c5s9_dont_say_anything
+
+=== c5s7_nephew ===
+"No, this is not the right answer," said Vedha.
+"Be prepared to die, my friend," said Vedha.
+
+* Continue
+->c6s1_game_over
+
+=== c5s8_uncle ===
+"No, this is not the right answer," said Vedha.
+"Be prepared to die, my friend," said Vedha.
+
+* Continue
+->c6s1_game_over
+
+=== c5s9_dont_say_anything ===
+"You genuinely don't know the answer, huh," said Vedha.
+"Now, I'm not going to go anywhere; you can talk to me," said Vedha.
+
+* Continue
+->c4s1_vedha_reaches_the_kali_temple
+
+=== c6s1_game_over ===
+Game Over, try from the beginning. 
+->END
+
+=== epilogue ===
+All three of you return to the Palace, and you appoint Vedha(Putpdhan) as one of your trusted counsels.
+You say, "I will call you 'Vedha' instead of 'Putpadhan'; it suits you better."
+Vedha smiles and nods his head in agreement.
+
+THE END
+
+->END

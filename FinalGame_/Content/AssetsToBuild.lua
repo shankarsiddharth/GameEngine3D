@@ -13,7 +13,7 @@ return
 	},
 	stories =
 	{
-		"Stories/test_story.txt",
+		"Stories/Vikram_Vedha.txt",
 	},
 	audios =
 	{

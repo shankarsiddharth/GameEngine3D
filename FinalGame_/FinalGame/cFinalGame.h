@@ -10,11 +10,14 @@
 
 #include <Engine/Application/iApplication.h>
 #include <Engine/Results/Results.h>
+#include "Engine/StoryNarrator/Story/Story.h"
 #include <Engine/Audio/AudioSystem.h>
+#include <External/imgui/Includes.h>
 
 #if defined( EAE6320_PLATFORM_WINDOWS )
 	#include "Resource Files/Resource.h"
 #endif
+
 
 
 // Class Declaration
@@ -40,9 +43,18 @@ namespace eae6320
 
 	private:
 
-		bool show_demo_window = true;
+		ImFont* m_latoFont = nullptr;
+		ImGuiWindowFlags window_flags = 0;
+
 		std::string story_string;
 		Narrator::Runtime::Story story;
+		bool m_showStartStory = true;
+		bool m_displayChoices = false;
+		bool m_choiceSelected = false;
+		size_t m_currentChoiceCount = 0;
+		size_t m_selectedChoice = 0;
+		bool m_enableScrollTrack = true;
+
 		eae6320::AudioSystem::cAudio m_TestAudio;
 
 		// Configuration
@@ -96,8 +108,11 @@ namespace eae6320
 		cResult Initialize() final;
 		cResult CleanUp() final;
 
+		eae6320::cResult InitializeUI();
 
 		eae6320::cResult InitializeStory();
+		void ReadStory();
+
 		eae6320::cResult InitializeAudio();
 		
 		void GetDefaultInitialResolution(uint16_t& o_width, uint16_t& o_height) const override;
