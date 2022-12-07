@@ -35,7 +35,7 @@ namespace eae6320
 	namespace Graphics
 	{
 
-		void RegisteronImGuiRenderUI(const std::function<void()>& i_OnRenderImGuiRenderUI);
+		void RegisterOnImGuiRenderUI(const std::function<void()>& i_OnRenderImGuiRenderUI);
 
 		// Submission
 		//-----------
