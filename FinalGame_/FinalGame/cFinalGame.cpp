@@ -17,7 +17,7 @@
 void eae6320::cFinalGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime,
 	const float i_elapsedSecondCount_sinceLastSimulationUpdate)
 {
-	m_TestAudio.SubmitAudioSource();
+	m_BGAudio.SubmitAudioSource();
 }
 
 void eae6320::cFinalGame::UpdateSimulationBasedOnInput()
@@ -27,16 +27,16 @@ void eae6320::cFinalGame::UpdateSimulationBasedOnInput()
 		ReadStory();
 	}*/
 
-	if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Space))
+	if (!m_BGAudio.IsPlaying())
+	{
+		m_BGAudio.Play();
+	}
+
+	/*if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Space))
 	{
 		
-	}
-
-	if (UserInput::IsKeyPressed('P'))
-	{
-		m_TestAudio.Play();
-	}
-
+	}*/
+	
 	if (m_enableScrollTrack)
 	{
 		m_enableScrollTrack = false;
@@ -211,7 +211,7 @@ eae6320::cResult eae6320::cFinalGame::InitializeAudio()
 {
 	auto result = eae6320::Results::Success;
 	
-	m_TestAudio.CreateAudioData("data/audios/test.mp3", "test_audio", 1000, false);
+	m_BGAudio.CreateAudioData("data/audios/bg.mp3", "bg_audio", 150, true);
 
 	return result;
 }

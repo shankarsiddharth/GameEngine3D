@@ -17,6 +17,7 @@ return
 	},
 	audios =
 	{
+		{ path = "Audios/BG.mp3"},
 		{ path = "Audios/Test.mp3"},
 	},
 	fonts =
