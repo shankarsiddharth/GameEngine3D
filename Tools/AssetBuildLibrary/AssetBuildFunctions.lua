@@ -329,6 +329,17 @@ NewAssetTypeInfo( "audios",
 	}
 )
 
+-- Font Asset Type
+--------------------
+
+NewAssetTypeInfo( "fonts",
+	{
+		GetBuilderRelativePath = function()
+			return "FontBuilder.exe"
+		end
+	}
+)
+
 -- Local Function Definitions
 --===========================
 

@@ -19,4 +19,8 @@ return
 	{
 		{ path = "Audios/Test.mp3"},
 	},
+	fonts =
+	{
+		{ path = "Fonts/Lato-Light.ttf"},
+	},
 }
