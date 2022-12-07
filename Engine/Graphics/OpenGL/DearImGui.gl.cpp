@@ -63,7 +63,7 @@ ImTextureID eae6320::Graphics::DearImGui::GetTexture(const eae6320::Graphics::cF
 {
 #if defined( EAE6320_PLATFORM_GL )
 	return (ImTextureID)i_FrameBuffer.GetCurrentFrame();
-#elif
+#elif defined( EAE6320_PLATFORM_D3D )
 	return nullptr;
 #endif
 }
