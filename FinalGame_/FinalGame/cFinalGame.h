@@ -10,10 +10,12 @@
 
 #include <Engine/Application/iApplication.h>
 #include <Engine/Results/Results.h>
+#include <Engine/Audio/AudioSystem.h>
 
 #if defined( EAE6320_PLATFORM_WINDOWS )
 	#include "Resource Files/Resource.h"
 #endif
+
 
 // Class Declaration
 //==================
@@ -40,6 +42,8 @@ namespace eae6320
 
 		bool show_demo_window = true;
 		std::string story_string;
+		Narrator::Runtime::Story story;
+		eae6320::AudioSystem::cAudio m_TestAudio;
 
 		// Configuration
 		//--------------
@@ -94,9 +98,10 @@ namespace eae6320
 
 
 		eae6320::cResult InitializeStory();
-
+		eae6320::cResult InitializeAudio();
+		
 		void GetDefaultInitialResolution(uint16_t& o_width, uint16_t& o_height) const override;
-
+		
 	};
 }
 

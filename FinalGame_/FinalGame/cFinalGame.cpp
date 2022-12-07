@@ -16,7 +16,7 @@
 void eae6320::cFinalGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_systemTime,
 	const float i_elapsedSecondCount_sinceLastSimulationUpdate)
 {
-
+	m_TestAudio.SubmitAudioSource();
 }
 
 void eae6320::cFinalGame::UpdateSimulationBasedOnInput()
@@ -28,6 +28,11 @@ void eae6320::cFinalGame::UpdateSimulationBasedOnInput()
 	else
 	{
 		show_demo_window = true;
+	}
+
+	if (UserInput::IsKeyPressed('P'))
+	{
+		m_TestAudio.Play();
 	}
 }
 
@@ -60,11 +65,15 @@ void eae6320::cFinalGame::UpdateBasedOnInput()
 
 eae6320::cResult eae6320::cFinalGame::Initialize()
 {
+	auto result = eae6320::Results::Success;
+
 	RegisterOnImGuiRenderUI(std::bind(&cFinalGame::RenderUI, this));
 
-	InitializeStory();
+	result = InitializeStory();
 
-	return Results::Success;
+	result = InitializeAudio();
+
+	return result;
 }
 
 eae6320::cResult eae6320::cFinalGame::CleanUp()
@@ -76,7 +85,6 @@ eae6320::cResult eae6320::cFinalGame::InitializeStory()
 {
 	auto result = eae6320::Results::Success;
 
-	Narrator::Runtime::Story story;
 	story.FromJSONFile("data/stories/test_story.storyasset");
 
 	while (story.canRead())
@@ -126,6 +134,15 @@ eae6320::cResult eae6320::cFinalGame::InitializeStory()
 			break;
 		}
 	}
+
+	return result;
+}
+
+eae6320::cResult eae6320::cFinalGame::InitializeAudio()
+{
+	auto result = eae6320::Results::Success;
+	
+	m_TestAudio.CreateAudioData("data/audios/test.mp3", "test_audio", 1000, false);
 
 	return result;
 }
