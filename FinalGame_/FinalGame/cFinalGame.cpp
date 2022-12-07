@@ -9,6 +9,7 @@
 #include <Engine/StoryNarrator/Includes.h>
 #include <External/imgui/Includes.h>
 #include <random>
+#include <string>
 
 // Inherited Implementation
 //=========================
@@ -21,18 +22,67 @@ void eae6320::cFinalGame::SubmitDataToBeRendered(const float i_elapsedSecondCoun
 
 void eae6320::cFinalGame::UpdateSimulationBasedOnInput()
 {
+	/*if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Enter))
+	{
+		ReadStory();
+	}*/
+
 	if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Space))
 	{
-		show_demo_window = false;
-	}
-	else
-	{
-		show_demo_window = true;
+		
 	}
 
 	if (UserInput::IsKeyPressed('P'))
 	{
 		m_TestAudio.Play();
+	}
+
+	if (m_enableScrollTrack)
+	{
+		m_enableScrollTrack = false;
+	}
+}
+
+void eae6320::cFinalGame::ReadStory()
+{
+	if (story.canRead())
+	{
+		std::string dialogue = story.Read();
+		if (dialogue.rfind("#", 0) == 0) 
+		{ 
+			//Skip lines that start with #
+		}
+		else
+		{
+			story_string.append("\n");
+			story_string.append(dialogue);
+		}
+		
+	}
+	else
+	{
+		std::vector<std::string> choices = story.GetChoices();
+		size_t choiceCount = choices.size();
+		if (choiceCount > 0)
+		{
+			if (!m_displayChoices && !m_choiceSelected)
+			{
+				m_displayChoices = true;
+			}
+
+			if (!m_displayChoices && m_choiceSelected)
+			{
+				story_string.append("\n-----------------------------------------------------\n");
+				story.SelectChoice((std::uint32_t)(m_selectedChoice));
+				m_choiceSelected = false;
+				ReadStory();
+				m_enableScrollTrack = true;
+			}
+		}
+		else
+		{
+			//End of Story
+		}
 	}
 }
 
@@ -73,6 +123,8 @@ eae6320::cResult eae6320::cFinalGame::Initialize()
 
 	result = InitializeAudio();
 
+	result = InitializeUI();
+
 	return result;
 }
 
@@ -81,12 +133,28 @@ eae6320::cResult eae6320::cFinalGame::CleanUp()
 	return Results::Success;
 }
 
+eae6320::cResult eae6320::cFinalGame::InitializeUI()
+{
+	auto result = eae6320::Results::Success;
+
+	ImGuiIO& io = ImGui::GetIO();
+	m_latoFont = io.Fonts->AddFontFromFileTTF("data/fonts/Lato-Light.ttf", 24.0f);
+
+	ImGuiWindowFlags window_flags = 0;
+	window_flags |= ImGuiWindowFlags_NoMove;
+	window_flags |= ImGuiWindowFlags_NoResize;
+	window_flags |= ImGuiWindowFlags_NoCollapse;
+
+	return result;
+}
+
 eae6320::cResult eae6320::cFinalGame::InitializeStory()
 {
 	auto result = eae6320::Results::Success;
 
-	story.FromJSONFile("data/stories/test_story.storyasset");
+	story.FromJSONFile("data/stories/vikram_vedha.storyasset");
 
+	/*
 	while (story.canRead())
 	{
 		while (story.canRead())
@@ -134,6 +202,7 @@ eae6320::cResult eae6320::cFinalGame::InitializeStory()
 			break;
 		}
 	}
+	*/
 
 	return result;
 }
@@ -155,43 +224,55 @@ void eae6320::cFinalGame::GetDefaultInitialResolution(uint16_t& o_width, uint16_
 
 void eae6320::cFinalGame::RenderUI()
 {
-	bool show_another_window = false;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
-
-	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
+	ImGui::PushFont(m_latoFont);
+	
 	{
-		static float f = 0.0f;
-		static int counter = 0;
+		ImGui::Begin("Vikram Vedha", NULL, window_flags);
 
-		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-		ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-		ImGui::Checkbox("Another Window", &show_another_window);
-
-		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			counter++;
-		ImGui::SameLine();
-		ImGui::Text("counter = %d", counter);
-		ImGui::Text("%s", story_string.c_str());
-
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		if (m_showStartStory)
+		{
+			if (ImGui::Button("Start Story"))
+			{
+				m_showStartStory = false;
+				ReadStory();				
+			}
+		}
+		else
+		{
+			ReadStory();
+		}
+		
+		ImGui::TextWrapped("%s", story_string.c_str());
+		if (m_enableScrollTrack)
+		{
+			ImGui::SetScrollHereY(1.0f);
+		}
+		ImGui::Text("    ");
 		ImGui::End();
-	}
-
-	// 3. Show another simple window.
-	if (show_another_window)
+	}	
 	{
-		ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-		ImGui::Text("Hello from another window!");
-		if (ImGui::Button("Close Me"))
-			show_another_window = false;
-		ImGui::End();
+		if (m_displayChoices)
+		{
+			ImGui::Begin("Choices");
+
+			std::vector<std::string> choices = story.GetChoices();
+			size_t choiceCount = choices.size();
+
+			for (size_t choiceIndex = 0; choiceIndex < choiceCount; choiceIndex++)
+			{
+				const std::string& choiceText = choices[choiceIndex];
+				if (ImGui::Button(choiceText.c_str()))
+				{
+					m_enableScrollTrack = true;
+					m_selectedChoice = choiceIndex;
+					m_choiceSelected = true;
+					m_displayChoices = false;
+					ReadStory();
+				}
+			}
+
+			ImGui::End();
+		}
 	}
+	ImGui::PopFont();
 }
