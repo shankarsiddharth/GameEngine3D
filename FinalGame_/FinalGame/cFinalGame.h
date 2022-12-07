@@ -55,7 +55,7 @@ namespace eae6320
 		size_t m_selectedChoice = 0;
 		bool m_enableScrollTrack = true;
 
-		eae6320::AudioSystem::cAudio m_TestAudio;
+		eae6320::AudioSystem::cAudio m_BGAudio;
 
 		// Configuration
 		//--------------
