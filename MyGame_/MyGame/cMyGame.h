@@ -72,6 +72,8 @@ namespace eae6320
 		static size_t s_numberOfPairsToRender;
 		eae6320::Graphics::MeshEffectPair* m_meshEffectPair = nullptr;
 
+		bool show_game_objects = true;
+
 		// Configuration
 		//--------------
 

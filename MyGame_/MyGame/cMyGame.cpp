@@ -67,9 +67,13 @@ void eae6320::cMyGame::SubmitDataToBeRendered(const float i_elapsedSecondCount_s
 
 	//eae6320::Graphics::SubmitMeshEffectPairs(m_meshEffectPair, s_GameState.numberOfPairsToDraw);
 
-	m_sphereGameObject->Render();
+	if (show_game_objects)
+	{
+		m_sphereGameObject->Render();
+		m_helixGameObject->Render();
+	}
+
 	m_planeGameObject->Render();
-	m_helixGameObject->Render();
 
 	eae6320::Graphics::SubmitCameraTransform(m_camera->GetWorldToCameraTransform(), m_camera->GetCameraToProjectedTransform_Perspective());
 }
@@ -457,6 +461,16 @@ void eae6320::cMyGame::GetDefaultInitialResolution(uint16_t& o_width, uint16_t& 
 
 void eae6320::cMyGame::RenderUI()
 {
+	{
+		ImGui::Begin("Scene Settings");                          // Create a window called "Hello, world!" and append into it.
+
+		ImGui::Checkbox("Toggle Game Objects", &show_game_objects);
+
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::End();
+	}
+
+	/*	
 	bool show_demo_window = true;
 	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -496,5 +510,6 @@ void eae6320::cMyGame::RenderUI()
 			show_another_window = false;
 		ImGui::End();
 	}
+	*/
 }
 
