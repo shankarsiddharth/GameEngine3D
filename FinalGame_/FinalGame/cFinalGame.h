@@ -14,6 +14,9 @@
 #include <Engine/Audio/AudioSystem.h>
 #include <External/imgui/Includes.h>
 
+#include <Engine/Camera/cCamera.h>
+#include <Engine/GameFramework/cGameObject.h>
+
 #if defined( EAE6320_PLATFORM_WINDOWS )
 	#include "Resource Files/Resource.h"
 #endif
@@ -43,6 +46,29 @@ namespace eae6320
 
 	private:
 
+		// 3D Objects
+		//--------------
+		eae6320::Graphics::cMesh* m_planeMesh = nullptr;
+		eae6320::Graphics::cMesh* m_sonicMesh = nullptr;
+		eae6320::Graphics::cMesh* m_sphereLargeMesh = nullptr;
+		eae6320::Graphics::cMesh* m_helixMesh = nullptr;
+		eae6320::Graphics::cEffect* m_animColorEffect = nullptr;
+		eae6320::Graphics::cEffect* m_defaultEffect = nullptr;
+
+
+		eae6320::Camera::cCamera* m_camera = nullptr;
+
+		eae6320::GameFramework::cGameObject* m_sonicGameObject = nullptr;
+		eae6320::GameFramework::cGameObject* m_planeGameObject = nullptr;
+		eae6320::GameFramework::cGameObject* m_helixGameObject = nullptr;
+
+		static const size_t MAXIMUM_NUMBER_OF_PAIRS = 500;
+		static size_t s_numberOfPairsToRender;
+		eae6320::Graphics::MeshEffectPair* m_meshEffectPair = nullptr;
+
+
+		// ImGui Members
+		//--------------
 		ImFont* m_latoFont = nullptr;
 		ImFont* m_defaultFont = nullptr;
 		ImGuiWindowFlags window_flags = 0;
@@ -57,6 +83,9 @@ namespace eae6320
 		bool m_enableScrollTrack = true;
 		
 		bool m_isEndOfStory = false;
+
+		bool m_ShowImGuiUI = true;
+		bool m_ShowViewportUI = false;
 
 		eae6320::AudioSystem::cAudio m_BGAudio;
 		eae6320::AudioSystem::cAudio m_SelectAudio;
@@ -82,6 +111,9 @@ namespace eae6320
 #endif
 			;
 		}
+
+		const char* GetPlatformName() const;
+
 		// Window classes are almost always identified by name;
 		// there is a unique "ATOM" associated with them,
 		// but in practice Windows expects to use the class name as an identifier.
@@ -112,12 +144,21 @@ namespace eae6320
 		cResult Initialize() final;
 		cResult CleanUp() final;
 
+		// ImGui Methods
+		//--------------
 		eae6320::cResult InitializeUI();
 
 		eae6320::cResult InitializeStory();
 		void ReadStory();
 
 		eae6320::cResult InitializeAudio();
+
+		// 3D Objects
+		//--------------
+		eae6320::cResult InitializeGeometry();
+		eae6320::cResult InitializeShadingData();
+		eae6320::cResult InitializePairs();
+		eae6320::cResult InitializeGameObjects();
 		
 		void GetDefaultInitialResolution(uint16_t& o_width, uint16_t& o_height) const override;
 		
