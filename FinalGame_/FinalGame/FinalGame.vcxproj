@@ -46,6 +46,12 @@
     <ProjectReference Include="..\..\Engine\Audio\Audio.vcxproj">
       <Project>{ceca4f23-f3ab-41d8-8c68-54c63374b4e0}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\Engine\Camera\Camera.vcxproj">
+      <Project>{474f9b05-5c06-497d-b19d-b16583a01c90}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Engine\GameFramework\GameFramework.vcxproj">
+      <Project>{8c74b362-013b-43a4-a75b-5fcb7cb314ea}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\Engine\Math\Math.vcxproj">
       <Project>{999c3d5f-7f79-4bd7-ae21-92eeed0c5962}</Project>
     </ProjectReference>

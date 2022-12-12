@@ -6,10 +6,49 @@
 #include <Engine/Asserts/Asserts.h>
 #include <Engine/UserInput/UserInput.h>
 #include <Engine/Logging/Logging.h>
+
 #include <Engine/StoryNarrator/Includes.h>
 #include <External/imgui/Includes.h>
+
+#include <Engine/Graphics/Graphics.h>
+#include <Engine/Graphics/VertexFormats.h>
+#include <Engine/Graphics/cMesh.h>
+#include <Engine/Graphics/cEffect.h>
+#include <Engine/Graphics/MeshEffectPair.h>
+#include <Engine/Math/cMatrix_transformation.h>
+#include <Engine/Math/Functions.h>
+
 #include <random>
 #include <string>
+
+namespace
+{
+	struct GameState
+	{
+		size_t numberOfPairsToDraw = 0;
+		bool bShouldSwapEffects = false;
+	};
+
+	GameState s_GameState;
+}
+
+size_t eae6320::cFinalGame::s_numberOfPairsToRender = 0;
+
+const char* eae6320::cFinalGame::GetPlatformName() const
+{
+	return
+#if defined( EAE6320_PLATFORM_D3D )
+		"Direct3D"
+#elif defined( EAE6320_PLATFORM_GL )
+		"OpenGL"
+#endif
+		//#ifdef _DEBUG
+		//		" -- Debug"
+		//#else
+		//		" -- Release"
+		//#endif
+		;
+}
 
 // Inherited Implementation
 //=========================
@@ -19,6 +58,34 @@ void eae6320::cFinalGame::SubmitDataToBeRendered(const float i_elapsedSecondCoun
 {
 	m_BGAudio.SubmitAudioSource();
 	m_SelectAudio.SubmitAudioSource();
+
+	if (m_ShowImGuiUI && !m_ShowViewportUI)
+	{
+		return;
+	}
+
+	//3D Objects
+	//eae6320::Graphics::SetBackgroundClearColor(0.0f, 0.95f, 1.0f);
+
+	if (s_GameState.bShouldSwapEffects)
+	{
+		m_meshEffectPair[0].effect = m_defaultEffect;
+		m_meshEffectPair[1].effect = m_animColorEffect;
+	}
+	else
+	{
+		m_meshEffectPair[0].effect = m_animColorEffect;
+		m_meshEffectPair[1].effect = m_defaultEffect;
+	}
+
+	//eae6320::Graphics::SubmitMeshEffectPairs(m_meshEffectPair, s_GameState.numberOfPairsToDraw);
+
+	m_sonicGameObject->Render();
+	m_planeGameObject->Render();
+	m_helixGameObject->Render();
+
+	eae6320::Graphics::SubmitCameraTransform(m_camera->GetWorldToCameraTransform(), m_camera->GetCameraToProjectedTransform_Perspective());
+
 }
 
 void eae6320::cFinalGame::UpdateSimulationBasedOnInput()
@@ -32,6 +99,16 @@ void eae6320::cFinalGame::UpdateSimulationBasedOnInput()
 	{
 		
 	}*/
+
+	if (UserInput::IsKeyPressed('H'))
+	{
+		m_ShowImGuiUI = !m_ShowImGuiUI;
+	}
+
+	if (UserInput::IsKeyPressed('V'))
+	{
+		m_ShowViewportUI = !m_ShowViewportUI;
+	}
 
 	if (!m_isEndOfStory)
 	{
@@ -52,6 +129,70 @@ void eae6320::cFinalGame::UpdateSimulationBasedOnInput()
 	{
 		m_enableScrollTrack = false;
 	}
+
+	if (m_ShowImGuiUI)
+	{
+		m_sonicGameObject->Move(eae6320::Math::sVector(0.0f, 0.0f, 0.0f));
+		m_camera->Move(eae6320::Math::sVector(0.0f, 0.0f, 0.0f));
+		return;
+	}
+
+	//Camera Movement
+	float velocity = 1.25f;
+
+	if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Left))
+	{
+		m_camera->Move(eae6320::Math::sVector(-velocity, 0.0f, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Right))
+	{
+		m_camera->Move(eae6320::Math::sVector(velocity, 0.0f, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Up))
+	{
+		m_camera->Move(eae6320::Math::sVector(0.0f, velocity, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed(eae6320::UserInput::KeyCodes::Down))
+	{
+		m_camera->Move(eae6320::Math::sVector(0.0f, -velocity, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed('Q'))
+	{
+		m_camera->Move(eae6320::Math::sVector(0.0f, 0.0f, velocity * 4));
+	}
+	else if (UserInput::IsKeyPressed('E'))
+	{
+		m_camera->Move(eae6320::Math::sVector(0.0f, 0.0f, -velocity * 4));
+	}
+	/*else
+	{
+		m_camera->Move(eae6320::Math::sVector(0.0f, 0.0f, 0.0f));
+	}*/
+
+
+	//Game Object Movement
+	//velocity = 0.75f;
+	if (UserInput::IsKeyPressed('W'))
+	{
+		m_sonicGameObject->Move(eae6320::Math::sVector(0.0f, velocity, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed('A'))
+	{
+		m_sonicGameObject->Move(eae6320::Math::sVector(-velocity, 0.0f, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed('S'))
+	{
+		m_sonicGameObject->Move(eae6320::Math::sVector(0.0f, -velocity, 0.0f));
+	}
+	else if (UserInput::IsKeyPressed('D'))
+	{
+		m_sonicGameObject->Move(eae6320::Math::sVector(velocity, 0.0f, 0.0f));
+	}
+	/*else
+	{
+		m_newGameObject->Move(eae6320::Math::sVector(0.0f, 0.0f, 0.0f));
+	}*/
+
 }
 
 void eae6320::cFinalGame::ReadStory()
@@ -109,7 +250,11 @@ void eae6320::cFinalGame::UpdateSimulationBasedOnTime(const float i_elapsedSecon
 
 void eae6320::cFinalGame::UpdateBasedOnTime(const float i_elapsedSecondCount_sinceLastUpdate)
 {
+	//Update Camera
+	m_camera->Update(i_elapsedSecondCount_sinceLastUpdate);
 
+	//Update RigidBody
+	m_sonicGameObject->Update(i_elapsedSecondCount_sinceLastUpdate);
 }
 
 // Run
@@ -141,11 +286,127 @@ eae6320::cResult eae6320::cFinalGame::Initialize()
 
 	result = InitializeUI();
 
+	// Initialize the shading data
+	{
+		if (!(result = InitializeShadingData()))
+		{
+			EAE6320_ASSERTF(false, "Can't initialize Graphics without the shading data");
+			return result;
+		}
+	}
+	// Initialize the geometry
+	{
+		if (!(result = InitializeGeometry()))
+		{
+			EAE6320_ASSERTF(false, "Can't initialize Graphics without the geometry data");
+			return result;
+		}
+	}
+	// Initialize the Mesh Effect Pairs
+	m_meshEffectPair = new eae6320::Graphics::MeshEffectPair[MAXIMUM_NUMBER_OF_PAIRS];
+
+	InitializePairs();
+
+	InitializeGameObjects();
+
+	s_GameState.numberOfPairsToDraw = s_numberOfPairsToRender;
+
+	m_camera = new eae6320::Camera::cCamera(eae6320::Math::sVector(0.0f, 0.0f, 10.0f));
+
+	eae6320::Logging::OutputMessage("My Game Initialized");
+
+	//Size Information:
+	size_t sizeOfMeshClass = sizeof(eae6320::Graphics::cMesh);
+	size_t sizeOfEffectClass = sizeof(eae6320::Graphics::cEffect);
+	eae6320::Logging::OutputMessage("Size of Mesh in  %s  using sizeof operator : %zu bytes", GetPlatformName(), sizeOfMeshClass);
+	eae6320::Logging::OutputMessage("Size of Effect in  %s  using sizeof operator : %zu bytes", GetPlatformName(), sizeOfEffectClass);
+
 	return result;
 }
 
 eae6320::cResult eae6320::cFinalGame::CleanUp()
 {
+	auto result = eae6320::Results::Success;
+
+	if (m_planeMesh)
+	{
+		m_planeMesh->DecrementReferenceCount();
+		m_planeMesh = nullptr;
+	}
+	if (m_sonicMesh)
+	{
+		m_sonicMesh->DecrementReferenceCount();
+		m_sonicMesh = nullptr;
+	}
+	if (m_sphereLargeMesh)
+	{
+		m_sphereLargeMesh->DecrementReferenceCount();
+		m_sphereLargeMesh = nullptr;
+	}
+	if (m_helixMesh)
+	{
+		m_helixMesh->DecrementReferenceCount();
+		m_helixMesh = nullptr;
+	}
+
+	if (m_animColorEffect)
+	{
+		m_animColorEffect->DecrementReferenceCount();
+		m_animColorEffect = nullptr;
+	}
+	if (m_defaultEffect)
+	{
+		m_defaultEffect->DecrementReferenceCount();
+		m_defaultEffect = nullptr;
+	}
+
+	size_t numberOfPairsToRender = s_numberOfPairsToRender;
+
+	for (size_t index = 0; index < numberOfPairsToRender; index++)
+	{
+		if (m_meshEffectPair[index].mesh != nullptr)
+		{
+			m_meshEffectPair[index].mesh->DecrementReferenceCount();
+			m_meshEffectPair[index].mesh = nullptr;
+		}
+		if (m_meshEffectPair[index].effect != nullptr)
+		{
+			m_meshEffectPair[index].effect->DecrementReferenceCount();
+			m_meshEffectPair[index].effect = nullptr;
+		}
+	}
+
+	if (m_meshEffectPair)
+	{
+		delete[] m_meshEffectPair;
+		m_meshEffectPair = nullptr;
+	}
+
+	if (m_camera)
+	{
+		delete m_camera;
+		m_camera = nullptr;
+	}
+
+	if (m_sonicGameObject)
+	{
+		delete m_sonicGameObject;
+		m_sonicGameObject = nullptr;
+	}
+
+	if (m_planeGameObject)
+	{
+		delete m_planeGameObject;
+		m_planeGameObject = nullptr;
+	}
+
+	if (m_helixGameObject)
+	{
+		delete m_helixGameObject;
+		m_helixGameObject = nullptr;
+	}
+
+	eae6320::Logging::OutputMessage("My Game CleanUp");
 	return Results::Success;
 }
 
@@ -233,6 +494,76 @@ eae6320::cResult eae6320::cFinalGame::InitializeAudio()
 	return result;
 }
 
+eae6320::cResult eae6320::cFinalGame::InitializeGeometry()
+{
+	auto result = eae6320::Results::Success;
+
+	// Initialize Meshes
+	// Direct3D is left-handed	
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/plane.bmasset", m_planeMesh);
+
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sonic.bmasset", m_sonicMesh);
+
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/sphere.bmasset", m_sphereLargeMesh);
+
+	result = eae6320::Graphics::cMesh::CreateMesh("data/Meshes/helix.bmasset", m_helixMesh);
+
+	return result;
+}
+
+eae6320::cResult eae6320::cFinalGame::InitializeShadingData()
+{
+	auto result = eae6320::Results::Success;
+
+	// Initialize Effects
+
+	result = eae6320::Graphics::cEffect::CreateEffect(m_animColorEffect, "data/Shaders/Fragment/testsample.bsasset");
+
+	result = eae6320::Graphics::cEffect::CreateEffect(m_defaultEffect);
+
+	return result;
+}
+
+eae6320::cResult eae6320::cFinalGame::InitializePairs()
+{
+	auto result = eae6320::Results::Success;
+
+	m_meshEffectPair[0].mesh = m_planeMesh;
+	m_meshEffectPair[0].effect = m_animColorEffect;
+	eae6320::Math::cQuaternion mesh_rotation1(eae6320::Math::ConvertDegreesToRadians(45), eae6320::Math::sVector(0.0f, 0.0f, 1.0f));
+	eae6320::Math::sVector mesh_position1(1.0f, 1.0f, 0.0f);
+	m_meshEffectPair[0].drawCallData.g_transform_localToWorld = eae6320::Math::cMatrix_transformation(mesh_rotation1, mesh_position1);
+	s_numberOfPairsToRender++;
+	m_meshEffectPair[1].mesh = m_sonicMesh;
+	m_meshEffectPair[1].effect = m_defaultEffect;
+	eae6320::Math::cQuaternion mesh_rotation2 = eae6320::Math::cQuaternion();
+	eae6320::Math::sVector mesh_position2(0.0f, 0.0f, 0.0f);
+	m_meshEffectPair[1].drawCallData.g_transform_localToWorld = eae6320::Math::cMatrix_transformation(mesh_rotation2, mesh_position2);
+	s_numberOfPairsToRender++;
+
+	return result;
+}
+
+eae6320::cResult eae6320::cFinalGame::InitializeGameObjects()
+{
+	auto result = eae6320::Results::Success;
+
+	eae6320::Math::cQuaternion game_object_rotation(eae6320::Math::ConvertDegreesToRadians(0), eae6320::Math::sVector(0.0f, 1.0f, 0.0f));
+	eae6320::Math::sVector game_object_position(1.0f, -1.0f, 3.5f);
+	m_sonicGameObject = new eae6320::GameFramework::cGameObject(game_object_position, game_object_rotation);
+	m_sonicGameObject->AddMeshEffectPair(m_sonicMesh, m_defaultEffect);
+	m_sonicGameObject->AddMeshEffectPair(m_sphereLargeMesh, m_animColorEffect);
+
+	m_planeGameObject = new eae6320::GameFramework::cGameObject();
+	m_planeGameObject->AddMeshEffectPair(m_planeMesh, m_defaultEffect);
+
+	m_helixGameObject = new eae6320::GameFramework::cGameObject();
+	m_helixGameObject->AddMeshEffectPair(m_helixMesh, m_defaultEffect);
+
+	return result;
+}
+
+
 void eae6320::cFinalGame::GetDefaultInitialResolution(uint16_t& o_width, uint16_t& o_height) const
 {
 	o_width = 900;
@@ -241,6 +572,11 @@ void eae6320::cFinalGame::GetDefaultInitialResolution(uint16_t& o_width, uint16_
 
 void eae6320::cFinalGame::RenderUI()
 {
+	if (!m_ShowImGuiUI)
+	{
+		return;
+	}
+
 	ImGui::PushFont(m_latoFont);
 	
 	{
